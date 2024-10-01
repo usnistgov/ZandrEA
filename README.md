@@ -48,9 +48,12 @@ but Docker is the target production environment and provides a standardized buil
 
 ## Contact Information
 
-| Principal Investigator: | Daniel Veronica<br>NIST Engineering Laboratory<br>Building Energy and Environment Division<br>Mechanical Systems and Controls Group (732.02) |
-| Project Home Page: | https://www.nist.gov/programs-projects/automated-fault-detection-and-diagnostics-mechanical-services-commercial-buildings |
-| External Project Documentation: | |
+Principal Investigator:<br>Daniel Veronica<br>NIST Engineering Laboratory<br>Building Energy and Environment Division<br>Mechanical Systems and Controls Group (732.02)
+
+Project Home Page:<br><https://www.nist.gov/programs-projects/automated-fault-detection-and-diagnostics-mechanical-services-commercial-buildings>
+
+External Project Documentation:<br>
+TBD.
 
 ## How to reference this work in citations
 
@@ -58,6 +61,8 @@ TBD.
 
 ## Links to referenced software dependencies
 
+| Name | URL | Notes |
+| --- | --- | --- |
 | Docker | https://docs.docker.com/engine/install/ | Most Linux distros have a -ce (free "community edition") |
 | GNU make | https://www.gnu.org/software/make/ | Install from Linux distro, or as part of software development framework, or sometimes standalone |
 | HDF5 | https://www.hdfgroup.org/solutions/hdf5/ | Source code is included in this repo |
