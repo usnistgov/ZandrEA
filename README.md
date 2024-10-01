@@ -49,7 +49,7 @@ but Docker is the target production environment and provides a standardized buil
 ## Contact Information
 
 ### Principal Investigator
-Daniel Veronica<br>NIST Engineering Laboratory<br>Building Energy and Environment Division<br>Mechanical Systems and Controls Group (732.02)
+Daniel Veronica<br>NIST Engineering Laboratory<br>Building Energy and Environment Division<br>Mechanical Systems and Controls Group (732.02)<br>daniel.veronica@nist.gov
 
 ### Project Home Page:
 <https://www.nist.gov/programs-projects/automated-fault-detection-and-diagnostics-mechanical-services-commercial-buildings>
