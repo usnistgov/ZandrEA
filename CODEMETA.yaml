@@ -37,8 +37,8 @@ categories:
   # - visualization
 
 themes:
-  - Information Technology
-    - Data and informatics
+  # - Information Technology
+  - Data and informatics
   # - Advanced communications
   #     - Optical communications
   #     - Quantum communications
@@ -56,10 +56,10 @@ themes:
   #     - Microbial measurements
   #     - Proteomics
   #
-  # - Buildings and Construction
+  - Buildings and Construction
   #     - Heating, ventilation and air conditioning equipment
   #     - Building codes and standards
-  #     - Building control systems
+      - Building control systems
   #     - Building damage and repair
   #     - Building economics
   #     - Building materials
