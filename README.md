@@ -72,7 +72,7 @@ TBD.
 
 ## Current Status
 
-Note that as the purpose of this project is to facilitate research, it has intentionally NOT been developed into a complete production-ready product. It is NOT intended for use as-is in a production environment. **It currently lacks any form of authentication of access control, so although it is read-only as far as your BACnet devices go, any client with network access can push data to it, possibly misleading (at best) or corrupting (at worst) any fault detection or knowledge bases you develop during use. We recommend that you only run it on a private network without Internet access - which you should be doing with your building BACnet network also. DO NOT expose this application to the open Internet. _USE AT YOUR OWN RISK!_**
+Note that as the purpose of this project is to facilitate research, it has intentionally NOT been developed into a complete production-ready product. It is NOT intended for use as-is in a production environment. **It currently lacks any form of authentication or access control, so although it is read-only as far as your BACnet devices go, any client with network access can push data to it, possibly misleading (at best) or corrupting (at worst) any fault detection or knowledge bases you develop during use. We recommend that you only run it on a private network without Internet access - which you should be doing with your building BACnet network also. DO NOT expose this application to the open Internet. _USE AT YOUR OWN RISK!_**
 
 As of October 1, 2024:
 
