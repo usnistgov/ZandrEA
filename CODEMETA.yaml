@@ -86,11 +86,11 @@ themes:
   #     - Sensors
   #     - Superconducting electronics
   #
-  # - Energy
+  - Energy
   #     - Alternative energy
   #     - Conventional energy
   #     - Electric power and smart grid
-  #     - Energy efficiency
+      - Energy efficiency
   #     - Fuels
   #     - Sustainability
   #
@@ -128,14 +128,14 @@ themes:
   #     - Precision medicine
   #     - Regenerative medicine
   #
-  # - Information Technology
-  #     - Artificial intelligence
+  - Information Technology
+      - Artificial intelligence
   #     - Biometrics
   #     - Cloud computing and virtualization
   #     - Complex systems
   #     - Computational science
   #     - Conformance testing
-  #     - Cyber-physical systems
+      - Cyber-physical systems
   #         - Smart cities
   #     - Cybersecurity
   #         - Configuration and vulnerability management

@@ -12,13 +12,13 @@ There are two types of environments supported by the build process:
 
 The four Docker containers include:
 - the computational engine (implemented by the `libEA` library code which exposes its functionality via a C++ API) which has been wrapped with a REST API handler to expose its functionality via a traditional HTTP (web) interface
-- a front-end GUI dashboard for viewing and analyzing the analysis, written in React (a Javascript framework) for viewing in a standard web browser
+- a front-end GUI dashboard for viewing and interacting with the analysis, written in React (a Javascript framework) for viewing in a standard web browser
 - a live data collection script which periodically polls BACnet devices and pushes the collected data into the computational engine via the REST interface for analysis
 - a reverse proxy container that merges the REST API and the server for the web client into a single unified web service, and could also be configured to implement SSL/https in a single location
 
 ## How to work with this repo
 
-Before attempting to work with this code you should first familiarize yourself with the concepts and vocabulary that will be used by reading the ZandrEA Primer document **_(Link to be provided)_**
+Before attempting to work with this code you should first familiarize yourself with the concepts and vocabulary that will be used by reading the ZandrEA Primer document **_(TBD - Link to be provided)_**
 
 We highly recommend creating your own fork of this repo so that you can customize it for your particular environment and needs.
 
@@ -34,7 +34,7 @@ Any host system hardware that can run Docker or Docker Desktop should should suf
 - At least 4GB of RAM should be available for the Docker containers
 - At least 2 CPU cores should be available for the Docker containers
 - At least 200GB of disk space should be available for build/development
-- At least 50GB of space should be available for a production-only runtime environment
+- At least 50GB of space should be available for a production runtime-only environment (containers built elsewhere)
 
 Development has been done primarily on Intel CPU systems. Builds have also been successful on Mac M1 and M2 CPUs (modern Mac systems) but be aware that containers built on one CPU type won't (or may not) run on another CPU type. If you need to use different CPU types, investigate the Docker platform environment variables.
 
