@@ -10,7 +10,15 @@ There are two types of environments supported by the build process:
 1. Development: Intended for software evaluation and development purposes. This is the default build environment.
 2. Production: although ZandrEA should NOT be used in any production capacity (see [Current Status](#current-status) below), a more streamlined, better-performing "production" build is available. This build pre-generates all the web pages so they can be directly and immediately served instead, reducing overhead. Most or all debugging capabilities have been stripped out. You might use this on a longer-running test installation, for example, where you want more stability and less overhead.
 
+The four Docker containers include:
+- the computational engine (implemented by the `libEA` library code which exposes its functionality via a C++ API) which has been wrapped with a REST API handler to expose its functionality via a traditional HTTP (web) interface
+- a front-end GUI dashboard for viewing and analyzing the analysis, written in React (a Javascript framework) for viewing in a standard web browser
+- a live data collection script which periodically polls BACnet devices and pushes the collected data into the computational engine via the REST interface for analysis
+- a reverse proxy container that merges the REST API and the server for the web client into a single unified web service, and could also be configured to implement SSL/https in a single location
+
 ## How to work with this repo
+
+Before attempting to work with this code you should first familiarize yourself with the concepts and vocabulary that will be used by reading the ZandrEA Primer document **_(Link to be provided)_**
 
 We highly recommend creating your own fork of this repo so that you can customize it for your particular environment and needs.
 
