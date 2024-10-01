@@ -12,12 +12,12 @@ The configuration files for the BACnet collection script have been moved into a 
 
 Note that the default (development) compose file simply bind-mounts the entire EAbacnet directory onto /data in the container, but the production version copies the script files into the container for security, and bind-mounts only the config directory.
 
-This code uses Joel Bender's bacpypes3 python library, so the first step is creating a BACpypes.ini file in the `config` directory. Please see the [BACpypes3 documentation](https://bacpypes3.readthedocs.io/en/latest/) for details. `BACpypes.ini.sample` can be used as a starting point.
+This code uses [Joel Bender's BACpypes3 python library](https://github.com/JoelBender/BACpypes3) for communication with BACnet devices, so the first step is creating a `BACpypes.ini` file in the `EAbacnet/config` directory. Please see the [BACpypes3 documentation](https://bacpypes3.readthedocs.io/en/latest/) for details about configuring BACpypes. `BACpypes.ini.sample` can be used as a starting point.
 
-The next step is creating a `ead.ini` configuration file, which will define the REST server's URL (leave default unless you know what you're doing) and adding a list of device names, and potentially defining an interval wait before polling for new data.
+The next step is creating an `ead.ini` configuration file, which will define the REST server's URL (leave default which refers to the internal Docker hostname for the rest container, unless you know what you're doing) and adding a list of device ("Subject") names, and potentially changing the interval to wait before polling for new data.
 
-After that you will need to create ini files for each of the defined subject names you listed in `ead.ini` (BACnet devices) in your configuration.
+After that you will need to create ini files for each of the defined subject names you listed in `ead.ini`.
 
-Note that as of this writing, the libEA configuration is hardcoded to 4 VAV subjects and 2 AHU subjects at compile/build time. In the future we hope more flexible run-time configuration will be added, or you may customize your fork of this project for your environment. (See: [libEA/tool.cpp](../libEA/tool.cpp) and [libEA/tool.hpp](../libEA/tool.hpp))
+As of this writing, the libEA configuration is hardcoded to 4 VAV subjects and 2 AHU subjects at compile/build time. In the future we hope more flexible run-time configuration will be added, or you may customize your fork of this project for your environment. (See: [libEA/tool.cpp](../libEA/tool.cpp) and [libEA/tool.hpp](../libEA/tool.hpp))
 
-There are sample files in the `config` directory for all of these file types.
+There are sample files in the `EAbacnet/config` directory for all of these configuration files.
