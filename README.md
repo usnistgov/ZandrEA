@@ -10,6 +10,14 @@ There are two types of environments supported by the build process:
 1. Development: Intended for software evaluation and development purposes. This is the default build environment.
 2. Production: although ZandrEA should NOT be used in any production capacity (see [Current Status](#current-status) below), a more streamlined, better-performing "production" build is available. This build pre-generates all the web pages so they can be directly and immediately served instead, reducing overhead. Most or all debugging capabilities have been stripped out. You might use this on a longer-running test installation, for example, where you want more stability and less overhead.
 
+## How to work with this repo
+
+We highly recommend creating your own fork of this repo so that you can customize it for your particular environment and needs.
+
+If there are changes you think should be integrated with the base project, please submit them as a [Pull Request](https://github.com/usnistgov/ZandrEA/pulls). In general, we will only be accepting changes that apply to basic functionality that all users will need or can use. Our intention is not to make substantial changes to the base repo since that will make integration of those changes into all of the customized forks difficult. See [README-how-to-update-your-fork](./README-how-to-update-your-fork.md) for a quick overview. More detailed explanations and methods can be found via Google.
+
+If you experience any bugs, please submit them as [Issues](https://github.com/usnistgov/ZandrEA/issues).
+
 ## System Requirements
 
 The use of Docker allows for very minimal system requirements and a programatic, scripted build process that is portable across any type of system that can run Docker.
