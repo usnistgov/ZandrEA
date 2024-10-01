@@ -1,0 +1,23 @@
+{
+   // See https://go.microsoft.com/fwlink/?LinkId=733558
+   // for the documentation about the tasks.json format
+   "version": "2.0.0",
+   "tasks": [
+      {
+         "label": "Start gdbserver in ReST container",
+         "type": "shell",
+         "group": {
+            "kind": "test",
+            "isDefault": true
+         },
+         "command": "docker",
+         "args": [
+            "exec",
+            "ea_devx-rest-1",
+            "gdbserver",
+            "--multi",
+            "host:2345"
+         ]
+      }
+   ]
+}
