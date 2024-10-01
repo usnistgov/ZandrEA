@@ -4,7 +4,9 @@
 
 ZandrEA is a software framework supporting research into the automated, real-time detection and diagnostics of operational faults in the heating, ventilating, and air-conditioning (HVAC) systems of large commercial buildings.
 
-It consists of a system of four Docker containers orchestrated with Docker Compose. Running in the Docker environment vastly reduces the requirements to build and run this software. See the [INSTALLATION](./INSTALLATION.md) document for instructions for how to build, run, and test ZandrEA.
+It is worth noting that "EA" was used early on in this project as a derivation from "Expert Assistant". That meaning is now deprecated, but as a convenient and short tag that was used pervasively through the codebase, you will continue to see references to EA throughout the repo.
+
+The project consists of a system of four Docker containers orchestrated with Docker Compose. Running in the Docker environment vastly reduces the requirements to build and run this software. See the [INSTALLATION](./INSTALLATION.md) document for instructions for how to build, run, and test ZandrEA.
 
 There are two types of environments supported by the build process:
 1. Development: Intended for software evaluation and development purposes. This is the default build environment.
