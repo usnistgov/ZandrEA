@@ -84,6 +84,8 @@ venv/bin/python3 EAd/tests/ead_functest_combined.py
 venv/bin/python3 EAd/tests/ead-push-date-time-ahu-vav-from-csv.py --time now --timestep 60 EAd/tests/testdata/ibal_240227_NF.csv
 ```
 
+# FOR BASIC TESTING AND USE, YOU WILL NOT NEED ANYTHING BELOW
+
 ## How to build the REST server outside of Docker
 
 This is not commonly used anymore so some information may be out of date. However, note that a Docker build will run the a `make install` on an Ubuntu base image, so that much should continue to work fine if installing directly on an Ubuntu host or VM. See the Dockerfile for the exact commands used to set up the host for building.

@@ -85,6 +85,8 @@ TBD.
 | Docker Compose plugin | <https://docs.docker.com/compose/install/> | May already be included with your Docker installation |
 | GNU make | <https://www.gnu.org/software/make/> | Install from Linux distro, or as part of software development framework, or sometimes standalone |
 | HDF5 | <https://www.hdfgroup.org/solutions/hdf5/> | Source code is included in this repo |
+| Cereal | <https://uscilab.github.io/cereal/> | Open source C++ serialization library |
+| CPPRESTSDK | <https://github.com/microsoft/cpprestsdk> | The opensource C++ REST API library used by the REST container |
 
 ## Current Status
 

@@ -1,6 +1,6 @@
 # Dependencies
 
-These are the dependencies needed to build the standalone version. If you use Docker these are all taken care of automatically by docker-compose and Dockerfiles.
+**These are the dependencies needed to build the standalone version. If you use Docker these are all taken care of automatically by docker-compose and Dockerfiles - you should not need anything in this file.**
 
 Supported platforms for non-Docker build:
 - Linux (Ubuntu 20.04+)
