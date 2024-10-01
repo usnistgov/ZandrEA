@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 AS baseos
+FROM ubuntu:24.04 AS prod_baseos
 LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
 # Bare minimum of libraries needed to run the above executable
 RUN apt update && DEBIAN_FRONTEND="noninteractive" apt upgrade -y && DEBIAN_FRONTEND="noninteractive" apt install -y \
@@ -16,7 +16,7 @@ RUN apt update && DEBIAN_FRONTEND="noninteractive" apt upgrade -y && DEBIAN_FRON
     libsz2
 #  && rm -rf /var/lib/apt/lists/* # Don't remove because derivatives may add more pkgs
 
-FROM baseos AS buildbase
+FROM prod_baseos AS prod_buildbase
 LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
 ARG home=/ea
 ENV HOME=${home}
@@ -32,7 +32,7 @@ WORKDIR $PKGROOT
 COPY hdf5-1.14.4-2.tar.gz h5c++.tmpl Makefile ./
 RUN make compiler
 
-FROM buildbase AS appbuilder
+FROM prod_buildbase AS prod_appbuilder
 LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
 ARG home=/ea
 ENV HOME=${home}
@@ -43,13 +43,13 @@ COPY libEA ./libEA/
 COPY EAd ./EAd/
 RUN make build-ead
 
-FROM baseos
+FROM prod_baseos
 LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
 ARG home=/ea
 ENV HOME=${home}
 ENV PKGROOT=${home}
 RUN mkdir -p /data /ea/bin && rm -rf /var/lib/apt/lists/*
-COPY --from=appbuilder /ea/bin/ /ea/bin/
+COPY --from=prod_appbuilder /ea/bin/ /ea/bin/
 WORKDIR /data
 ENTRYPOINT ["/ea/bin/ead"]
 CMD ["-b", "http://0.0.0.0", "-p", "9876"]

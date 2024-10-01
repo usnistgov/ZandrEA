@@ -25,14 +25,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nist_eldst:afdd_ead
+    image: ea-rest
     container_name: ea-rest
     restart: on-failure
     privileged: true
     ports:
       - "9876:9876"
     volumes:
-      #      - rest-kb:/data
+      #      - ea-rest-kb:/data
       - ./data/:/data/
       - ./libEA:/ea/libEA:ro
       - ./EAd:/ea/EAd:ro
@@ -51,7 +51,7 @@ services:
       context: ./EAbacnet
       dockerfile: Dockerfile
     restart: on-failure
-    image: nist_eldst:afdd_eabacnet
+    image: ea-bacnet
     container_name: ea-bacnet
     links:
       - rest:ead
@@ -64,7 +64,7 @@ services:
     build:
       context: ./eajscli
       dockerfile: Dockerfile
-    image: nist_eldst:afdd_eawebapp
+    image: ea-webapp
     container_name: ea-webapp
     restart: on-failure
     user: "node"
@@ -80,7 +80,7 @@ services:
       - "3000:3000"
     volumes:
       - ./eajscli/:/home/node/app/
-      - exclude:/home/node/app/node_modules/
+      - ea-exclude:/home/node/app/node_modules/
     command: bash -c "rm -rf /home/node/app/node_modules/* /home/node/app/node_modules/.bin /home/node/app/node_modules/.cache/* && npm start"
     labels:
       - "traefik.enable=true"
@@ -96,5 +96,5 @@ networks:
     driver: bridge
 
 volumes:
-  rest-kb:
-  exclude:
+  #  ea-rest-kb:
+  ea-exclude:
