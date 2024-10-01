@@ -16,7 +16,7 @@ make docker-down    # Stops the application containers. Same as docker compose d
 
 Once the containers are up, you can point your web browser to the web interface. If the containers are running on your local workstation, use <http://localhost/> or replace localhost with the hostname of the server running the containers.
 
-To run the production version instead, make sure the development version is shut down first, then inside the repo directory use the same make commands, but instead of `docker-up` use `docker-production-up` ... similarly, `docker-down` becomes `docker-production-down`, etc.  You can find all the supported make target names in the Makefile.
+To run the production version instead, make sure the development version is shut down first (they cannot both run at the same time), then inside the repo directory use the same make commands, but instead of `docker-up` use `docker-production-up` ... similarly, `docker-down` becomes `docker-production-down`, etc.  You can find all the supported make target names in the Makefile. See [README-production](./README-production.md) for more information.
 
 ### Knowledge Base storage
 
