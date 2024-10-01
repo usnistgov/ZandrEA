@@ -48,11 +48,13 @@ but Docker is the target production environment and provides a standardized buil
 
 ## Contact Information
 
-Principal Investigator:<br>Daniel Veronica<br>NIST Engineering Laboratory<br>Building Energy and Environment Division<br>Mechanical Systems and Controls Group (732.02)
+### Principal Investigator
+Daniel Veronica<br>NIST Engineering Laboratory<br>Building Energy and Environment Division<br>Mechanical Systems and Controls Group (732.02)
 
-Project Home Page:<br><https://www.nist.gov/programs-projects/automated-fault-detection-and-diagnostics-mechanical-services-commercial-buildings>
+### Project Home Page:
+<https://www.nist.gov/programs-projects/automated-fault-detection-and-diagnostics-mechanical-services-commercial-buildings>
 
-External Project Documentation:<br>
+### External Project Documentation:
 TBD.
 
 ## How to reference this work in citations
@@ -63,13 +65,14 @@ TBD.
 
 | Name | URL | Notes |
 | --- | --- | --- |
-| Docker | https://docs.docker.com/engine/install/ | Most Linux distros have a -ce (free "community edition") |
-| GNU make | https://www.gnu.org/software/make/ | Install from Linux distro, or as part of software development framework, or sometimes standalone |
-| HDF5 | https://www.hdfgroup.org/solutions/hdf5/ | Source code is included in this repo |
+| Docker | <https://docs.docker.com/engine/install/> | Most Linux distros have a `docker-ce` package (a free "community edition") that will suffice |
+| Docker Compose plugin | <https://docs.docker.com/compose/install/> | May already be included with your Docker installation |
+| GNU make | <https://www.gnu.org/software/make/> | Install from Linux distro, or as part of software development framework, or sometimes standalone |
+| HDF5 | <https://www.hdfgroup.org/solutions/hdf5/> | Source code is included in this repo |
 
 ## Current Status
 
-Note that as the purpose of this project is to facilitate research, it has intentionally NOT been developed into a complete production-ready product. It is NOT intended for use as-is in a production environment. *It currently lacks any form of authentication of access control, so although it is read-only as far as your BACnet devices go, any client with network access can push data to it, possibly misleading (at best) or corrupting (at worst) any fault detection or knowledge bases you develop during use. We recommend that you only run it on a private network without Internet access - which you should be doing with your building BACnet network also. DO NOT expose this application to the open Internet. USE AT YOUR OWN RISK!*
+Note that as the purpose of this project is to facilitate research, it has intentionally NOT been developed into a complete production-ready product. It is NOT intended for use as-is in a production environment. **It currently lacks any form of authentication of access control, so although it is read-only as far as your BACnet devices go, any client with network access can push data to it, possibly misleading (at best) or corrupting (at worst) any fault detection or knowledge bases you develop during use. We recommend that you only run it on a private network without Internet access - which you should be doing with your building BACnet network also. DO NOT expose this application to the open Internet. _USE AT YOUR OWN RISK!_**
 
 As of October 1, 2024:
 
