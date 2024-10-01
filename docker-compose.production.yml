@@ -1,0 +1,102 @@
+services:
+
+  proxy:
+    #platform: linux/amd64
+    image: traefik:latest
+    container_name: ${DOCKER_PROJECT}-proxy
+    restart: on-failure
+    depends_on:
+      rest:
+        condition: service_started
+      webapp:
+        condition: service_started
+    ports:
+      - "${FRONT_HTTP_PORT:-80}:80"
+    environment:
+      - TRAEFIK_LOG_LEVEL=INFO
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+      - TRAEFIK_PROVIDERS_DOCKER=true
+      - TRAEFIK_PROVIDERS_DOCKER_NETWORK=${DOCKER_PROJECT}_traefik01
+      - TRAEFIK_ENTRYPOINTS_FRONT=true
+      - TRAEFIK_ENTRYPOINTS_FRONT_ADDRESS=:${FRONT_HTTP_PORT:-80}
+    networks:
+      - traefik01
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  rest:
+    #platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    image: ${DOCKER_REGISTRY}${DOCKER_PROJECT}/${DOCKER_IMAGE_PREFIX}ead${DOCKER_IMAGE_SUFFIX}
+    container_name: ${DOCKER_PROJECT}-rest
+    restart: on-failure
+    privileged: false
+    ports:
+      - "9876:9876"
+    volumes:
+      - rest-kb:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rest.entrypoints=front"
+      - "traefik.http.routers.rest.rule=PathPrefix(`/api/`)"
+      - "traefik.http.services.rest.loadbalancer.server.port=9876"
+      - "traefik.http.routers.rest.middlewares=rest-stripprefix"
+      - "traefik.http.middlewares.rest-stripprefix.stripprefix.prefixes=/api"
+    networks:
+      - traefik01
+
+  bacnet:
+    #platform: linux/amd64
+    build:
+      context: ./EAbacnet
+      dockerfile: Dockerfile.production
+    image: ${DOCKER_REGISTRY}${DOCKER_PROJECT}/${DOCKER_IMAGE_PREFIX}bacnet${DOCKER_IMAGE_SUFFIX}
+    container_name: ${DOCKER_PROJECT}-bacnet
+    links:
+      - rest:ead
+    restart: on-failure
+    depends_on:
+      rest:
+        condition: service_started
+    networks:
+      - traefik01
+    volumes:
+      - ./EAbacnet/config/:/data/config/
+
+  webapp:
+    #platform: linux/amd64
+    build:
+      context: ./eajscli
+      dockerfile: Dockerfile.production
+    image: ${DOCKER_REGISTRY}${DOCKER_PROJECT}/${DOCKER_IMAGE_PREFIX}webapp${DOCKER_IMAGE_SUFFIX}
+    container_name: ${DOCKER_PROJECT}-webapp
+    restart: on-failure
+    stdin_open: true
+    depends_on:
+      rest:
+        condition: service_started
+    environment:
+      - REACT_APP_DOCKERENV=true
+      - REACT_APP_API_PREFIX=/api
+      - REACT_APP_API_PORT=80
+      - NODE_ENV=production
+    mem_limit: "500m"
+    ports:
+      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webapp.entrypoints=front"
+      - "traefik.http.routers.webapp.rule=PathPrefix(`/`)"
+      - "traefik.http.services.webapp.loadbalancer.server.port=3000"
+    networks:
+      - traefik01
+
+networks:
+  traefik01:
+    name: ${DOCKER_PROJECT}_traefik01
+    driver: bridge
+
+volumes:
+  rest-kb:

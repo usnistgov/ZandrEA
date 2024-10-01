@@ -1,0 +1,5958 @@
+Single step 1 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:28
+T
+zoneInBand
+04/18 13:28
+T
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+68.0
+N
+TazSetHtg
+65.0
+N
+Single step 2 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:28
+T
+zoneInBand
+04/18 13:28
+T
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 3 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:28
+T
+zoneInBand
+04/18 13:28
+T
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 4 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:28
+T
+zoneInBand
+04/18 13:28
+T
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 5 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:28
+T
+zoneInBand
+04/18 13:28
+T
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 6 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:28
+T
+zoneInBand
+04/18 13:28
+T
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 7 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:28
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 8 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:35
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 9 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:35
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 10 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:35
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 11 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:38
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 12 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:38
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 13 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:38
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 14 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:38
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 15 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:38
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+69.0
+N
+TazSetHtg
+65.0
+N
+Single step 16 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:43
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 17 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:43
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 18 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:43
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:28
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+69.0
+N
+TazSetHtg
+65.0
+N
+Single step 19 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:43
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:46
+T
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 20 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:43
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:46
+T
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 21 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:46
+T
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 22 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:46
+T
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 23 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:46
+T
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 24 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:46
+T
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 25 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+69.0
+N
+TazSetHtg
+65.0
+N
+Single step 26 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:28
+F
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 27 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+61.0
+N
+TazSetHtg
+65.0
+N
+Single step 28 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+65.0
+N
+TazSetHtg
+65.0
+N
+Single step 29 taken.
+zoneOccupied
+04/18 13:28
+F
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+64.0
+N
+TazSetHtg
+65.0
+N
+Single step 30 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+75.0
+N
+Taz
+64.0
+N
+TazSetHtg
+65.0
+N
+Single step 31 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+63.0
+N
+TazSetHtg
+65.0
+N
+Single step 32 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+62.0
+N
+TazSetHtg
+65.0
+N
+Single step 33 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+61.0
+N
+TazSetHtg
+65.0
+N
+Single step 34 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+59.0
+N
+TazSetHtg
+67.0
+N
+Single step 35 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+59.0
+N
+TazSetHtg
+67.0
+N
+Single step 36 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 13:28
+F
+unitClgZone
+04/18 13:28
+T
+TazSetClg
+70.0
+N
+Taz
+58.5
+N
+TazSetHtg
+67.0
+N
+Single step 37 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+75.0
+N
+Taz
+52.0
+N
+TazSetHtg
+65.0
+N
+Single step 38 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+75.0
+N
+Taz
+48.0
+N
+TazSetHtg
+65.0
+N
+Single step 39 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+75.0
+N
+Taz
+47.0
+N
+TazSetHtg
+65.0
+N
+Single step 40 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+75.0
+N
+Taz
+47.0
+N
+TazSetHtg
+65.0
+N
+Single step 41 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+75.0
+N
+Taz
+48.0
+N
+TazSetHtg
+65.0
+N
+Single step 42 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 13:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+75.0
+N
+Taz
+47.0
+N
+TazSetHtg
+65.0
+N
+Single step 43 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:10
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+70.0
+N
+Taz
+41.0
+N
+TazSetHtg
+65.0
+N
+Single step 44 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+70.0
+N
+Taz
+41.0
+N
+TazSetHtg
+65.0
+N
+Single step 45 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+70.0
+N
+Taz
+41.0
+N
+TazSetHtg
+65.0
+N
+Single step 46 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+70.0
+N
+Taz
+46.0
+N
+TazSetHtg
+67.0
+N
+Single step 47 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+70.0
+N
+Taz
+49.0
+N
+TazSetHtg
+67.0
+N
+Single step 48 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+70.0
+N
+Taz
+51.0
+N
+TazSetHtg
+67.0
+N
+Single step 49 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+75.0
+N
+Taz
+58.0
+N
+TazSetHtg
+65.0
+N
+Single step 50 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+75.0
+N
+Taz
+57.0
+N
+TazSetHtg
+65.0
+N
+Single step 51 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:04
+T
+unitClgZone
+04/18 14:04
+F
+TazSetClg
+75.0
+N
+Taz
+57.0
+N
+TazSetHtg
+65.0
+N
+Single step 52 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:19
+F
+unitClgZone
+04/18 14:19
+T
+TazSetClg
+75.0
+N
+Taz
+62.0
+N
+TazSetHtg
+65.0
+N
+Single step 53 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:11
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 13:54
+T
+unitHtgZone
+04/18 14:19
+F
+unitClgZone
+04/18 14:19
+T
+TazSetClg
+75.0
+N
+Taz
+63.0
+N
+TazSetHtg
+65.0
+N
+Single step 54 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:19
+F
+unitClgZone
+04/18 14:19
+T
+TazSetClg
+75.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 55 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:19
+F
+unitClgZone
+04/18 14:19
+T
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 56 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:23
+T
+unitClgZone
+04/18 14:23
+F
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 57 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:23
+T
+unitClgZone
+04/18 14:23
+F
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+65.0
+N
+Single step 58 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:23
+T
+unitClgZone
+04/18 14:23
+F
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 59 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:23
+T
+unitClgZone
+04/18 14:23
+F
+TazSetClg
+70.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 60 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 61 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 62 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 63 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 64 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 65 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 66 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 67 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 13:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+69.0
+N
+TazSetHtg
+65.0
+N
+Single step 68 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:35
+T
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 69 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:35
+T
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 70 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:37
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 71 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:38
+T
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 72 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:38
+T
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+71.5
+N
+TazSetHtg
+67.0
+N
+Single step 73 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:40
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 74 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:40
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 75 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:40
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 76 taken.
+zoneOccupied
+04/18 13:57
+T
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:40
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 77 taken.
+zoneOccupied
+04/18 14:44
+F
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:40
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 78 taken.
+zoneOccupied
+04/18 14:44
+F
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:40
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+75.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 79 taken.
+zoneOccupied
+04/18 14:44
+F
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:40
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+69.0
+N
+TazSetHtg
+65.0
+N
+Single step 80 taken.
+zoneOccupied
+04/18 14:44
+F
+unitOutputSteady
+04/18 14:21
+F
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:47
+T
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 81 taken.
+zoneOccupied
+04/18 14:44
+F
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:47
+T
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+65.0
+N
+Single step 82 taken.
+zoneOccupied
+04/18 14:44
+F
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:49
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 83 taken.
+zoneOccupied
+04/18 14:44
+F
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:50
+T
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 84 taken.
+zoneOccupied
+04/18 14:44
+F
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:50
+T
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+70.0
+N
+Taz
+71.5
+N
+TazSetHtg
+67.0
+N
+Single step 85 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 86 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 87 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 88 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 89 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 13:34
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 90 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 14:57
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 91 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 14:57
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 92 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 14:57
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 93 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 94 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 95 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 96 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 97 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 98 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 99 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 100 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 101 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 102 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 14:48
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 103 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:10
+F
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 104 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 105 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 106 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 107 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 108 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.5
+N
+TazSetHtg
+67.0
+N
+Single step 109 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:00
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 110 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 111 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 112 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 113 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:11
+T
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 114 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 115 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 116 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 117 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 118 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 119 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 120 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 121 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 14:21
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+68.0
+N
+TazSetHtg
+67.0
+N
+Single step 122 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 123 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 124 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 125 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 126 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 127 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 128 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 129 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 130 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 131 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:29
+T
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+67.0
+N
+TazSetHtg
+67.0
+N
+Single step 132 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 133 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:29
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 134 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:41
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 135 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:41
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 136 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:41
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 137 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:41
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 138 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 139 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 140 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:21
+F
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 141 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 142 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 143 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 144 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.5
+N
+TazSetHtg
+67.0
+N
+Single step 145 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 146 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 147 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 148 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 149 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 150 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 151 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 152 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 153 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 154 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 155 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 156 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.5
+N
+TazSetHtg
+67.0
+N
+Single step 157 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 158 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 159 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 160 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 161 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 162 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 15:48
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 163 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:10
+F
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 164 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 165 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 166 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 167 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 168 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.5
+N
+TazSetHtg
+67.0
+N
+Single step 169 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 15:45
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 170 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 16:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 171 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 16:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 172 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 16:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 173 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:11
+T
+zoneInBand
+04/18 16:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 174 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 175 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:17
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 176 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:23
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 177 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:23
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 178 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:23
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 179 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:23
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 180 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:23
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.5
+N
+TazSetHtg
+67.0
+N
+Single step 181 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:23
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 182 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:29
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 183 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:29
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 184 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:29
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 185 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:29
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 186 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:29
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+69.0
+N
+TazSetHtg
+67.0
+N
+Single step 187 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:34
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 188 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:35
+T
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 189 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:36
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 190 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:36
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 191 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:36
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+Single step 192 taken.
+zoneOccupied
+04/18 14:52
+T
+unitOutputSteady
+04/18 16:21
+F
+zoneInBand
+04/18 16:36
+F
+zoneTooWarm
+04/18 14:52
+F
+zoneTooCool
+04/18 15:39
+F
+unitHtgZone
+04/18 14:27
+F
+unitClgZone
+04/18 14:27
+T
+TazSetClg
+72.0
+N
+Taz
+71.0
+N
+TazSetHtg
+67.0
+N
+
+VAV-127:Fails-Rule-5:000: [' FAULT PROBABLE as of: Thu Apr 18 15:20:59 2019\nFailing 60 secs/test on: Rule-5 : Zone temp tracking high yet unit not responding with max cooling', 'Faults possible in this case, with current probability of each:', '(65) Spurious failure on rule. Adjust parameters in rule operands. 33.3 %', '(66) Damper stuck. 33.3 %', '(67) Supply air temperature too high. 33.3 %', '', "EA's current solution is (65)"]
+
+VAV-127:Fails-Rule-8:000: [' FAULT PROBABLE as of: Thu Apr 18 14:09:59 2019\nFailing 60 secs/test on: Rule-8 : Zone temp tracking low yet unit not responding with max reheat', 'Faults possible in this case, with current probability of each:', '(65) Spurious failure on rule. Adjust parameters in rule operands. 33.3 %', '(66) HW valve stuck. 33.3 %', '(67) HW valve control loop trouble. 33.3 %', '', "EA's current solution is (65)"]
+
+VAV-127:Fails-Rule-6:000: [' FAULT PROBABLE as of: Thu Apr 18 13:57:59 2019\nFailing 60 secs/test on: Rule-6 : Zone too cool yet unit not reheating', 'Faults possible in this case, with current probability of each:', '(65) Spurious failure on rule. Adjust parameters in rule operands. 33.3 %', '(66) HW valve stuck. 33.3 %', '(67) HW valve control loop trouble. 33.3 %', '', "EA's current solution is (65)"]

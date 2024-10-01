@@ -1,0 +1,26 @@
+#
+# This file defines the connection to the EAd REST server and the list of
+# BACnet devices to poll for data and submit to EAd. Each string in the
+# devices list should correspond to a .ini file which has been customized
+# for each device.
+#
+# NOTE: In a docker environment, the hostname in the url must be the name
+# of the service to talk to as defined in the master docker-compose file.
+# The port needs to match the CONTAINER_PORT of that service (not the
+# exported HOST_PORT)
+#
+# Properties:
+# url:	  the URL of the REST daemon. If using docker-compose you shouldn't
+#	  need to change this.
+#
+# devices: A list of devices to query. Every device listed here should have
+#	  a corresponding file of the same name with a .ini suffix to
+#	  define the points to be read.
+#
+# interval: How often (in seconds) to poll the devices for new data. [60]
+#
+
+[DEFAULT]
+url: http://ead:9876/
+devices: ["VAV-1"]
+interval: 60

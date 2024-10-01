@@ -1,0 +1,120 @@
+#!/usr/bin/env node
+
+//
+// Usage: json_find [-p parent] filename [-r|-s] [key] value
+//
+
+'use strict';
+
+const fs = require('fs');
+let args = process.argv.slice(2);
+let file = '/dev/stdin';
+var container = null;
+var key = null;
+var value = null;
+
+function usage() {
+  console.log("Usage: json_find [options] [file]");
+  console.log("  -h, --help         This message");
+  console.log("  -c, --container C  Match keys/values in container C");
+  console.log("  -k, --key KEY      Find all keys matching regex KEY");
+  console.log("  -v, --value VALUE  Find all values matching regex VALUE");
+  process.exit(0);
+}
+
+while (args.length > 0) {
+  const a = args.shift();
+  if (a === '-h' || a === '--help') {
+    usage();
+  }
+  if (a[0] === '-') {
+    if (a.length > 1) {
+      const b = args.shift();
+      if        (a === '-c' || a === '--container') {
+	container = b;
+      } else if (a === '-k' || a === '--key') {
+	key = b;
+      } else if (a === '-v' || a === '--value') {
+	value = b;
+      }
+    } else {
+      usage();
+    }
+  } else {
+    file = a;
+  }
+}
+
+if (!container && !key && !value) {
+  usage();
+}
+
+console.log("container='%s' key='%s' value='%s'", container, key, value);
+
+let root;
+try {
+  root = JSON.parse(fs.readFileSync(file));
+}
+catch(e) {
+  console.error(e.message);
+  process.exit(1);
+}
+
+//
+// Now we need to walk the object tree under root to look. Keep a stack.
+// 
+var regex_container = new RegExp(container ? container : '');
+var regex_key       = new RegExp(key       ? key       : '');
+var regex_value     = new RegExp(value     ? value     : '');
+
+// Recursive function to walk an object tree
+function walk(obj, name, path, containerpath, containerobj) {
+  let t = typeof(obj);
+  let isleaf = (t !== 'object');
+  let newpath = path + '.' + name;
+
+  let keymatch = false;
+  let valuematch = false;
+
+  //console.log("%s has type %s", path, t);
+  if (container && ! isleaf) {
+    if (regex_container.test(name)) {
+      containerpath = path;
+      containerobj = obj;
+    }
+  }
+  if (key) {
+    if (regex_key.test(name)) {
+      keymatch = true;
+    }
+  }
+  if (isleaf && value) {
+    if (regex_value.test(obj)) {
+      valuematch = true;
+    }
+  }
+
+  if ((key && keymatch && value && valuematch) ||
+      (key && keymatch && !value) ||
+      (value && valuematch && !key)) {
+    if (isleaf) {
+      console.log("%s: %s", path, obj);
+    } else {
+      console.log("%s: [object]", path);
+    }
+    if (containerobj) {
+      console.log("  %s: %o", containerpath, containerobj);
+    }
+  }
+
+
+  if (! isleaf) {
+    for (const p in obj) {
+      walk(obj[p], p, `${path}.${p}`, containerpath, containerobj);
+    }
+  }
+}
+
+walk(root, 'root', 'root', '', null);
+
+process.exit(0);

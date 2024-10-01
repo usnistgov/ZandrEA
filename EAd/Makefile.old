@@ -1,0 +1,82 @@
+# Make sure we find the dependency binaries first
+export PATH := $(HOME)/Git/ea_ConApp/dep/bin:$(PATH)
+
+# You probably will need to adjust these definitions
+DEFS=-DPOSIX -DSTANDALONE
+LIBNAME=EA
+CXXOPTS=-Wno-comments
+
+# Build target name
+TARGET=ead
+
+# You may need to adjust these for your porting target
+CXX=../dep/bin/h5c++
+INCLUDES=-I../EAwin32DLL -I../dep/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/openssl@1.1/1.1.0g/include
+LD=$(CXX)
+ifeq ($(OS),Windows_NT)
+  HOST_OS := Windows
+  DEFS += -DWINDOWS
+else
+  HOST_OS := $(shell uname -s)
+endif
+ifeq ($(HOST_OS),Darwin)
+  BOOSTLIBS := -lboost_system-mt -lboost_chrono-mt -lboost_thread-mt
+  DEFS += -DOSX
+endif
+ifeq ($(HOST_OS),Linux)
+  BOOSTLIBS := -lboost_system -lboost_chrono -lboost_thread
+  DEFS += -DLINUX
+endif
+LIBS=-L../EAwin32DLL -L../dep/lib -L/opt/homebrew/lib -L/opt/homebrew/Cellar/openssl\@1.1/1.1.0g/lib -l$(LIBNAME) -lhdf5 -lcpprest -lssl -lcrypto $(BOOSTLIBS) -lstdc++
+CXXFLAGS=-g -O $(CXXOPTS) $(DEFS) $(INCLUDES)
+#LDFLAGS=-g -Wl,-rpath=$$HOME/Git/ea_ConApp/dep/lib64 $(LIBS)
+LDFLAGS=-g $(LIBS)
+
+# Add .d to Make's recognized suffixes.
+SUFFIXES += .d
+
+# These are the source and corresponding dep and object files we need to build
+#SRCS =	case.cpp dllExports.cpp knowBase.cpp mvc_model.cpp portInput.cpp rule.cpp state.cpp tool.cpp \
+#	HDF5Parts.cpp chart.cpp dllmain.cpp knowParts.cpp mvc_view.cpp portOutput.cpp seqElement.cpp subject.cpp viewParts.cpp \
+#	agent.cpp dataChannel.cpp formula.cpp mvc_ctrlr.cpp parameter.cpp rainfall.cpp sequence.cpp taskClock.cpp \
+#	portability.cpp
+
+EXCLPAT = EAwin32DLL.%
+SRCS =	$(filter-out $(EXCLPAT), $(wildcard *.cpp))
+OBJS =	$(SRCS:.cpp=.o)
+DEPS =	$(SRCS:.cpp=.d)
+
+#We don't need to clean up when we're making these targets
+NODEPS:=clean tags svn
+
+.PHONY:	all clean install
+
+all:	$(TARGET)
+
+#Don't create dependencies when we're cleaning, for instance
+ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
+    #Chances are, these files don't exist.  GMake will create them and
+    #clean up automatically afterwards
+    -include $(DEPS)
+endif
+
+#This is the rule for creating the dependency files
+%.d:	%.cpp
+	@set -e; rm -f $@; \
+		echo "Remaking $@..."; \
+		$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
+		sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+		rm -f $@.$$$$
+#	$(CXX) $(CXXFLAGS) -MM -MT '$(patsubst %.cpp,%.o,$<)' $< -MF $@
+
+# How to build a .o file from a .cpp file
+%.o:	%.cpp %.d Makefile
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+# This is our executable
+$(TARGET):	$(OBJS)
+	$(CXX) $(LDFLAGS) $(OBJS) -o $@
+
+clean:
+	rm -f $(TARGET) *.a *.so *.o *.d *.d.* Kbase.h5 "60s Rule Kit.xml" "10s Rule Kit.xml"
+	rm -rf $(TARGET).dSYM

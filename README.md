@@ -1,152 +1,31 @@
-# NIST Open-Source Software Repository Template
+# ZandrEA 
 
-Use of GitHub by NIST employees for government work is subject to
-the [Rules of Behavior for GitHub][gh-rob]. This is the
-recommended template for NIST employees, since it contains
-required files with approved text. For details, please consult
-the Office of Data & Informatics' [Quickstart Guide to GitHub at
-NIST][gh-odi].
+[DAN REWRITE THIS] This repo contains software for commercial building HVAC automated fault detection. It monitors data from the HVAC system (usually via BACnet) and attempts to identify potential faults, while suggesting actions to take to address those faults. Over time it develops a knowledge base to improve its recommendations.
 
-Please click on the green **Use this template** button above to
-create a new repository under the [usnistgov][gh-nst]
-organization for your own open-source work. Please do not "fork"
-the repository directly, and do not create the templated
-repository under your individual account.
+This build consists of four Docker containers orchestrated with docker-compose:
+- `ea-rest` is the core REST server component that houses all of the EA functionality, and wraps it with a REST server.
+- `ea-webapp` is a React single page (web) application to serve as the user interface and front end.
+- `ea-bacnet` is the Python bacnet code to collect data from bacnet devices and push it to the REST server
+- `ea-proxy` is a Traefik server running as a reverse proxy for the `ea-rest` and `ea-webapp` containers.
 
-The key files contained in this repository -- which will also
-appear in templated copies -- are listed below, with some things
-to know about each.
+The reverse proxy consolidates all HTTP services (both web app and REST API) - everything runs on the standard HTTP port now. The proxy moves the REST API to a /api URI prefix to avoid conflicts with the web app, and presents all HTTP services as normal port 80 HTTP service.
 
----
+Not yet implemented: a configuration component and a device discovery component.
 
-## README
+The code will build and run on Mac or Linux and can be built outside of Docker for development/testing if need be,
+but Docker is the target production environment and provides a standardized build environment cross-platform - in this way it can be
+built and and run on a Windows server with Docker installed, if docker-compose is also installed.
 
-Each repository will contain a plain-text [README file][wk-rdm],
-preferably formatted using [GitHub-flavored Markdown][gh-mdn] and
-named `README.md` (this file) or `README`.
+Note that as this project has not been developed into a complete production-ready product, it is NOT intended for use in a production environment. *It currently lacks any form of authentication of access control, so although it is read-only as far as your BACnet devices go, any client with network access can push data to it, possibly misleading (at best) or corrupting (at worst) any fault detection or knowledge bases you develop during use. USE AT YOUR OWN RISK!*
 
-Per the [GitHub ROB][gh-rob] and [NIST Suborder 1801.02][nist-s-1801-02],
-your README should contain:
+## Current Status
 
-1. Software or Data description
-   - Statements of purpose and maturity
-   - Description of the repository contents
-   - Technical installation instructions, including operating
-     system or software dependencies
-1. Contact information
-   - PI name, NIST OU, Division, and Group names
-   - Contact email address at NIST
-   - Details of mailing lists, chatrooms, and discussion forums,
-     where applicable
-1. Related Material
-   - URL for associated project on the NIST website or other Department
-     of Commerce page, if available
-   - References to user guides if stored outside of GitHub
-1. Directions on appropriate citation with example text
-1. References to any included non-public domain software modules,
-   and additional license language if needed, *e.g.* [BSD][li-bsd],
-   [GPL][li-gpl], or [MIT][li-mit]
+As of September 30, 2024:
 
-The more detailed your README, the more likely our colleagues
-around the world are to find it through a Web search. For general
-advice on writing a helpful README, please review
-[*Making Readmes Readable*][18f-guide] from 18F and Cornell's
-[*Guide to Writing README-style Metadata*][cornell-meta].
+- The `ea-bacnet` docker container has been reworked, and with proper configuration MIGHT work now. It is currently untested. See the [EAbacnet/README](./EAbacnet/README.md) file for configuration information.
+- The `ea-rest` REST daemon is functional. The [REST API documentation](./EAd/REST-API-v3.md) is up to date.
+- The `ea-webapp` container is feature-complete (as far as the capabilities available through the REST API)
 
-## LICENSE
+## How to build
 
-Each repository will contain a plain-text file named `LICENSE.md`
-or `LICENSE` that is phrased in compliance with the Public Access
-to NIST Research [*Copyright, Fair Use, and Licensing Statement
-for SRD, Data, and Software*][nist-open], which provides
-up-to-date official language for each category in a blue box.
-
-- The version of [LICENSE.md](LICENSE.md) included in this
-  repository is approved for use.
-- Updated language on the [Licensing Statement][nist-open] page
-  supersedes the copy in this repository. You may transcribe the
-  language from the appropriate "blue box" on that page into your
-  README.
-
-If your repository includes any software or data that is licensed
-by a third party, create a separate file for third-party licenses
-(`THIRD_PARTY_LICENSES.md` is recommended) and include copyright
-and licensing statements in compliance with the conditions of
-those licenses.
-
-## CODEOWNERS
-
-This template repository includes a file named
-[CODEOWNERS](CODEOWNERS), which visitors can view to discover
-which GitHub users are "in charge" of the repository. More
-crucially, GitHub uses it to assign reviewers on pull requests.
-GitHub documents the file (and how to write one) [here][gh-cdo].
-
-***Please update that file*** to point to your own account or
-team, so that the [Open-Source Team][gh-ost] doesn't get spammed
-with spurious review requests. *Thanks!*
-
-## CODEMETA
-
-Project metadata is captured in `CODEMETA.yaml`, used by the NIST
-Software Portal to sort your work under the appropriate thematic
-homepage. ***Please update this file*** with the appropriate
-"theme" and "category" for your code/data/software. The Tier 1
-themes are:
-
-- [Advanced communications](https://www.nist.gov/advanced-communications)
-- [Bioscience](https://www.nist.gov/bioscience)
-- [Buildings and Construction](https://www.nist.gov/buildings-construction)
-- [Chemistry](https://www.nist.gov/chemistry)
-- [Electronics](https://www.nist.gov/electronics)
-- [Energy](https://www.nist.gov/energy)
-- [Environment](https://www.nist.gov/environment)
-- [Fire](https://www.nist.gov/fire)
-- [Forensic Science](https://www.nist.gov/forensic-science)
-- [Health](https://www.nist.gov/health)
-- [Information Technology](https://www.nist.gov/information-technology)
-- [Infrastructure](https://www.nist.gov/infrastructure)
-- [Manufacturing](https://www.nist.gov/manufacturing)
-- [Materials](https://www.nist.gov/materials)
-- [Mathematics and Statistics](https://www.nist.gov/mathematics-statistics)
-- [Metrology](https://www.nist.gov/metrology)
-- [Nanotechnology](https://www.nist.gov/nanotechnology)
-- [Neutron research](https://www.nist.gov/neutron-research)
-- [Performance excellence](https://www.nist.gov/performance-excellence)
-- [Physics](https://www.nist.gov/physics)
-- [Public safety](https://www.nist.gov/public-safety)
-- [Resilience](https://www.nist.gov/resilience)
-- [Standards](https://www.nist.gov/standards)
-- [Transportation](https://www.nist.gov/transportation)
-
----
-
-[usnistgov/opensource-repo][gh-osr] is developed and maintained
-by the [opensource-team][gh-ost], principally:
-
-- Gretchen Greene, @GRG2
-- Yannick Congo, @faical-yannick-congo
-- Trevor Keller, @tkphd
-
-Please reach out with questions and comments.
-
-<!-- References -->
-
-[18f-guide]: https://github.com/18F/open-source-guide/blob/18f-pages/pages/making-readmes-readable.md
-[cornell-meta]: https://data.research.cornell.edu/content/readme
-[gh-cdo]: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
-[gh-mdn]: https://github.github.com/gfm/
-[gh-nst]: https://github.com/usnistgov
-[gh-odi]: https://odiwiki.nist.gov/ODI/GitHub.html
-[gh-osr]: https://github.com/usnistgov/opensource-repo/
-[gh-ost]: https://github.com/orgs/usnistgov/teams/opensource-team
-[gh-rob]: https://odiwiki.nist.gov/pub/ODI/GitHub/GHROB.pdf
-[gh-tpl]: https://github.com/usnistgov/carpentries-development/discussions/3
-[li-bsd]: https://opensource.org/licenses/bsd-license
-[li-gpl]: https://opensource.org/licenses/gpl-license
-[li-mit]: https://opensource.org/licenses/mit-license
-[nist-code]: https://code.nist.gov
-[nist-disclaimer]: https://www.nist.gov/open/license
-[nist-s-1801-02]: https://inet.nist.gov/adlp/directives/review-data-intended-publication
-[nist-open]: https://www.nist.gov/open/license#software
-[wk-rdm]: https://en.wikipedia.org/wiki/README
+Please see the [INSTALLATION](./INSTALLATION.md) instructions for how to build, run, and test ZandrEA.

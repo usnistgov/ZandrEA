@@ -1,0 +1,100 @@
+#version: '3'
+
+services:
+
+  proxy:
+    image: traefik
+    container_name: ea-proxy
+    restart: on-failure
+    ports:
+      - "${FRONT_HTTP_PORT:-80}:80"
+    environment:
+      - TRAEFIK_LOG_LEVEL=DEBUG
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+      - TRAEFIK_PROVIDERS_DOCKER=true
+      - TRAEFIK_PROVIDERS_DOCKER_NETWORK=ea_traefik01
+      # - TRAEFIK_API_INSECURE=true
+      - TRAEFIK_ENTRYPOINTS_FRONT=true
+      - TRAEFIK_ENTRYPOINTS_FRONT_ADDRESS=:${FRONT_HTTP_PORT:-80}
+    networks:
+      - traefik01
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  rest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nist_eldst:afdd_ead
+    container_name: ea-rest
+    restart: on-failure
+    privileged: true
+    ports:
+      - "9876:9876"
+    volumes:
+      #      - rest-kb:/data
+      - ./data/:/data/
+      - ./libEA:/ea/libEA:ro
+      - ./EAd:/ea/EAd:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rest.entrypoints=front"
+      - "traefik.http.routers.rest.rule=PathPrefix(`/api/`)"
+      - "traefik.http.services.rest.loadbalancer.server.port=9876"
+      - "traefik.http.routers.rest.middlewares=rest-stripprefix"
+      - "traefik.http.middlewares.rest-stripprefix.stripprefix.prefixes=/api"
+    networks:
+      - traefik01
+
+  bacnet:
+    build:
+      context: ./EAbacnet
+      dockerfile: Dockerfile
+    restart: on-failure
+    image: nist_eldst:afdd_eabacnet
+    container_name: ea-bacnet
+    links:
+      - rest:ead
+    networks:
+      - traefik01
+    volumes:
+      - ./EAbacnet/:/data/
+
+  webapp:
+    build:
+      context: ./eajscli
+      dockerfile: Dockerfile
+    image: nist_eldst:afdd_eawebapp
+    container_name: ea-webapp
+    restart: on-failure
+    user: "node"
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_DOCKERENV=true
+      - REACT_APP_API_PREFIX=/api
+      - REACT_APP_API_PORT=80
+      - NODE_ENV=production
+    mem_limit: 1000m
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./eajscli/:/home/node/app/
+      - exclude:/home/node/app/node_modules/
+    command: bash -c "rm -rf /home/node/app/node_modules/* /home/node/app/node_modules/.bin /home/node/app/node_modules/.cache/* && npm start"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webapp.entrypoints=front"
+      - "traefik.http.routers.webapp.rule=PathPrefix(`/`)"
+      - "traefik.http.services.webapp.loadbalancer.server.port=3000"
+    networks:
+      - traefik01
+
+networks:
+  traefik01:
+    name: ea_traefik01
+    driver: bridge
+
+volumes:
+  rest-kb:
+  exclude:

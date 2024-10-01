@@ -1,0 +1,57 @@
+FROM ubuntu:24.04 AS baseos
+LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
+# Bare minimum of libraries needed to run the above executable
+RUN apt update && DEBIAN_FRONTEND="noninteractive" apt upgrade -y && DEBIAN_FRONTEND="noninteractive" apt install -y \
+    libboost-chrono-dev \
+    libboost-date-time-dev \
+    libboost-dev \
+    libboost-filesystem-dev \
+    libboost-iostreams-dev \
+    libboost-program-options-dev \
+    libboost-system-dev \
+    libboost-thread-dev \
+    libcereal-dev \
+    libcpprest-dev \
+    libstdc++-13-dev \
+    libsz2
+#  && rm -rf /var/lib/apt/lists/* # Don't remove because derivatives may add more pkgs
+
+FROM baseos AS buildbase
+LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
+ARG home=/ea
+ENV HOME=${home}
+ENV PKGROOT=${home}
+RUN DEBIAN_FRONTEND="noninteractive" apt install -y \
+    build-essential \
+    libaec-dev \
+    nodejs \
+  && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /ea/include/ea /ea/lib/ea /ea/bin
+ENV PATH $PKGROOT/HDF5/bin:$PATH
+WORKDIR $PKGROOT
+COPY hdf5-1.14.4-2.tar.gz h5c++.tmpl Makefile ./
+RUN make compiler
+
+FROM buildbase AS appbuilder
+LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
+ARG home=/ea
+ENV HOME=${home}
+ENV PKGROOT=${home}
+ENV PATH $PKGROOT/HDF5/bin:$PATH
+WORKDIR $PKGROOT
+COPY libEA ./libEA/
+COPY EAd ./EAd/
+RUN make build-ead
+
+FROM baseos
+LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
+ARG home=/ea
+ENV HOME=${home}
+ENV PKGROOT=${home}
+RUN mkdir -p /data /ea/bin && rm -rf /var/lib/apt/lists/*
+COPY --from=appbuilder /ea/bin/ /ea/bin/
+WORKDIR /data
+ENTRYPOINT ["/ea/bin/ead"]
+CMD ["-b", "http://0.0.0.0", "-p", "9876"]
+VOLUME ["/data"]
+EXPOSE 9876/tcp

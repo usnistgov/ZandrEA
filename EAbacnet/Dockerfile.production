@@ -1,0 +1,18 @@
+FROM python:3.12
+LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
+#ENV HOME=${home}
+# We may want to pass in some configuration via env?
+#COPY Pipfile Pipfile.lock ./
+WORKDIR /tmp
+COPY Pipfile /tmp/
+RUN pip install --upgrade pipenv 'pip>=24.0' && \
+  pipenv install --skip-lock --deploy --system && \
+  rm -frv .cache/pip
+RUN mkdir /data && pip install bacpypes3
+#RUN if [ ! -f ead.ini ]; then echo "MISSING MASTER CONFIGURATION FILE ead.ini"; exit 1; fi
+WORKDIR /data
+COPY *.py /data/
+###BIND MOUNT THE CONFIGS TO /data/config/ AT RUN TIME###
+ENTRYPOINT ["/data/main.py"]
+CMD []
+#VOLUME ["/data"]

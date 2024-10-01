@@ -1,0 +1,23 @@
+# Any files matching patterns below will not be COPYd into docker images
+*.d
+*.o
+*.a
+*.h5
+.git
+.gitlab-ci.yml
+node_modules
+build
+EAd/ead
+EAwin32Client/eacli_iowavav_kb
+EAwin32Client/eacli_iowavav_gui
+EAjsClient
+eajscli
+hdf5-*
+!hdf5-*.tar.gz
+bin
+data
+lib
+# vvv three added below for VS Code json files [DAV]
+#.vscode/
+*.code-workspace
+devcontainer.json

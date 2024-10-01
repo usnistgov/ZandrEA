@@ -1,0 +1,76 @@
+#
+# Defines 11 data points needed for a VAV box (31:10), two of which come from
+# a separate AHU device (31:1)
+#
+# The Points section must exist and must be a list of the 11 section names (in
+# order) defining the data points to to submit to the EA REST daemon. Do not change
+# this section.
+#
+# Other sections will need to be customized for each site, but do not add or delete
+# any sections.
+#
+# For multiple devices, customize an initial copy of this file, then use it as a
+# template so additional copies will require minimal editing.
+#
+
+# define common values used in other sections below
+[PointsCommon]
+devIdAHU: 31:1
+devIdVAV: 31:10
+
+[Psas]
+devId: ${PointsCommon:devIdAHU}
+channel: analog-input,7
+comment: Psas- static supply air pressure- read from the AHU, device 01- stat_press, AI-07
+
+[Tas]
+devId: ${PointsCommon:devIdAHU}
+channel: analog-input,8
+comment: Tas- supply air temp- also from the AHU-  AI-08
+
+[Tad]
+channel: analog-input,2
+comment: Tad- discharge air temp- AI-02
+
+[Taz]
+channel: analog-input,4
+comment: Taz- zone air temp, AI-04
+
+[TazSetHtg]
+channel: analog-value,2
+comment: TazSetHtg- AV-02
+
+[TazSetClg]
+channel: analog-value,1
+comment: TazSetClg- AV-01
+
+[Zvh]
+channel: analog-output,1
+comment: Zvh- heating valve position- AO-01
+
+[Zd]
+channel: analog-value,23
+comment: Zd- damper position- AV-23
+
+[Qa]
+channel: analog-input,1
+comment: Qa- flow- AI-01
+
+[QaSet]
+channel: analog-value,12
+comment: QaSet- flow setpoint- AV-12
+
+[Bocc]
+channel: binary-value,2
+comment: Bocc- occupancy- BV-02
+
+#
+# ------ DO NOT EDIT ANYTHING BELOW ------
+#
+
+[DEFAULT]
+dataType: presentValue
+devId: ${PointsCommon:devIdVAV}
+
+[Points]
+points: ["Psas", "Tas", "Tad", "Taz", "TazSetHtg", "TazSetClg", "Zvh", "Zd", "Qa", "QaSet", "Bocc"]

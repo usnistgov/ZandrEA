@@ -1,0 +1,24 @@
+#
+# This file defines the BACnet parameters needed by BACpypes to communicate
+# with BACnet devices. It is a standard INI-format file and it must have a
+# [BACpypes] section. See BACpypes documentation for a description of the
+# available configuration options:
+#
+# https://media.readthedocs.org/pdf/bacpypes/latest/bacpypes.pdf
+#
+# Note that it does not need the address of the local system defined
+# ("address") the way BACpypes examples show because we get the
+# address from the system itself. However if you do specify it here
+# it will override the one automatically determined by the script.
+#
+
+[BACpypes]
+objectName: EAbacnet
+objectIdentifier: 599
+maxApduLengthAccepted: 1024
+segmentationSupported: segmentedBoth
+maxSegmentsAccepted: 1024
+vendorIdentifier: 15
+foreignPort: 0
+foreignBBMD: 10.0.5.1
+foreignTTL: 30

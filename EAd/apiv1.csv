@@ -1,0 +1,54 @@
+URI,C++,METHOD,JSON params,JSON return,status_codes
+/apiver   /api   /noop,n/a,GET,,"{""apiver"":INT}",OK
+/ctrl/time,SetCurrentTM(std::tm),PUT,"{""time"":INTSTR}",,OK   BadRequest
+/ctrl/sample/tags,"std::vector<std::string> SaySampleTagsInOrderExpected()",GET,,"{""tags"":STR[]}",OK
+/ctrl/sample,"SetCurrentSamples(std::vector<double>&)",PUT,"{""values"":DBL[]}",,OK   BadRequest
+/ctrl/singlestep,SingleStepAFDD(void),POST,,,OK
+/ctrl/caseids,std::vector<std::string >SayCaseList(void),GET,"{subject:INT}","{caseids:INT[]}",OK
+/ctrl/focuscase/prompt,std::string SayPromptFromFocusCase(void),GET,,"{prompt:STR}",OK
+/ctrl/focuscase,std::string SayReportFromFocusCase(void),GET,,"{report:STR}",OK
+/ctrl/focuscase,int SetFocusCaseAs(size_t),PUT,"{case:INT}","{returncode:INT}",OK   BadRequest
+/ctrl/focuscase/promptmode,char SayPromptModeOfFocusCase(void),GET,,"{promptmode:STR}",OK
+/ctrl/focuscase/numoptions,int SayNumOptionsModeM(void),GET,,"{numoptions:INT}",OK
+/ctrl/focuscase/answer,int SetAnswerToPromptAs(int),PUT,"{answer:INT}","{returncode:INT}",OK   BadRequest
+/ctrl/focuscase/kronoid,int SayKronoIdOfFocusCaseSnapshot(void),GET,,"{kronoid:INT}",OK   BadRequest
+/view/featureids,std::vector<unsigned int> SayMappedFeatureIds(void),GET,,"{featureids:INT[]}",OK
+/view/feature/label,std::string SayLabelOfFeature(unsigned int),GET,"{""feature"":INT}","{""label"":STR}",OK   BadRequest
+/view/feature/text,std::string SayTextInFeature(unsigned int),GET,"{""feature"":INT}","{""text"":STR}",OK   BadRequest
+/view/feature/color,char SayColorInFeature(unsigned int),GET,"{""feature"":INT}","{""color"":CHAR}",OK   BadRequest
+/view/feature/knob/count,size_t SayNumKnobsOnFeature(unsigned int),GET,"{""feature"":INT}","{""count"":INT}",OK   BadRequest
+/view/feature/knob/labels,std::vector<std::string> SayKnobLabelsOfFeature(unsigned int),GET,"{""feature"":INT}","{""labels"":STR[]}",OK   BadRequest
+/view/feature/knob/units,std::vector<std::string> SayKnobUnitsOfFeature(unsigned int),GET,"{""feature"":INT}","{""units"":STR[]}",OK   BadRequest
+/view/feature/knob/ranges,std::vector<std::string> SayKnobRangesMinMaxOfFeature(unsigned int),GET,"{""feature"":INT}","{""ranges"":STR[]}",OK   BadRequest
+/view/feature/knob/values,std::vector<std::string> GetKnobValuesOfFeature(unsigned int),GET,"{""feature"":INT}","{""values"":STR[]}",OK   BadRequest
+/view/kronoids,std::vector<unsigned int> SayMappedKronoIds(void),GET,,"{""kronoids"":INT[]}",OK
+/view/krono/title,std::string SayTitleOfKrono(unsigned int),GET,"{""krono"":INT}","{""title"":STR}",OK   BadRequest
+/view/krono/timeaxis/clock,std::vector<time_t> SayTimeAxisPerClockOfKrono(unsigned int),GET,"{""krono"":INT}","{""tapc"":INT}",OK   BadRequest
+/view/krono/timeaxis/lagsecs,std::vector<int> SayTimeAxisPerLagSecsOfKrono(unsigned int),GET,"{""krono"":INT}","{""tapls"":INT[]}",OK   BadRequest
+/view/krono/length/seconds,int GetLengthInSecsOfKrono(unsigned int),GET,"{""krono"":INT}","{""seconds"":INT}",OK   BadRequest
+/view/krono/length/cycles,size_t SayLengthInCyclesOfKrono(unsigned int),GET,"{""krono"":INT}","{""cycles"":INT)",OK   BadRequest
+/view/krono/pane/count,size_t SayNumPanesInKrono(unsigned int),GET,"{""krono"":INT}","{""count"":INT}",OK   BadRequest
+/view/krono/pane/style,"char SayStyleOfPaneInKrono(size_t, unsigned int)",GET,"{""pane"":INT,""krono"":INT}","{""style"":STR}",OK   BadRequest
+/view/krono/pane/yaxis/label,"std::string SayYaxisLabelOfPaneInKrono(size_t, unsigned int)",GET,"{""pane"":INT,""krono"":INT}","{""label"":STR}",OK   BadRequest
+/view/krono/pane/yaxis/units,"std::string SayYaxisUnitsOfPaneInKrono(size_t, unsigned int)",GET,"{""pane"":INT,""krono"":INT}","{""units"":STR}",OK   BadRequest
+/view/krono/pane/yaxis/min,"const double SayYaxisMinOfPaneInKrono(size_t, unsigned int)",GET,"{""pane"":INT,""krono"":INT}","{""min"":DBL}",OK   BadRequest
+/view/krono/pane/yaxis/max,"const double SayYaxisMaxOfPaneInKrono(size_t, unsigned int)",GET,"{""pane"":INT,""krono"":INT}","{""max"":DBL}",OK   BadRequest
+/view/krono/pane/trace/count,"size_t SayNumTracesInPaneOfKrono(size_t, unsigned int)",GET,"{""pane"":INT,""krono"":INT}","{""count"":INT}",OK   BadRequest
+/view/krono/pane/trace/values,"std::vector<double> SayValuesSeenTracePaneKrono(size_t, size_t, unsigned int)",GET,"{""trace"":INT,""pane"":INT,""krono"":INT}","{""values"":DBL[]}",OK   BadRequest
+/view/krono/pane/trace/label,"std::string SayLabelTracePaneKrono(size_t, size_t, unsigned int)",GET,"{""trace"":INT,""pane"":INT,""krono"":INT}","{""label"":STR}",OK   BadRequest
+/view/krono/pane/trace/knob/count,"size_t SayNumKnobsTracePaneKrono(size_t, size_t, unsigned int)",GET,"{""trace"":INT,""pane"":INT,""krono"":INT}","{""count"":INT}",OK   BadRequest
+/view/krono/pane/trace/knob/labels,"std::vector<std::string> SayKnobLabelsTracePaneKrono(size_t, size_t, unsigned int)",GET,"{""trace"":INT,""pane"":INT,""krono"":INT}","{""labels"":STR[]}",OK   BadRequest
+/view/krono/pane/trace/knob/ranges,"std::vector<std::string> SayKnobRangesTracePaneKrono(size_t, size_t, unsigned int)",GET,"{""trace"":INT,""pane"":INT,""krono"":INT}","{""ranges"":STR[]}",OK   BadRequest
+/view/krono/pane/trace/knob/values,"std::vector<std::string> GetKnobValuesTracePaneKrono(size_t, size_t, unsigned int)",GET,"{""trace"":INT,""pane"":INT,""krono"":INT}","{""values"":STR[]}",OK   BadRequest
+/view/krono/pane/trace/newestvalue,"double SayNewestValueTracePaneKrono(size_t, size_t, unsigned int)",GET,"{""trace"":INT,""pane"":INT,""krono"":INT}","{""value"":DBL}",OK   BadRequest
+/view/krono/newesttime,time_t SayNewestTimeInKrono(unsigned int),GET,"{""krono"":INT}","{""time"":INTSTR}",OK   BadRequest
+/view/kit/alerts,std::vector<std::string> SayAlertsFromKit(char),GET,"{""kit"":CHAR}","{""alerts"":STR[]}",OK   BadRequest
+/set/feature/knob/value,"int SetKnobOnFeatureToValue(size_t, unsigned int, double)",PUT,"{""feature"":INT,""knob"":INT,""value"":DBL}","{""success"":BOOL}",OK   BadRequest
+/set/krono/pane/trace/knob/value,"int SetKnobOnTracePaneKronoToValue(size_t, size_t, size_t, unsigned int, double)",PUT,"{""knob"":INT,""trace"":INT,""pane"":INT,""krono"":INT,""value"":DBL}","{""success"":BOOL}",OK   BadRequest
+/set/krono/length/seconds,"int SetLengthOfKronoInSeconds(unsigned int, int)",PUT,"{""krono"":INT,""seconds"":INT}","{""success"":BOOL}",OK   BadRequest
+-
+/ctrl/sampletimestep,n/a,PUT,"{""time"":INT,""values"":DBL[]""}",,OK   BadRequest
+/feature,n/a,GET,"{""feature"":INT}",(all /view/feature/* returns above, plus id),OK   BadRequest
+/features,n/a,GET,,"{""featurelist"":[list of features as above]}",OK   BadRequest
+/cases,n/a,GET,,"{""[list of {id,label} case objects]}",OK   BadRequest
+/state,n/a,GET,,(dump of ENTIRE object hierarchy),OK

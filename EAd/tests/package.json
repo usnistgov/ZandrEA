@@ -1,0 +1,8 @@
+{
+  "name": "ead-test-suite",
+  "version": "0.2.0",
+  "author": "Steve Barber <steve.barber@nist.gov>",
+  "dependencies": {
+    "bent": "^7.3.12"
+  }
+}
