@@ -1,4 +1,4 @@
-# ZandrEA 
+# ZandrEA&trade;
 
 ## What is it?
 
