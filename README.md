@@ -2,7 +2,7 @@
 
 ## What is it?
 
-ZandrEA :tm: is a software framework supporting research into the automated, real-time detection and diagnostics of operational faults in the heating, ventilating, and air-conditioning (HVAC) systems of large commercial buildings.
+ZandrEA&trade; is a software framework supporting research into the automated, real-time detection and diagnostics of operational faults in the heating, ventilating, and air-conditioning (HVAC) systems of large commercial buildings.
 
 It is worth noting that "EA" was used early on in this project as a derivation from "Expert Assistant". That meaning is now deprecated, but as a convenient and short tag that was used pervasively through the codebase, you will continue to see references to EA throughout the repo.
 
