@@ -1,6 +1,11 @@
 #syntax=docker/dockerfile:1
 
-FROM node:22
+FROM node:lts
+
+# Install a particular NPM version because newer vsersions tend to hang during audit checks
+ENV NPM_VERSION=10.3.0
+RUN npm install -g npm@"${NPM_VERSION}"
+# This can probably be commented out at some point in the future when NPM is fixed.
 
 #
 # NOTE: docker-compose's bind mount of the app only happens AFTER the
