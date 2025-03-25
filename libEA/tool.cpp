@@ -1569,8 +1569,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                          *u_Subject,
                                                          u_Taz.get(),
                                                          u_TazShew.get(),
-                                                         u_TazSetptHtg.get(),
-                                                         u_TazSetptHtgShew.get(),
+                                                         u_TazSetptClg.get(),
+                                                         u_TazSetptClgShew.get(),
                                                          INIT_MINDEFMAX_TRACKING_HALFBAND_DEGF_0TO120,
                                                          INIT_MINDEFMAX_TRACKING_WARN_DEGF_0TO120,
                                                          ctrlrRef );

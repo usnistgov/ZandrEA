@@ -165,10 +165,10 @@ const std::array<int,3> INIT_MINDEFMAX_TRACKING_APPSBETWEENRESETS = {0, 5, 10};
 
 // Fraction of -WARN that sum in register N will cancel register P = +WARN being a called a "rise" -and-
 // fraction of +WARN that sum in register P will cancel register N = -WARN being a called a "fall"
-const std::array<float,3> INIT_MINDEFMAX_TRACKING_LAGFRAC = {0.0f, 0.0f, 1.0f}; 
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_LAGFRAC = {0.20f, 0.50f, 1.0f}; 
 
 // fraction in P and N registers allowed to "stale off" when not increased during a cycle
-const std::array<float,3> INIT_MINDEFMAX_TRACKING_STALEFRAC = {0.0f, 0.0f, 1.0f};
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_STALEFRAC = {0.20f, 0.50f, 1.0f};
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 /* Min is zero, max is given
@@ -202,7 +202,7 @@ const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_IWG_0TO3 =           {-0.1
 
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_ANYFRACTION =   {0.01f, 0.02f, 0.03f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_ANYPERCENT =    {1.0f, 2.0f, 3.0f};
-const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_CFM_0TO3K =     {5.0f, 25.0f, 50.0f};
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_CFM_0TO3K =     {10.0f, 50.0f, 90.0f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_DEGF_0TO120 =   {0.5f, 0.5f, 3.0f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_IWG_0TO3 =      {0.1f, 0.3f, 0.6f};
 
@@ -217,6 +217,105 @@ const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_CFM_0TO3K = {0.0f, 300.0f
 // number of degF-minutes summed over reset
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_DEGF_0TO120 = {0.0f, 5.0f, 30.0f};
 
+
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+// Constants and types related to binning of input data into a "Rainfall"
+
+/*
+Type accumulating a "bin sum" down (i.e., column-wise) all rows of rainfall
+Also for holding the sum across all bin sums (a "sum bin sums" = full count)
+since arithmetic is also done in this type, better to use signed vs. unsigned
+*/
+typedef int BinSum_t;
+const BinSum_t FIXED_RULERAIN_FAILSINEMPTYTRAP_MAX = 5; // Max Rule fails in a trap considered "empty"
+
+// Each "bin row" of Boolean bins represents one "cycle" ("sample", "time step") within rainfall
+// Analog use is "widest" use, so it fixes width of rainfall. Other uses read/write rows of fewer bins
+
+typedef std::array<BinSum_t,FIXED_RAIN_ANALOGVALUE_NUMBINS >   BinSumsAnalogValue_t;
+typedef std::array<BinSum_t,FIXED_RAIN_ANALOGSTATE_NUMBINS>    BinSumsAnalogState_t;
+typedef std::array<BinSum_t,FIXED_RAIN_FACTSTATE_NUMBINS>      BinSumsFactState_t;
+typedef std::array<BinSum_t,FIXED_RAIN_RULESTATE_NUMBINS>      BinSumsRuleState_t;
+
+
+const std::array<EGuiState, FIXED_RAIN_ANALOGSTATE_NUMBINS>
+   GUISTATES_ANALOGSTATEBINS = { {  EGuiState::Analog_invalid,
+                                    EGuiState::Analog_valid,
+                                    EGuiState::Analog_unavailable } };
+
+const std::array<std::string, FIXED_RAIN_ANALOGSTATE_NUMBINS>
+   GUILABELS_ANALOGSTATEBINS = { {  "Invalid",
+                                    "Valid",
+                                    "Unavail" } };
+
+const std::array<EGuiState, FIXED_RAIN_FACTSTATE_NUMBINS>
+   GUISTATES_FACTBINS =   { { EGuiState::Fact_false,
+                              EGuiState::Fact_true,
+                              EGuiState::Fact_invalid,
+                              EGuiState::Fact_unavailable } };
+
+const std::array<std::string, FIXED_RAIN_FACTSTATE_NUMBINS>
+   GUILABELS_FACTBINS =   { { "False",
+                              "True",
+                              "Invalid",
+                              "Unavail" } };
+
+const std::array<EGuiState, FIXED_RAIN_RULESTATE_NUMBINS>
+   GUISTATES_RULEBINS = { {   EGuiState::Rule_autoMode_fail,
+                              EGuiState::Rule_autoMode_pass,
+                              EGuiState::Rule_autoMode_skip,
+                              EGuiState::Rule_invalid,
+                              EGuiState::Rule_caseMode_fail,
+                              EGuiState::Rule_caseMode_pass,
+                              EGuiState::Rule_caseMode_skip,
+                              EGuiState::Rule_idleMode_fail,
+                              EGuiState::Rule_idleMode_pass,
+                              EGuiState::Rule_idleMode_skip,
+                              EGuiState::Rule_unavailable } };
+
+const std::array<bool, FIXED_RAIN_RULESTATE_NUMBINS>
+   FAILEDINANYMODE_RULEBINS = { {   true,
+                                    false,
+                                    false,
+                                    false,
+                                    true,
+                                    false,
+                                    false,
+                                    true,
+                                    false,
+                                    false,
+                                    false } };
+
+const std::array<std::string, FIXED_RAIN_RULESTATE_NUMBINS>
+   GUILABELS_RULEBINS = { {   "Fa",
+                              "Pa",
+                              "Sa",
+                              "X",
+                              "Fc",
+                              "Pc",
+                              "Sc",
+                              "Fi",
+                              "Pi",
+                              "Si",
+                              "U" } };
+
+// Needed for std::find on "validity over cycles" checks by charts:
+const Bindex_t BINDEX_ANALOGSTATE_INVALID = static_cast<Bindex_t>(0u);  // 1st bin, as is zero-indexed
+const Bindex_t BINDEX_FACT_INVALID = static_cast<Bindex_t>(2u);         // 3rd bin, as is zero-indexed
+
+const Bindex_t BINDEX_RULE_AUTOMODEFAIL = static_cast<Bindex_t>(0u);    // 1th bin = "autoMode fail"
+
+// Needed to backfill resized logs :
+const Bindex_t BINDEX_ANALOGSTATE_UNAVAIL = static_cast<Bindex_t>(2u);     // 3rd bin, as is zero-indexed
+const Bindex_t BINDEX_ANALOGVALUE_UNAVAIL = static_cast<Bindex_t>(127u);   // arbitrarily mid of 256 bins
+const Bindex_t BINDEX_FACT_UNAVAIL = static_cast<Bindex_t>(3u);            // 4th bin = "unavail"
+const Bindex_t BINDEX_RULE_UNAVAIL = static_cast<Bindex_t>(10u);           // 11th bin = "unavail"
+
+// Needed to initialize histogram slices (hopefully to cut down on compiler warnings from implied casts):
+const size_t INDEX_BINSUMS_ANALOGSTATE_UNAVAIL = static_cast<size_t>(BINDEX_ANALOGSTATE_UNAVAIL);
+const size_t INDEX_BINSUMS_ANALOGVALUE_UNAVAIL = static_cast<size_t>(BINDEX_ANALOGVALUE_UNAVAIL);
+const size_t INDEX_BINSUMS_FACT_UNAVAIL = static_cast<size_t>(BINDEX_FACT_UNAVAIL);
+const size_t INDEX_BINSUMS_RULE_UNAVAIL = static_cast<size_t>(BINDEX_RULE_UNAVAIL);
 
 //======================================================================================================/
 // Further Typedefs and Structs
@@ -298,11 +397,6 @@ typedef struct SEnergyPrices {
    }
 
 } EnergyPrices_t;
-
-//======================================================================================================/
-// Types used in Rainfall classes and also in Histogram classes, so singularly defined here:
-
-
 
 
 //======================================================================================================/
@@ -437,7 +531,7 @@ enum struct EDataRange : unsigned char {
    None
 };
 
-//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+//======================================================================================================/
 
 enum struct EDataLabel : unsigned int {
 
@@ -888,103 +982,7 @@ enum struct EDataSuffix : unsigned char {
 };
 
 
-/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
-// Constants and types related to binning of input data into a "Rainfall"
-/*
-Type accumulating a "bin sum" down (i.e., column-wise) all rows of rainfall
-Also for holding the sum across all bin sums (a "sum bin sums" = full count)
-since arithmetic is also done in this type, better to use signed vs. unsigned
-*/
-typedef int BinSum_t;
 
-// Each "bin row" of Boolean bins represents one "cycle" ("sample", "time step") within rainfall
-// Analog use is "widest" use, so it fixes width of rainfall. Other uses read/write rows of fewer bins
-
-typedef std::array<BinSum_t,FIXED_RAIN_ANALOGVALUE_NUMBINS >   BinSumsAnalogValue_t;
-typedef std::array<BinSum_t,FIXED_RAIN_ANALOGSTATE_NUMBINS>    BinSumsAnalogState_t;
-typedef std::array<BinSum_t,FIXED_RAIN_FACTSTATE_NUMBINS>      BinSumsFactState_t;
-typedef std::array<BinSum_t,FIXED_RAIN_RULESTATE_NUMBINS>      BinSumsRuleState_t;
-
-
-const std::array<EGuiState, FIXED_RAIN_ANALOGSTATE_NUMBINS>
-   GUISTATES_ANALOGSTATEBINS = { {  EGuiState::Analog_invalid,
-                                    EGuiState::Analog_valid,
-                                    EGuiState::Analog_unavailable } };
-
-const std::array<std::string, FIXED_RAIN_ANALOGSTATE_NUMBINS>
-   GUILABELS_ANALOGSTATEBINS = { {  "Invalid",
-                                    "Valid",
-                                    "Unavail" } };
-
-const std::array<EGuiState, FIXED_RAIN_FACTSTATE_NUMBINS>
-   GUISTATES_FACTBINS =   { { EGuiState::Fact_false,
-                              EGuiState::Fact_true,
-                              EGuiState::Fact_invalid,
-                              EGuiState::Fact_unavailable } };
-
-const std::array<std::string, FIXED_RAIN_FACTSTATE_NUMBINS>
-   GUILABELS_FACTBINS =   { { "False",
-                              "True",
-                              "Invalid",
-                              "Unavail" } };
-
-const std::array<EGuiState, FIXED_RAIN_RULESTATE_NUMBINS>
-   GUISTATES_RULEBINS = { {   EGuiState::Rule_autoMode_fail,
-                              EGuiState::Rule_autoMode_pass,
-                              EGuiState::Rule_autoMode_skip,
-                              EGuiState::Rule_invalid,
-                              EGuiState::Rule_caseMode_fail,
-                              EGuiState::Rule_caseMode_pass,
-                              EGuiState::Rule_caseMode_skip,
-                              EGuiState::Rule_idleMode_fail,
-                              EGuiState::Rule_idleMode_pass,
-                              EGuiState::Rule_idleMode_skip,
-                              EGuiState::Rule_unavailable } };
-
-const std::array<bool, FIXED_RAIN_RULESTATE_NUMBINS>
-   FAILEDINANYMODE_RULEBINS = { {   true,
-                                    false,
-                                    false,
-                                    false,
-                                    true,
-                                    false,
-                                    false,
-                                    true,
-                                    false,
-                                    false,
-                                    false } };
-
-const std::array<std::string, FIXED_RAIN_RULESTATE_NUMBINS>
-   GUILABELS_RULEBINS = { {   "Fa",
-                              "Pa",
-                              "Sa",
-                              "X",
-                              "Fc",
-                              "Pc",
-                              "Sc",
-                              "Fi",
-                              "Pi",
-                              "Si",
-                              "U" } };
-
-
-// Needed for std::find on "validity over cycles" checks by charts:
-const Bindex_t BINDEX_ANALOGSTATE_INVALID = static_cast<Bindex_t>(0u);  // 1st bin, as is zero-indexed
-const Bindex_t BINDEX_FACT_INVALID = static_cast<Bindex_t>(2u);         // 3rd bin, as is zero-indexed
-
-const Bindex_t BINDEX_RULE_AUTOMODEFAIL = static_cast<Bindex_t>(0u);    // 1th bin = "autoMode fail"
-
-// Needed to backfill resized logs :
-const Bindex_t BINDEX_ANALOGSTATE_UNAVAIL = static_cast<Bindex_t>(2u);     // 3rd bin, as is zero-indexed
-const Bindex_t BINDEX_ANALOGVALUE_UNAVAIL = static_cast<Bindex_t>(127u);   // arbitrarily mid of 256 bins
-const Bindex_t BINDEX_FACT_UNAVAIL = static_cast<Bindex_t>(3u);            // 4th bin = "unavail"
-const Bindex_t BINDEX_RULE_UNAVAIL = static_cast<Bindex_t>(10u);           // 11th bin = "unavail"
-
-// Needed to initialize histogram slices (hopefully to cut down on compiler warnings from implied casts):
-const size_t INDEX_BINSUMS_ANALOGSTATE_UNAVAIL = static_cast<size_t>(BINDEX_ANALOGSTATE_UNAVAIL);
-const size_t INDEX_BINSUMS_ANALOGVALUE_UNAVAIL = static_cast<size_t>(BINDEX_ANALOGVALUE_UNAVAIL);
-const size_t INDEX_BINSUMS_FACT_UNAVAIL = static_cast<size_t>(BINDEX_FACT_UNAVAIL);
-const size_t INDEX_BINSUMS_RULE_UNAVAIL = static_cast<size_t>(BINDEX_RULE_UNAVAIL);
 
 #endif
 
