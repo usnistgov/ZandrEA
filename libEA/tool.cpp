@@ -639,23 +639,12 @@ u_RuleKit = std::make_unique<CRuleKit>(
 //======================================================================================================/
 // Define direct Fact objects
 
-   u_sysOcc = std::make_unique<CFactFromPoint>(
-                  seq0Ref,
-                  *u_Subject,
-                  EDataLabel::Fact_direct_Bso,
-                  *u_Bso);
-
-//======================================================================================================/
-// Define sustained Fact objects
-
-   u_sysOccSus = std::make_unique<CFactSustained>(
-                  seq0Ref,
-                  *u_Subject,
-                  EDataLabel::Fact_sustained_Bso,
-                  *u_sysOcc,
-                  true,
-                  INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES,
-                  ctrlrRef);
+   // "system" (ahu) occupied means at least one of its zones being occupied
+   u_sysOccupied = std::make_unique<CFactFromPoint>( 
+                      seq0Ref,
+                     *u_Subject,
+                     EDataLabel::Fact_direct_Bso,
+                     *u_Bso); // Direct from a CPointBinary object that reads a BAS channel (occ flag)
 
 //======================================================================================================/
 // Define CFactFromFacts objects
@@ -679,12 +668,12 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_unitOn =  std::make_unique<CFactFromFacts>(
                               seq0Ref,
                               *u_Subject,
-                              EDataLabel::Fact_subj_ahu_unitOn,
+                              EDataLabel::Fact_subject_unitOn,
                               operands,
                               LambdaToCopy );
  
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
-// inputsSteady
+// inputChartsSteady
 
    operands.clear();
    operands.push_back( u_TasSetptSteady.get() );
@@ -693,38 +682,13 @@ u_RuleKit = std::make_unique<CRuleKit>(
                         return ( u_TasSetptSteady->Now() );
                      } );
 
-   u_inputsSteady =  std::make_unique<CFactFromFacts>(
-                        seq0Ref,
-                        *u_Subject,
-                        EDataLabel::Fact_subj_ahu_inputsSteady,
-                        operands,
-                        LambdaToCopy );
+   u_inputChartsSteady =  std::make_unique<CFactFromFacts>(
+                          seq0Ref,
+                          *u_Subject,
+                          EDataLabel::Fact_subject_inputChartsSteady,
+                          operands,
+                          LambdaToCopy );
 
-//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
-// outputLevel
-
-   operands.clear();
-   operands.push_back( u_sysOccSus.get() );
-//   operands.push_back( u_TasSteady.get() );
-//   operands.push_back( u_TasRising.get() );
-//   operands.push_back( u_TasFalling.get() );
-
-   LambdaToCopy = (  [&]() -> bool {
-                        return ( u_sysOccSus->Now()
-//                                 ( u_TasSteady->Now() &&
-//                                   ( ! u_TasRising->Now() ) &&
-//                                   ( ! u_TasFalling->Now() )
-//                                 )
-                        );
-                     } );
-
-   u_outputLevel =  std::make_unique<CFactFromFacts>(
-                        seq0Ref,
-                        *u_Subject,
-                        EDataLabel::Fact_subj_ahu_outputLevel,
-                        operands,
-                        LambdaToCopy );
- 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // chwCoolingAir
 
@@ -785,6 +749,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // econExpected
 
+   // "expected" defined to include AHU being "on" but does not necessarily mean any zone is occupied
+
    operands.clear();
    operands.push_back( u_unitOn.get() );
    operands.push_back( u_Tao_LT_TasSetpt.get() );
@@ -800,6 +766,27 @@ u_RuleKit = std::make_unique<CRuleKit>(
                               EDataLabel::Fact_subj_ahu_econExpected,
                               operands,
                               LambdaToCopy );
+
+//======================================================================================================/
+// Define facts sustained over a specified number of cycles
+
+   u_inputSteadySus =  std::make_unique<CFactSustained>(
+                       seq0Ref,
+                       *u_Subject,
+                       EDataLabel::Fact_sustained_inputSteady,
+                       *u_inputChartsSteady,
+                       true,
+                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES,
+                       ctrlrRef );
+
+   u_sysOccSus =  std::make_unique<CFactSustained>(
+                       seq0Ref,
+                       *u_Subject,
+                       EDataLabel::Fact_sustained_Bso,
+                       *u_sysOccupied,
+                       true,
+                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES,
+                       ctrlrRef );
  
 //VVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVVV
 // Instantiate Knowledge Base
@@ -815,15 +802,16 @@ u_RuleKit = std::make_unique<CRuleKit>(
 // Rule 1
 
    operands_if.push_back( u_unitOn.get() );
-   operands_if.push_back( u_inputsSteady.get() );
-   operands_if.push_back( u_outputLevel.get() );
+   operands_if.push_back( u_sysOccSus.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_econExpected.get() );
+
    operands_then.push_back( u_Tas_EQ_TasSetpt.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_unitOn->Now() &&
-                                 u_inputsSteady->Now() &&
-                                 u_outputLevel->Now() &&
+                                 u_sysOccSus->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  (! u_econExpected->Now()) );
                      } );
 
@@ -851,16 +839,17 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_unitOn.get() );
-   operands_if.push_back( u_inputsSteady.get() );
-   operands_if.push_back( u_outputLevel.get() );
+   operands_if.push_back( u_sysOccSus.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_econExpected.get() );
+
    operands_then.push_back( u_TasTrackingHigh.get() );
    operands_then.push_back( u_TasTrackingLow.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_unitOn->Now() &&
-                                 u_inputsSteady->Now() &&
-                                 u_outputLevel->Now() &&
+                                 u_sysOccSus->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  (! u_econExpected->Now()) );
                         }
    );
@@ -889,15 +878,16 @@ u_RuleKit = std::make_unique<CRuleKit>(
 // Rule 3
 
    operands_if.push_back( u_unitOn.get() );
-   operands_if.push_back( u_inputsSteady.get() );
-   operands_if.push_back( u_outputLevel.get() );
+   operands_if.push_back( u_sysOccSus.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_econExpected.get() );
+
    operands_then.push_back( u_Tas_EQ_TasSetpt.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_unitOn->Now() &&
-                                 u_inputsSteady->Now() &&
-                                 u_outputLevel->Now() &&
+                                 u_sysOccSus->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  u_econExpected->Now() );
                      } );
 
@@ -926,16 +916,17 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_unitOn.get() );
-   operands_if.push_back( u_inputsSteady.get() );
-   operands_if.push_back( u_outputLevel.get() );
+   operands_if.push_back( u_sysOccSus.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_econExpected.get() );
+
    operands_then.push_back( u_TasTrackingHigh.get() );
    operands_then.push_back( u_TasTrackingLow.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_unitOn->Now() &&
-                                 u_inputsSteady->Now() &&
-                                 u_outputLevel->Now() &&
+                                 u_sysOccSus->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  u_econExpected->Now() );
                         } );
 
@@ -966,6 +957,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_if.push_back( u_unitOn.get() );
    operands_if.push_back( u_UvcSteady.get() );
    operands_if.push_back( u_UvcShut.get() );
+
    operands_then.push_back( u_chwCoolingAir.get() );
 
 
@@ -999,14 +991,12 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_unitOn.get() );
-   operands_if.push_back( u_outputLevel.get() );
    operands_if.push_back( u_econExpected.get() );
+
    operands_then.push_back( u_econActive.get() );
  
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_unitOn->Now() &&
-                                 u_inputsSteady->Now() &&
-                                 u_outputLevel->Now() &&
                                  u_econExpected->Now() );
                         } );
 
@@ -1034,16 +1024,13 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_chwNeeded.get() );
+
    operands_then.push_back( u_chwCoolingAir.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_unitOn->Now() &&
-                                 u_inputsSteady->Now() &&
-                                 u_outputLevel->Now() &&
                                  u_chwNeeded->Now() );
                      } );
-
-
 
    LambdaToCopy_then =  ( [&]() -> bool {
                            return ( u_chwCoolingAir->Now() );
@@ -1096,6 +1083,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_unitOn.get() );
+
    operands_then.push_back( u_Tam_GTE_minTaoTar.get() );
    operands_then.push_back( u_Tam_LTE_maxTaoTar.get() );
  
@@ -1128,12 +1116,15 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_unitOn.get() );
+   operands_if.push_back( u_sysOccSus.get() );
    operands_if.push_back( u_absDifTaoTar_GTE_10F.get() );
    operands_if.push_back( u_econExpected.get() );
+
    operands_then.push_back( u_fracOAatMin.get() );
  
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_unitOn->Now() &&
+                                 u_sysOccSus->Now() &&
                                  u_absDifTaoTar_GTE_10F->Now() &&
                                  ( ! u_econExpected->Now() ) );
                      } );
@@ -1294,8 +1285,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_GuiFeat02 = std::make_unique<CFeatureFact>(  *u_Subject,
                                                    viewRef,
                                                    2,
-                                                   *u_inputsSteady,
-                                                   ([&]()->bool { return u_inputsSteady->Now(); }) );
+                                                   *u_inputSteadySus,
+                                                   ([&]()->bool { return u_inputSteadySus->Now(); }) );
 
    //'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
    u_GuiFeat03 =  std::make_unique<CFeatureAnalog>(
@@ -1905,7 +1896,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                          LambdaToCopy );
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
-// inputsSteady
+// inputChartsSteady
 
    operands.clear();
    operands.push_back( u_PsaiSteady.get() );
@@ -1920,10 +1911,10 @@ u_RuleKit = std::make_unique<CRuleKit>(
                               u_TazSetptClgSteady->Now() );
                   } );
 
-   u_inputsSteady =  std::make_unique<CFactFromFacts>(
+   u_inputChartsSteady =  std::make_unique<CFactFromFacts>(
                               seq0Ref,
                               *u_Subject,
-                              EDataLabel::Fact_subj_vav_inputsSteady,
+                              EDataLabel::Fact_subject_inputChartsSteady,
                               operands,
                               LambdaToCopy );
  
@@ -1931,12 +1922,12 @@ u_RuleKit = std::make_unique<CRuleKit>(
 // TazInBand
 
    operands.clear();
-   operands.push_back( u_inputsSteady.get() );
+   operands.push_back( u_inputChartsSteady.get() );
    operands.push_back( u_Taz_GT_setptClg.get() );
    operands.push_back( u_Taz_LT_setptHtg.get() );
 
    LambdaToCopy = ( [&]() -> bool {
-                     return ( u_inputsSteady->Now() &&
+                     return ( u_inputChartsSteady->Now() &&
                               ( ! (u_Taz_GT_setptClg->Now() || u_Taz_LT_setptHtg->Now()) ) );
                   } );
 
@@ -1946,6 +1937,30 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                    operands,
                                                    LambdaToCopy );
 
+
+
+//======================================================================================================/
+// Define facts sustained over a specified number of cycles
+
+   u_inputSteadySus = std::make_unique<CFactSustained>(
+                         seq0Ref,
+                         *u_Subject,
+                          EDataLabel::Fact_sustained_inputSteady,
+                         *u_inputChartsSteady,
+                         true,
+                         INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES,
+                         ctrlrRef );
+
+// Define Fact object to enable steady-state Rules to test; Make this also a sustained Fact
+
+   u_zoneOccSus =  std::make_unique<CFactSustained>(
+                       seq0Ref,
+                       *u_Subject,
+                       EDataLabel::Fact_subject_ssRuleEnable,
+                       *u_zoneOccupied,  // So, actually this is EDataLabel::Fact_sustained_Bzo
+                       true,
+                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES,
+                       ctrlrRef );
  
 //VVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVVV
 // Instantiate Knowledge Base
@@ -1964,17 +1979,17 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_if.clear();
    operands_then.clear();
 
-   operands_if.push_back( u_zoneOccupied.get() );
+   operands_if.push_back( u_zoneOccSus.get() );
    operands_if.push_back( u_ahuOutputOkay.get() );
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
 
    operands_then.push_back( u_QadTrackingLow.get() );
    operands_then.push_back( u_QadTrackingHigh.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
-                        return ( u_zoneOccupied->Now() &&
+                        return ( u_zoneOccSus->Now() &&
                                  u_ahuOutputOkay->Now() &&
-                                 u_inputsSteady->Now()
+                                 u_inputSteadySus->Now()
                         );
                      } );
 
@@ -2001,16 +2016,16 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_if.clear();
    operands_then.clear();
 
-   operands_if.push_back( u_zoneOccupied.get() );
+   operands_if.push_back( u_zoneOccSus.get() );
    operands_if.push_back( u_ahuOutputOkay.get() );
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
 
    operands_then.push_back( u_QadHunting.get() );
  
    LambdaToCopy_if = ( [&]() -> bool {
-                        return ( u_zoneOccupied->Now() &&
+                        return ( u_zoneOccSus->Now() &&
                                  u_ahuOutputOkay->Now() &&
-                                 u_inputsSteady->Now()
+                                 u_inputSteadySus->Now()
                         );
                      } );
 
@@ -2035,9 +2050,9 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_if.clear();
    operands_then.clear();
 
-   operands_if.push_back( u_zoneOccupied.get() );
+   operands_if.push_back( u_zoneOccSus.get() );
    operands_if.push_back( u_ahuOutputOkay.get() );
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_Taz_GT_setptClg.get() );
 
    operands_then.push_back( u_unitCoolingZone.get() );
@@ -2045,7 +2060,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_zoneOccupied->Now() &&
                                  u_ahuOutputOkay->Now() &&
-                                 u_inputsSteady->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  u_Taz_GT_setptClg->Now());
                      } );
 
@@ -2070,16 +2085,16 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_if.clear();
    operands_then.clear();
 
-   operands_if.push_back( u_zoneOccupied.get() );
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_zoneOccSus.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_unitCoolingZone.get() );
    operands_if.push_back( u_UddFull.get() );
 
    operands_then.push_back( u_TazTrackingHigh.get() );
  
    LambdaToCopy_if = ( [&]() -> bool {
-                        return ( u_zoneOccupied->Now() &&
-                                 u_inputsSteady->Now() &&
+                        return ( u_zoneOccSus->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  u_unitCoolingZone->Now() &&
                                  u_UddFull->Now() );
                      } );
@@ -2106,7 +2121,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_zoneOccupied.get() );
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_unitCoolingZone.get() );
    operands_if.push_back( u_UddFull.get() );
 
@@ -2114,7 +2129,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
  
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_zoneOccupied->Now() &&
-                                 u_inputsSteady->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  u_unitCoolingZone->Now() &&
                                  ( ! u_UddFull->Now() ) );
                      } );
@@ -2141,14 +2156,14 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_zoneOccupied.get() );
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_Taz_LT_setptHtg.get() );
  
    operands_then.push_back( u_unitReheating.get() );
  
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_zoneOccupied->Now() &&
-                                 u_inputsSteady->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  u_Taz_LT_setptHtg->Now() );
                      } );
 
@@ -2174,7 +2189,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_zoneOccupied.get() );
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_unitReheating.get() );
    operands_if.push_back( u_UddFull.get() );
 
@@ -2182,7 +2197,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
  
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_zoneOccupied->Now() &&
-                                 u_inputsSteady->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  u_unitReheating->Now() &&
                                  u_UddFull->Now() );
                      } );
@@ -2209,7 +2224,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.clear();
 
    operands_if.push_back( u_zoneOccupied.get() );
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_unitReheating.get() );
    operands_if.push_back( u_UddFull.get() );
 
@@ -2217,7 +2232,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
  
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_zoneOccupied->Now() &&
-                                 u_inputsSteady->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  u_unitReheating->Now() &&
                                  ( ! u_UddFull->Now() ) );
                      } );
@@ -2243,14 +2258,14 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_if.clear();
    operands_then.clear();
 
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_UvhShut.get() );
    operands_if.push_back( u_QadZero.get() );
 
    operands_then.push_back( u_Tad_GT_Tai.get() );
  
    LambdaToCopy_if = ( [&]() -> bool {
-                        return ( u_inputsSteady->Now() &&
+                        return ( u_inputSteadySus->Now() &&
                                  u_UvhShut->Now() &&
                                  ( ! u_QadZero->Now() ) );
                      } );
@@ -2278,7 +2293,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
 
    operands_if.push_back( u_zoneOccupied.get() );
    operands_if.push_back( u_ahuOutputOkay.get() );
-   operands_if.push_back( u_inputsSteady.get() );
+   operands_if.push_back( u_inputSteadySus.get() );
    operands_if.push_back( u_QadZero.get() );
 
    operands_then.push_back( u_TazInBand.get() );
@@ -2286,7 +2301,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_zoneOccupied->Now() &&
                                  u_ahuOutputOkay->Now() &&
-                                 u_inputsSteady->Now() &&
+                                 u_inputSteadySus->Now() &&
                                  ( ! u_QadZero->Now() ) );
                      } );
 
@@ -2437,8 +2452,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_GuiFeat02 = std::make_unique<CFeatureFact>(  *u_Subject,
                                                    viewRef,
                                                    2,
-                                                   *u_inputsSteady,
-                                                   ([&]()->bool { return u_inputsSteady->Now(); }) );
+                                                   *u_inputSteadySus,
+                                             ([&]()->bool { return u_inputSteadySus->Now(); }) );
 
    //'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
    u_GuiFeat03 = std::make_unique<CFeatureFact>(  *u_Subject,

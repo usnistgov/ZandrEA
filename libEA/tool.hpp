@@ -191,23 +191,23 @@ class CTool_ahu_ibal : public ATool {
 //======================================================================================================/ 
 // Declare direct Facts
 
-      std::unique_ptr<CFactFromPoint> u_sysOcc;
-
-//======================================================================================================/ 
-// Declare sustained Facts
-
-      std::unique_ptr<CFactSustained> u_sysOccSus;
+      std::unique_ptr<CFactFromPoint> u_sysOccupied;
 
 //======================================================================================================/
 // Declare facts from facts
 
       std::unique_ptr<CFactFromFacts>  u_unitOn;
-      std::unique_ptr<CFactFromFacts>  u_inputsSteady;
-      std::unique_ptr<CFactFromFacts>  u_outputLevel;
+      std::unique_ptr<CFactFromFacts>  u_inputChartsSteady;
       std::unique_ptr<CFactFromFacts>  u_chwCoolingAir;
       std::unique_ptr<CFactFromFacts>  u_chwNeeded;
       std::unique_ptr<CFactFromFacts>  u_econActive;
       std::unique_ptr<CFactFromFacts>  u_econExpected;
+
+//======================================================================================================/
+// Declare facts sustained over a specified number of cycles
+
+      std::unique_ptr<CFactSustained>  u_inputSteadySus;
+      std::unique_ptr<CFactSustained>  u_sysOccSus;
 
 //======================================================================================================/
 // Declare "rule" objects
@@ -412,9 +412,14 @@ class CTool_vav_ibal : public ATool {
 
       std::unique_ptr<CFactFromFacts>  u_unitCoolingZone;
       std::unique_ptr<CFactFromFacts>  u_unitReheating;
-      std::unique_ptr<CFactFromFacts>  u_inputsSteady;
+      std::unique_ptr<CFactFromFacts>  u_inputChartsSteady;
       std::unique_ptr<CFactFromFacts>  u_TazInBand;
 
+//======================================================================================================/
+// Declare facts sustained over a specified number of cycles
+
+      std::unique_ptr<CFactSustained>  u_inputSteadySus;
+      std::unique_ptr<CFactSustained>  u_zoneOccSus;
 //======================================================================================================/
 // Declare "rule" objects
 

@@ -523,7 +523,10 @@ enum struct EDataRange : unsigned char {
    Analog_percent,
    Analog_zeroToOne,
    Analog_zeroTo3,
+   Analog_zeroTo50,
    Analog_zeroTo120,
+   Analog_zeroTo750,
+   Analog_zeroTo1500,
    Analog_zeroTo3k,
    Bindex_fact,
    Bindex_rule,
@@ -646,7 +649,14 @@ enum struct EDataLabel : unsigned int {
    Fact_para_ZvhShut,
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
-// facts specific within particular subjects
+// facts common among subjects of multiple types
+ 
+   Fact_subject_inputChartsSteady,
+   Fact_subject_ssRuleEnable,
+   Fact_subject_unitOn,
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// facts specific to particular subjects
  
    Fact_subj_ahu_chwCoolingAir,
    Fact_subj_ahu_chwHelpingEcon,
@@ -654,25 +664,22 @@ enum struct EDataLabel : unsigned int {
    Fact_subj_ahu_econActive,
    Fact_subj_ahu_econAtMax,
    Fact_subj_ahu_econExpected,
-   Fact_subj_ahu_inputsSteady,
    Fact_subj_ahu_okayOnEconAlone,
    Fact_subj_ahu_okayOnEconPlusChw,
-   Fact_subj_ahu_outputLevel,
    Fact_subj_ahu_preheatNeeded,
-   Fact_subj_ahu_unitOn,
    Fact_subj_ahu_unitPreheating,
 
-   Fact_subj_vav_inputsSteady,
    Fact_subj_vav_TazInBand,
    Fact_subj_vav_unitCoolingZone,
    Fact_subj_vav_unitHeatingZone,
    Fact_subj_vav_unitReheating,
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
-// facts sustained as true (or false) over min cycles
+// facts sustained as true (or false) over a specified number of cycles
  
    Fact_sustained_Bso,
    Fact_sustained_Bzo,
+   Fact_sustained_inputSteady,
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // labels of formulations/calculations based on data
@@ -918,26 +925,31 @@ enum struct EDataUnit : unsigned char {
 
    Undefined = 0u,
    Area_sqFt,
+   Area_m2,
    Binary_Boolean,
-   Bindex_rule,
    Bindex_fact,
+   Bindex_rule,
    Coefficient,
    Count_sum,
    Count_cycle,
-   Distance_feet,
-   Distance_inch,
    Distance_stdDev,
    Energy_kilowattHr,
    FlowVolume_cfm,
    FlowVolume_gpm,
+   FlowVolume_Lps,
+   FlowVolume_m3ps,
    Frequency_cph,
    Identifier_ruleUai,
    Index,
+   Length_feet,
+   Length_inch,
+   Length_meter,
    None,
    Power_kiloWatt,
    PressureAbso_psia,
    PressureDiff_psid,
    PressureGage_iwg,
+   PressureGage_Pa,
    PressureGage_psig,
    Ratio_fraction,
    Ratio_percent,
@@ -947,7 +959,8 @@ enum struct EDataUnit : unsigned char {
    TemperatureDiff_Fdeg,
    TimeSpan_hour,
    TimeSpan_sec,
-   Velocity_fpm
+   Velocity_fpm,
+   Velocity_mps
 };
 
 

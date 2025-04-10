@@ -53,7 +53,10 @@ IGuiShadow::~IGuiShadow( void ) { };
       { EDataRange::Analog_percent, {{ 0.0f, 100.0f }} }, \
       { EDataRange::Analog_zeroToOne, {{ 0.0f, 1.0f }} }, \
       { EDataRange::Analog_zeroTo3, {{ 0.0f, 3.0f }} }, \
+      { EDataRange::Analog_zeroTo50, {{ 0.0f, 50.0f }} }, \
       { EDataRange::Analog_zeroTo120, {{ 0.0f, 120.0f }} }, \
+      { EDataRange::Analog_zeroTo750, {{ 0.0f, 750.0f }} }, \
+      { EDataRange::Analog_zeroTo1500, {{ 0.0f, 1500.0f }} }, \
       { EDataRange::Analog_zeroTo3k, {{ 0.0f, 3000.0f }} }, \
       { EDataRange::Bindex_fact, {{ NaNFLOAT, NaNFLOAT }} }, \
       { EDataRange::Bindex_rule, {{ NaNFLOAT, NaNFLOAT }} }, \
@@ -155,26 +158,26 @@ std::array<float,2> IGuiShadow::LookUpMinMax( EDataRange key ) {
       { EDataLabel::Fact_para_ZdmFullRA,                             "ZdmFullRA" }, \
       { EDataLabel::Fact_para_ZvcShut,                               "ZvcShut" }, \
       { EDataLabel::Fact_para_ZvhShut,                               "ZvhShut" }, \
+      { EDataLabel::Fact_subject_inputChartsSteady,                  "inpChtsStdy" }, \
+      { EDataLabel::Fact_subject_ssRuleEnable,                       "ssRuleEnable" }, \
+      { EDataLabel::Fact_subject_unitOn,                             "unitOn" }, \
       { EDataLabel::Fact_subj_ahu_chwCoolingAir,                     "chwClgAir" }, \
       { EDataLabel::Fact_subj_ahu_chwHelpingEcon,                    "chwHelpingEcon" }, \
       { EDataLabel::Fact_subj_ahu_chwNeeded,                         "chwNeed" }, \
       { EDataLabel::Fact_subj_ahu_econActive,                        "econActive" }, \
       { EDataLabel::Fact_subj_ahu_econAtMax,                         "econAtMax" }, \
       { EDataLabel::Fact_subj_ahu_econExpected,                      "econExpected" }, \
-      { EDataLabel::Fact_subj_ahu_inputsSteady,                      "inputsSteady" }, \
       { EDataLabel::Fact_subj_ahu_okayOnEconAlone,                   "okayOnEconAlone" }, \
       { EDataLabel::Fact_subj_ahu_okayOnEconPlusChw,                 "okayOnEconPlusChw" }, \
-      { EDataLabel::Fact_subj_ahu_outputLevel,                       "outputLevel" }, \
       { EDataLabel::Fact_subj_ahu_preheatNeeded,                     "preheatNeeded" }, \
-      { EDataLabel::Fact_subj_ahu_unitOn,                            "unitOn" }, \
       { EDataLabel::Fact_subj_ahu_unitPreheating,                    "preheat" }, \
-      { EDataLabel::Fact_subj_vav_inputsSteady,                      "inputsSteady" }, \
       { EDataLabel::Fact_subj_vav_TazInBand,                         "TazInBand" }, \
       { EDataLabel::Fact_subj_vav_unitCoolingZone,                   "clgZone" }, \
       { EDataLabel::Fact_subj_vav_unitHeatingZone,                   "htgZone" }, \
       { EDataLabel::Fact_subj_vav_unitReheating,                     "reheating" }, \
       { EDataLabel::Fact_sustained_Bso,                              "BsoSus" }, \
       { EDataLabel::Fact_sustained_Bzo,                              "BzoSus" }, \
+      { EDataLabel::Fact_sustained_inputSteady,                      "inpSusSteady" }, \
       { EDataLabel::Formula_absDif_TarTao,                           "absDifTaoTar"}, \
       { EDataLabel::Formula_fraction_OA_tempProxy,                   "fracOA_T"}, \
       { EDataLabel::Formula_maxTaoTar,                               "maxTaoTar"}, \
@@ -382,26 +385,31 @@ std::string IGuiShadow::LookUpText( EDataSuffix key ) {
    { \
       { EDataUnit::Undefined,                "?" }, \
       { EDataUnit::Area_sqFt,                "sqFt" }, \
+      { EDataUnit::Area_m2,                  "m2" }, \
       { EDataUnit::Binary_Boolean,           "F/T" }, \
       { EDataUnit::Bindex_fact,              "" }, \
       { EDataUnit::Bindex_rule,              "" }, \
       { EDataUnit::Coefficient,              "" }, \
       { EDataUnit::Count_sum,                "" }, \
       { EDataUnit::Count_cycle,              "cycles" }, \
-      { EDataUnit::Distance_feet,            "ft" }, \
-      { EDataUnit::Distance_inch,            "in" }, \
       { EDataUnit::Distance_stdDev,          "stdDevs" }, \
       { EDataUnit::Energy_kilowattHr,        "kWh" }, \
       { EDataUnit::FlowVolume_cfm,           "cfm" }, \
       { EDataUnit::FlowVolume_gpm,           "gpm" }, \
+      { EDataUnit::FlowVolume_Lps,           "L/s" }, \
+      { EDataUnit::FlowVolume_m3ps,          "m3/s" }, \
       { EDataUnit::Frequency_cph,            "cph" }, \
       { EDataUnit::Identifier_ruleUai,       "Rule UAI" }, \
       { EDataUnit::Index,                    "" }, \
+      { EDataUnit::Length_feet,              "ft" }, \
+      { EDataUnit::Length_inch,              "in" }, \
+      { EDataUnit::Length_meter,             "m" }, \
       { EDataUnit::None,                     "" }, \
       { EDataUnit::Power_kiloWatt,           "kW" }, \
       { EDataUnit::PressureAbso_psia,        "psia" }, \
       { EDataUnit::PressureDiff_psid,        "psid" }, \
       { EDataUnit::PressureGage_iwg,         "iwg" }, \
+      { EDataUnit::PressureGage_Pa,          "Pa" }, \
       { EDataUnit::PressureGage_psig,        "psig" }, \
       { EDataUnit::Ratio_fraction,           "/1.0" }, \
       { EDataUnit::Ratio_percent,            "%" }, \
@@ -411,7 +419,8 @@ std::string IGuiShadow::LookUpText( EDataSuffix key ) {
       { EDataUnit::TemperatureDiff_Fdeg,     "Fdeg" }, \
       { EDataUnit::TimeSpan_hour,            "h" }, \
       { EDataUnit::TimeSpan_sec,             "s" }, \
-      { EDataUnit::Velocity_fpm,             "fpm" } \
+      { EDataUnit::Velocity_fpm,             "fpm" }, \
+      { EDataUnit::Velocity_mps,             "m/s" } \
    }
 
 std::string IGuiShadow::LookUpText( EDataUnit key ) {

@@ -565,6 +565,7 @@ void CFactSustained::Cycle( time_t timestampNow ) {
 
       claimWas = claimNow;
 
+      // once cyclesSustained reaches min threshold, keep it there until == test is failed
       cyclesSustained =
          ( ( FactSustainedRef.Now() == replyExpected ) ?
            std::min( minCyclesToSustain, (cyclesSustained + 1) ) : 0 );
@@ -587,7 +588,7 @@ void CFactSustained::Cycle( time_t timestampNow ) {
                   validNow
    );
 
-   firstCycle = false;
+   firstCycle = false;  // endlessly setting this is likely faster than endlessly running a test 
    return;
 }
 
