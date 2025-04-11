@@ -1319,7 +1319,7 @@ RuleTrapResult_t CRainRuleKit::EnableTrapAndSayResult( const RuleUaiToPtrTable_t
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // Check trap and act if trap is not found empty
 
-   if ( sumSumsOfFails > 0 ) {    // trap not empty?
+   if ( sumSumsOfFails > FIXED_RULERAIN_FAILSINEMPTYTRAP_MAX ) {    // trap not empty?
 
 //------------------------------------------------------------------------------------------------------/
 // Action to find UAI of Rule (having no prior snapshot) that failed most often over the trap length

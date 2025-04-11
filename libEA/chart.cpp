@@ -12,7 +12,7 @@
 #include "controlParts.hpp"
 #include "dataChannel.hpp"
 #include "formula.hpp"
-
+#include "subject.hpp"
 #include <algorithm>
 #include <numeric>
 
@@ -708,6 +708,9 @@ void CChartTracking::PullInput( void ) {
    else {
       xObsvdNow = p_ObsvdRain->NowY();
       xGuideNow = p_GuideRain->NowY();
+      if (SubjRef.SayName() == ERealName::Subject_vav1) {
+      std::cout << "ECHO obsvNow = " + std::to_string(xObsvdNow) + " guideNow = " + std::to_string(xGuideNow) << std::endl;
+      }
    }
    return;
 }

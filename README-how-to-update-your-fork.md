@@ -1,9 +1,9 @@
-# How to integrate updates from upstream/master to master
+# How to integrate updates from upstream/master to main
 
 First, commit any local changes.  Then:
 ```
-git checkout master
-git pull upstream master
+git checkout main
+git pull upstream main
 <...resolve any merge conflicts...>
-git push [origin master]
+git push [origin main]
 ```

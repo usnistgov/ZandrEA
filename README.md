@@ -1,12 +1,16 @@
-# ZandrEA&trade;
+# ZandrEA;
 
 ## What is it?
 
-ZandrEA&trade; is a software framework supporting research into the automated, real-time detection and diagnostics of operational faults in the heating, ventilating, and air-conditioning (HVAC) systems of large commercial buildings.
+ZandrEA&trade; is an ongoing, collaborative, open-source software development project.  It supports research into automated, real-time detection and diagnostics of "faults" (unwanted, wasteful conditions) in the heating, ventilating, and air-conditioning (HVAC) systems of large commercial buildings.  The topic is known throughout the HVAC industry as automated fault detection and diagnostics (AFDD). The ZandrEA project was founded by federal employees at the U.S. National Institute of Standards and Technology (NIST). The project shares in NIST's overall mission through research advancing AFDD technology in ways to benefit U.S. enterprises marketing AFDD products and services. The project is "collaborative" because research proposals, development contributions, and technical skills are welcomed from beyond NIST, particularly from other laboratories, academia, private-sector businesses engaged in AFDD, and individuals.
 
-It is worth noting that "EA" was used early on in this project as a derivation from "Expert Assistant". That meaning is now deprecated, but as a convenient and short tag that was used pervasively through the codebase, you will continue to see references to EA throughout the repo.
+Anyone wanting to learn more about ZandrEA and its AFDD research application is strongly encouraged to first read its "primer" document, NIST Technical Note 2337, available as a free PDF download at: https://doi.org/10.6028/NIST.TN.2337 
 
-The project consists of a system of four Docker containers orchestrated with Docker Compose. Running in the Docker environment vastly reduces the requirements to build and run this software. See the [INSTALLATION](./INSTALLATION.md) document for instructions for how to build, run, and test ZandrEA.
+The moniker "EA" preceded the ultimate naming of the ZandrEA project, previously being an abbreviation of "Expert Assistant". That association is now deprecated. However, as a convenient and short tag, "EA" is used pervasively throughout the codebase for parts of ZandrEA comprising the founding NIST contribution. You will continue to see references to EA throughout the primer and this repo, and it should be understood as an existent subset within a potentially larger future codebase for ZandrEA.
+
+## Now that you have read at least Sections 1, 2, and 4 of the primer...
+
+ZandrEA consists of a system of four Docker containers orchestrated with Docker Compose. Running in the Docker environment vastly reduces the requirements to build and run this software. See the [INSTALLATION](./INSTALLATION.md) document for instructions for how to build, run, and test ZandrEA.
 
 There are two types of environments supported by the build process:
 1. Development: Intended for software evaluation and development purposes. This is the default build environment.
@@ -67,13 +71,17 @@ but Docker is the target production environment and provides a standardized buil
 ## Contact Information
 
 ### Principal Investigator
-Daniel Veronica<br>NIST Engineering Laboratory<br>Building Energy and Environment Division<br>Mechanical Systems and Controls Group (732.02)<br>daniel.veronica@nist.gov
+Daniel Veronica<br>NIST Engineering Laboratory, Mechanical Systems & Controls Group<br>daniel.veronica@nist.gov
+
+Please include "ZandrEA" in the subject line.
 
 ### Project Home Page:
 <https://www.nist.gov/programs-projects/automated-fault-detection-and-diagnostics-mechanical-services-commercial-buildings>
 
 ### External Project Documentation:
-TBD.
+<https://doi.org/10.6028/NIST.TN.2337>
+
+Information in any document of this repo supercedes the above in case of apparent conflict.
 
 ## How to reference this work in citations
 
