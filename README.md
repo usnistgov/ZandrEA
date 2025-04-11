@@ -6,7 +6,7 @@ ZandrEA&trade; is an ongoing, collaborative, open-source software development pr
 
 Anyone wanting to learn more about ZandrEA and its AFDD research application is strongly encouraged to first read its "primer" document, NIST Technical Note 2337, available as a free PDF download at: https://doi.org/10.6028/NIST.TN.2337 
 
-The moniker "EA" preceded the ultimate naming of the ZandrEA project by previously being an abbreviation of "Expert Assistant". That association is now deprecated. However, as a convenient and short tag, "EA" is used pervasively throughout the codebase for parts of ZandrEA comprising the founding NIST contribution. You will continue to see references to EA throughout the primer and this repo, and it should be understood as an existent subset within a potentially larger future ZandrEA codebase.
+The moniker "EA" preceded the ultimate naming of the ZandrEA project, previously being an abbreviation of "Expert Assistant". That association is now deprecated. However, as a convenient and short tag, "EA" is used pervasively throughout the codebase for parts of ZandrEA comprising the founding NIST contribution. You will continue to see references to EA throughout the primer and this repo, and it should be understood as an existent subset within a potentially larger future codebase for ZandrEA.
 
 ## Now that you have read at least Sections 1, 2, and 4 of the primer...
 
@@ -71,7 +71,7 @@ but Docker is the target production environment and provides a standardized buil
 ## Contact Information
 
 ### Principal Investigator
-Daniel Veronica<br>NIST Engineering Laboratory<br><br>daniel.veronica@nist.gov
+Daniel Veronica<br>NIST Engineering Laboratory, Mechanical Systems & Controls Group<br>daniel.veronica@nist.gov
 
 Please include "ZandrEA" in the subject line.
 
