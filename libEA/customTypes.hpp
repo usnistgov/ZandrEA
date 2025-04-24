@@ -153,7 +153,7 @@ const std::array<int,3> INIT_KNOB_MINDEFMAX_DATALOG_SECSLOGGING = { FIXED_DATALO
 // Shewhart passband half-width, in number of std. devs off data mean
 const std::array<float,3> INIT_MINDEFMAX_SHEWHART_ZPASS = {0.0f, 3.0f, 5.0f};
 
-const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES = {1, 90, 360};
+const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES = {1, 90, 180};
 
 // Bilateral stubbornness (in successive chart apps with no trip) for chart to flip
 // between "isSteady" being "true" or "false"
