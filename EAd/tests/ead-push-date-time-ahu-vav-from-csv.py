@@ -38,7 +38,7 @@ pointsVAV = [
         "Binary_zoneOccupied"
 ]
 
-# Column definitions in the CSV for this 1AHU+6VAV datafile
+# Column definitions in the CSV are for a 2 AHU + 4 VAV ( = 3+22+44 = 69 columns total) file (datafile)
 c_date = 0
 c_time = 1
 c_gtc = 2
@@ -56,9 +56,9 @@ Col     Description
 {}      date
 {}      time
 {}      ground truth code
-followed by 0 or more AHUs of {} columns each (not currently used). Remaining columns are assumed to be 0 or more VAV of {} columns each.
+followed by 0 or more AHUs of {} columns each. Remaining columns are assumed to be 0 or more VAV of {} columns each.
 
-In turn, the devices in the datafile will be matched to the devices in the DLL simply by order. Currently the script only recognizes DLL subjects as VAVs. AHU data will be ignored. VAVs are matched to subjects in the orders provided by both the datafile and the DLL. (First subject from DLL -> first VAV in datafile). This loose coupling is fragile so beware.
+In turn, devices in datafile were expected to match to Subject objects created in the EA back end simply by instantiation order (first Subject instantiated in tool.cpp -> first device in datafile). During recent testing, that expectation has turned out to be flawed. In fact, a matching occurs, but in reverse of the expected order. This problem is documented as an Issue on the ZandrEA usnistgov GitHub repo, and is being addressed.
 """.format(c_date, c_time, c_gtc, ahu_channels, vav_channels),
 )
 cli.add_argument("filenames", help="Name of the CSV file(s) to load (- for stdin)", nargs="+")
