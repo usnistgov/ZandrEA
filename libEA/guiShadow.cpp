@@ -84,12 +84,12 @@ std::array<float,2> IGuiShadow::LookUpMinMax( EDataRange key ) {
 
 #define INIT_DATATAG \
    { \
-      { EDataLabel::Undefined,                                       "?????" }, \
+      { EDataLabel::Undefined,                                       "???" }, \
       { EDataLabel::Case_alertToGui,                                 "FAULT PROBABLE: "}, \
       { EDataLabel::Fact_antecedent_vav_ahuOkay,                     "ahuOutputOK" }, \
       { EDataLabel::Fact_antecedent_vav_hwPlantOkay,                 "hwPlantOK" }, \
-      { EDataLabel::Fact_direct_Bso,                                 "sysOcc" }, \
-      { EDataLabel::Fact_direct_Bzo,                                 "zoneOcc" }, \
+      { EDataLabel::Fact_direct_Bso,                                 "Bso" }, \
+      { EDataLabel::Fact_direct_Bzo,                                 "Bzo" }, \
       { EDataLabel::Fact_data_PsaiSteady,                            "PsaiSteady" }, \
       { EDataLabel::Fact_data_PsasSteady,                            "PsasSteady" }, \
       { EDataLabel::Fact_data_QadHunting,                            "QasHunts" }, \
@@ -158,8 +158,7 @@ std::array<float,2> IGuiShadow::LookUpMinMax( EDataRange key ) {
       { EDataLabel::Fact_para_ZdmFullRA,                             "ZdmFullRA" }, \
       { EDataLabel::Fact_para_ZvcShut,                               "ZvcShut" }, \
       { EDataLabel::Fact_para_ZvhShut,                               "ZvhShut" }, \
-      { EDataLabel::Fact_subject_inputChartsSteady,                  "inpChtsStdy" }, \
-      { EDataLabel::Fact_subject_ssRuleEnable,                       "ssRuleEnable" }, \
+      { EDataLabel::Fact_subject_inputSteady,                        "inpSteady" }, \
       { EDataLabel::Fact_subject_unitOn,                             "unitOn" }, \
       { EDataLabel::Fact_subj_ahu_chwCoolingAir,                     "chwClgAir" }, \
       { EDataLabel::Fact_subj_ahu_chwHelpingEcon,                    "chwHelpingEcon" }, \
@@ -175,9 +174,10 @@ std::array<float,2> IGuiShadow::LookUpMinMax( EDataRange key ) {
       { EDataLabel::Fact_subj_vav_unitCoolingZone,                   "clgZone" }, \
       { EDataLabel::Fact_subj_vav_unitHeatingZone,                   "htgZone" }, \
       { EDataLabel::Fact_subj_vav_unitReheating,                     "reheating" }, \
-      { EDataLabel::Fact_sustained_Bso,                              "BsoSus" }, \
-      { EDataLabel::Fact_sustained_Bzo,                              "BzoSus" }, \
-      { EDataLabel::Fact_sustained_inputSteady,                      "inpSusSteady" }, \
+      { EDataLabel::Fact_sustained_inputSteady,                      "inpSteadySus" }, \
+      { EDataLabel::Fact_sustained_sysOcc,                           "BsoSus" }, \
+      { EDataLabel::Fact_sustained_UvcShut,                          "UvcShutSus" }, \
+      { EDataLabel::Fact_sustained_zoneOcc,                          "BzoSus" }, \
       { EDataLabel::Formula_absDif_TarTao,                           "absDifTaoTar"}, \
       { EDataLabel::Formula_fraction_OA_tempProxy,                   "fracOA_T"}, \
       { EDataLabel::Formula_maxTaoTar,                               "maxTaoTar"}, \

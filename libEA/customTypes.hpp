@@ -143,7 +143,8 @@ const bool     FIXED_RULE_UNITOUTPUT_PINNED = true;
 const bool     FIXED_RULE_UNITOUTPUT_NOTPINNED = false;
 
 const float    INIT_HVACPARAM_AHU_FRZSTAT_DEGF = 35.0f;
-const float    INIT_HVACPARAM_AHU_OAFRAC_MIN = 0.30f;
+ // "Min" below is 100% until AHU Rule 10 is redeveloped for IBAL based upon ASHRAE Guideline 10 or etc.
+const float    INIT_HVACPARAM_AHU_OAFRAC_MIN = 1.0f;  // Intended for 2006 APAR (AHU rules) = out-of-date
 
 const size_t   INIT_MAPBUCKETS_DOMAIN_NUMSUBJECTS = 10;
 const size_t   INIT_MAPBUCKETS_DOMAIN_NUMOUTPUTSPERSUBJ = 4;
@@ -153,7 +154,10 @@ const std::array<int,3> INIT_KNOB_MINDEFMAX_DATALOG_SECSLOGGING = { FIXED_DATALO
 // Shewhart passband half-width, in number of std. devs off data mean
 const std::array<float,3> INIT_MINDEFMAX_SHEWHART_ZPASS = {0.0f, 3.0f, 5.0f};
 
-const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES = {1, 90, 180};
+// Sets default and Knob slider range on sustained Facts:
+const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_90 = {1, 90, 180};
+const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_15 = {1, 15, 30};
+const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_05 = {1, 3, 15};
 
 // Bilateral stubbornness (in successive chart apps with no trip) for chart to flip
 // between "isSteady" being "true" or "false"
@@ -487,7 +491,7 @@ enum struct ETimeSpan : unsigned char {
 
 enum class ERealName : unsigned int {
 
-/* "Real" = The physically real thing, represented via an object of class CDomain or of a concrete
+/* "Real" = A physically real thing, represented via an object of class CDomain or of a concrete
    subclass of ASubject.
 */
    Undefined = 0u,
@@ -651,8 +655,7 @@ enum struct EDataLabel : unsigned int {
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // facts common among subjects of multiple types
  
-   Fact_subject_inputChartsSteady,
-   Fact_subject_ssRuleEnable,
+   Fact_subject_inputSteady,
    Fact_subject_unitOn,
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
@@ -675,11 +678,13 @@ enum struct EDataLabel : unsigned int {
    Fact_subj_vav_unitReheating,
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
-// facts sustained as true (or false) over a specified number of cycles
- 
-   Fact_sustained_Bso,
-   Fact_sustained_Bzo,
-   Fact_sustained_inputSteady,
+// facts sustained as true, false, or XOR (exclusive either) over a specified number of cycles
+
+   Fact_sustained_inputSteady, 
+   Fact_sustained_sysOcc,
+   Fact_sustained_UvcShut,
+   Fact_sustained_zoneOcc,
+
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // labels of formulations/calculations based on data
