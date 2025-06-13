@@ -142,7 +142,8 @@ class CTool_ahu_ibal : public ATool {
       std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_QasZero;
       std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_UdmFullOA;
       std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_UvcShut;
-      std::unique_ptr< CFactRelatingLeftToParam<CFormula, PtrRainGetr_t, Left_EQ_Right> >  u_fracOAatMin;
+      std::unique_ptr<CFactSustained> u_UvcShutSus;
+      std::unique_ptr< CFactRelatingLeftToParam<CFormula, PtrRainGetr_t, Left_LTE_Right> >  u_fracOAatMin;
       std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_GT_Right> >  u_Tam_GT_frzStat;
       std::unique_ptr< CFactRelatingLeftToParam<CFormula, PtrRainGetr_t, Left_GTE_Right> > u_absDifTaoTar_GTE_10F;
 
@@ -189,25 +190,20 @@ class CTool_ahu_ibal : public ATool {
          >  u_Tam_LTE_maxTaoTar;
 
 //======================================================================================================/ 
-// Declare direct Facts
+// Declare direct Facts and any sustainers
 
-      std::unique_ptr<CFactFromPoint> u_sysOccupied;
-
+      std::unique_ptr<CFactFromPoint> u_sysOcc;
+      std::unique_ptr<CFactSustained> u_sysOccSus;
 //======================================================================================================/
-// Declare facts from facts
+// Declare facts from facts and any sustainers
 
       std::unique_ptr<CFactFromFacts>  u_unitOn;
-      std::unique_ptr<CFactFromFacts>  u_inputChartsSteady;
+      std::unique_ptr<CFactFromFacts>  u_inputSteady;
+      std::unique_ptr<CFactSustained>  u_inputSteadySus;
       std::unique_ptr<CFactFromFacts>  u_chwCoolingAir;
       std::unique_ptr<CFactFromFacts>  u_chwNeeded;
       std::unique_ptr<CFactFromFacts>  u_econActive;
       std::unique_ptr<CFactFromFacts>  u_econExpected;
-
-//======================================================================================================/
-// Declare facts sustained over a specified number of cycles
-
-      std::unique_ptr<CFactSustained>  u_inputSteadySus;
-      std::unique_ptr<CFactSustained>  u_sysOccSus;
 
 //======================================================================================================/
 // Declare "rule" objects
@@ -398,28 +394,24 @@ class CTool_vav_ibal : public ATool {
       >  u_Taz_LT_setptHtg;
 
 //======================================================================================================/ 
-// Declare direct Facts
+// Declare direct Facts and any sustainers
 
-      std::unique_ptr<CFactFromPoint> u_zoneOccupied;
-
+     std::unique_ptr<CFactFromPoint> u_zoneOcc;
+     std::unique_ptr<CFactSustained> u_zoneOccSus;
 //======================================================================================================/ 
 // Declare facts from antecedent subjects
 
       std::unique_ptr<CFactFromAntecedentSubject>  u_ahuOutputOkay;      
 
 //======================================================================================================/
-// Declare facts from facts
+// Declare facts from facts and any sustainers
 
       std::unique_ptr<CFactFromFacts>  u_unitCoolingZone;
       std::unique_ptr<CFactFromFacts>  u_unitReheating;
-      std::unique_ptr<CFactFromFacts>  u_inputChartsSteady;
+      std::unique_ptr<CFactFromFacts>  u_inputSteady;
+      std::unique_ptr<CFactSustained>  u_inputSteadySus;
       std::unique_ptr<CFactFromFacts>  u_TazInBand;
 
-//======================================================================================================/
-// Declare facts sustained over a specified number of cycles
-
-      std::unique_ptr<CFactSustained>  u_inputSteadySus;
-      std::unique_ptr<CFactSustained>  u_zoneOccSus;
 //======================================================================================================/
 // Declare "rule" objects
 

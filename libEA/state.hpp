@@ -35,6 +35,12 @@ class CPointBinary;
 class CTraceRealtime;
 class CView;
 
+enum struct ESustainedAs : unsigned char {
+
+   False = 0u,
+   True,
+   TrueXorFalse
+};
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // Declare an interface (top-of-chain abstract base class (ABC)) for ALL fact objects 
@@ -815,7 +821,7 @@ class CFactSustained : public AFact {
                         ASubject&,
                         EDataLabel,
                         const AFact&,
-                        bool,
+                        const ESustainedAs,
                         std::array<int,3>,
                         CController& );
   
@@ -825,17 +831,19 @@ class CFactSustained : public AFact {
 
    private:
    // Handle
-      const AFact&     FactSustainedRef;
+      const AFact&     FactToWatchRef;
 
    // Fields
-      const bool       replyExpected;
-      int              minCyclesToSustain;
-      int              cyclesSustained;
+      const ESustainedAs   watchMode;
+      int                  minCyclesToSustain;
+      int                  cyclesSustained;
+      bool                 claimToWatch;
 
    // Methods
-      void              AttachOwnKnobs( CController& );
+      void              AttachOwnKnobs( CController&, std::array<int,3>);
       virtual void      CalcOwnTriggerGroup( void ) override;
       virtual void      Cycle( time_t ) override;
+
       
 /* CLASS NOTES vvvv2vvvvvvvvv3vvvvvvvvv4vvvvvvvvv5vvvvvvvvv6vvvvvvvvv7vvvvvvvvv8vvvvvvvvv9vvvvvvvvvCvvvvv
 

@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "gcc",
+            "name": "GCC",
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/include/hdf5/serial"

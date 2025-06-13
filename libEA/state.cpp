@@ -49,7 +49,7 @@ AFact::AFact(  CSequence& bArg0,
                   spillage (0.0f),
                   timeOfClaimNow (0),
                   firstCycle (true),
-                  claimNow (false),
+                  claimNow (false),   // deliberately not NaNBOOL so can backfill rainfalls on startup
                   claimWas (NaNBOOL),
                   claimHasFlipped (NaNBOOL) {
 
@@ -506,7 +506,7 @@ CFactSustained::CFactSustained(  CSequence& bArg0,
                                  ASubject& bArg1,
                                  EDataLabel bArg2,
                                  const AFact& arg0,
-                                 const bool arg1,
+                                 const ESustainedAs arg1,
                                  std::array<int,3> arg2,
                                  CController& arg3 )
                                  :  AFact( bArg0,
@@ -514,13 +514,14 @@ CFactSustained::CFactSustained(  CSequence& bArg0,
                                            bArg2,
                                            std::vector<AFact*>(0)
                                     ),
-                                    FactSustainedRef (arg0),
-                                    replyExpected (arg1),
+                                    FactToWatchRef (arg0),
+                                    watchMode (arg1),
                                     minCyclesToSustain (arg2[1]),
-                                    cyclesSustained (0) {
+                                    cyclesSustained (0),
+                                    claimToWatch (NaNBOOL) {
 
 CalcOwnTriggerGroup();   
-AttachOwnKnobs( arg3 );
+AttachOwnKnobs( arg3, arg2 );
 }
  
 CFactSustained::~CFactSustained( void ) { /* empty */ }
@@ -528,7 +529,7 @@ CFactSustained::~CFactSustained( void ) { /* empty */ }
 //VVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVVV
 // Private methods
 
-void CFactSustained::AttachOwnKnobs( CController& ctrlrRef ) {
+void CFactSustained::AttachOwnKnobs( CController& ctrlrRef, std::array<int,3> rangeStops ) {
 
   /* AKnob subclasses test GUI input to range allowed prior to calling setter lambdas, so value
      given by User either gets ignored with O.O.R. error sent, or arrives at lambda arg as "vetted" */
@@ -543,7 +544,7 @@ void CFactSustained::AttachOwnKnobs( CController& ctrlrRef ) {
                                     minCyclesToSustain = userInputVetted;
                                     return; }
                               ),
-                              INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES,
+                              rangeStops,
                               minCyclesToSustain
                         )
    );
@@ -552,33 +553,48 @@ void CFactSustained::AttachOwnKnobs( CController& ctrlrRef ) {
 
 void CFactSustained::CalcOwnTriggerGroup( void ) {
 
-   ownTriggerGroup = FactSustainedRef.SayOwnTriggerGroup() + 1u;
+   ownTriggerGroup = FactToWatchRef.SayOwnTriggerGroup() + 1u;
    return;
 }
 
+
 void CFactSustained::Cycle( time_t timestampNow ) {
 
-   validWas = validNow;
-   validNow = FactSustainedRef.IsValid();
+   if ( firstCycle ) { 
 
-   if ( validNow ) { 
+      claimToWatch = ( ( watchMode == ESustainedAs::TrueXorFalse ) ?
+         FactToWatchRef.Now() :
+         ( (watchMode == ESustainedAs::True) ? true : false )
+      );
+      firstCycle = false;
+   }
 
-      claimWas = claimNow;
+   validWas = validNow;  // ISeqElement inits to TRUE
+   validNow = FactToWatchRef.IsValid();
+
+   claimWas = claimNow;  // AFact init sets claimWas, claimToWatch to NaNBOOL; claimNow to FALSE
+
+   if ( validNow ) {
 
       // once cyclesSustained reaches min threshold, keep it there until == test is failed
       cyclesSustained =
-         ( ( FactSustainedRef.Now() == replyExpected ) ?
+         ( ( claimToWatch == FactToWatchRef.Now() ) ?
            std::min( minCyclesToSustain, (cyclesSustained + 1) ) : 0 );
 
       claimNow = ( cyclesSustained > (minCyclesToSustain - 1) ); 
 
       claimHasFlipped = (claimNow != claimWas);
 
+      if ( claimHasFlipped && ( watchMode == ESustainedAs::TrueXorFalse ) ) {
+         claimToWatch = FactToWatchRef.Now();
+      }  
+
       timeOfClaimNow = (   ( claimHasFlipped || (validWas != validNow) || firstCycle ) ?
                               timestampNow :
                               timeOfClaimNow );
-   }   
-   /* Regardless, log most recent valid claim, to include invalid periods.
+   }  // close IF on validNow
+
+   /* Log most recent claim, including invalid periods.
       Relies on claimNow in AFact c-tor not being initialized as NaNBOOL
    */
    u_Rain->Cycle( timestampNow,
@@ -588,7 +604,6 @@ void CFactSustained::Cycle( time_t timestampNow ) {
                   validNow
    );
 
-   firstCycle = false;  // endlessly setting this is likely faster than endlessly running a test 
    return;
 }
 
