@@ -2,13 +2,13 @@
 
 ## What is it?
 
-ZandrEA&trade; is an ongoing, collaborative, open-source software development project.  It supports research into automated, real-time detection and diagnostics of "faults" (unwanted, wasteful conditions) in the heating, ventilating, and air-conditioning (HVAC) systems of large commercial buildings.  The topic is known throughout the HVAC industry as automated fault detection and diagnostics (AFDD). The ZandrEA project was founded by federal employees at the U.S. National Institute of Standards and Technology (NIST). The project shares in NIST's overall mission through research advancing AFDD technology in ways to benefit U.S. enterprises marketing AFDD products and services. The project is "collaborative" because research proposals, development contributions, and technical skills are welcomed from beyond NIST, particularly from other laboratories, academia, private-sector businesses engaged in AFDD, and individuals.
+ZandrEA&trade; is an ongoing, collaborative, open-source software development project.  It supports research into automated, real-time detection and diagnostics of "faults" (unwanted, wasteful conditions) in the heating, ventilating, and air-conditioning (HVAC) systems of large commercial buildings.  The topic is known throughout the HVAC industry as automated fault detection and diagnostics (AFDD). The ZandrEA project was founded by federal employees at the U.S. National Institute of Standards and Technology (NIST). The project shares in NIST's overall mission through research advancing AFDD technology in ways to benefit U.S. enterprises marketing AFDD products and services. The project is "collaborative" because research proposals, development contributions, and technical skills are welcomed from beyond NIST, particularly from other laboratories, universities, private-sector businesses, and individuals engaged in AFDD.
 
-Anyone wanting to learn more about ZandrEA and its AFDD research application is strongly encouraged to first read its "primer" document, NIST Technical Note 2337, available as a free PDF download at: https://doi.org/10.6028/NIST.TN.2337 
+Anyone wanting to learn more about ZandrEA and its application to AFDD research is strongly encouraged to first read the Section 1, Introduction in its "primer" document, NIST Technical Note (TN) 2337, available as a free PDF download at: https://doi.org/10.6028/NIST.TN.2337 
 
-The moniker "EA" preceded the ultimate naming of the ZandrEA project, previously being an abbreviation of "Expert Assistant". That association is now deprecated. However, as a convenient and short tag, "EA" is used pervasively throughout the codebase for parts of ZandrEA comprising the founding NIST contribution. You will continue to see references to EA throughout the primer and this repo, and it should be understood as an existent subset within a potentially larger future codebase for ZandrEA.
+The moniker "EA" preceded the final name "ZandrEA" given to the project, being previously an abbreviation of "Expert Assistant". That association to an abbreviation is now deprecated. However, as a convenient short tag, "EA" is still used extensively throughout the ZandrEA codebase and TN-2337 to encompass the parts of it in the founding NIST contribution. EA should be understood to refer to an evolving subset within a future, potentially larger and more broadly capable, codebase for ZandrEA.
 
-## Now that you have read at least Sections 1, 2, and 4 of the primer...
+## Implementation Overview
 
 ZandrEA consists of a system of four Docker containers orchestrated with Docker Compose. Running in the Docker environment vastly reduces the requirements to build and run this software. See the [INSTALLATION](./INSTALLATION.md) document for instructions for how to build, run, and test ZandrEA.
 
@@ -24,7 +24,7 @@ The four Docker containers include:
 
 ## How to work with this repo
 
-Before attempting to work with this code you should first familiarize yourself with the concepts and vocabulary that will be used by reading the ZandrEA Primer document **_(TBD - Link to be provided)_**
+Before attempting to work with this code you should first familiarize yourself with the particular concepts and vocabulary used in ZandrEA by reading at least Sections 1, 2, and 4 of the ZandrEA Primer document, TN-2337, at https://doi.org/10.6028/NIST.TN.2337
 
 We highly recommend creating your own fork of this repo so that you can customize it for your particular environment and needs.
 

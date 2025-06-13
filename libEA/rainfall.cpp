@@ -467,7 +467,7 @@ void CRainAnalog::UpdateStatistics_Analog( void ) {
 
 /* Method Notes ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 
-[1]   Upon "apparent" runtime (i.e., cycling on sampled data, vs. "latent", construction-stage runtime),
+[1]   Upon "productive" runtime (i.e., cycling on sampled data, vs. "latent", construction-stage runtime),
       analog value bindex logs are filled to back end with bindex of first data value received as input.
       Thus, statistics calculated over early cycles first completely, then decreasingly, reflect that
       one first value, since at startup no other value was "available".
