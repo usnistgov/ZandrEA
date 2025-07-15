@@ -52,12 +52,18 @@ IGuiShadow::~IGuiShadow( void ) { };
       { EDataRange::Undefined, {{ NaNFLOAT, NaNFLOAT }} }, \
       { EDataRange::Analog_percent, {{ 0.0f, 100.0f }} }, \
       { EDataRange::Analog_zeroToOne, {{ 0.0f, 1.0f }} }, \
-      { EDataRange::Analog_zeroTo3, {{ 0.0f, 3.0f }} }, \
-      { EDataRange::Analog_zeroTo50, {{ 0.0f, 50.0f }} }, \
+      { EDataRange::Analog_zeroTo4, {{ 0.0f, 4.0f }} }, \
+      { EDataRange::Analog_zeroTo1k, {{ 0.0f, 1000.0f }} }, \
+      { EDataRange::Analog_zeroTo500, {{ 0.0f, 500.0f }} }, \
+      { EDataRange::Analog_zeroTo3450, {{ 0.0f, 3450.0f }} }, \
+      { EDataRange::Analog_n10To40, {{ -10.0f, 40.0f }} }, \
+      { EDataRange::Analog_n70To276, {{ -70.0f, 276.0f }} }, \
       { EDataRange::Analog_zeroTo120, {{ 0.0f, 120.0f }} }, \
-      { EDataRange::Analog_zeroTo750, {{ 0.0f, 750.0f }} }, \
-      { EDataRange::Analog_zeroTo1500, {{ 0.0f, 1500.0f }} }, \
+      { EDataRange::Analog_n18To49, {{ -17.78f, 48.89f }} }, \
       { EDataRange::Analog_zeroTo3k, {{ 0.0f, 3000.0f }} }, \
+      { EDataRange::Analog_zeroTo1416, {{ 0.0f, 1416.0f }} }, \
+      { EDataRange::Analog_zeroTo40, {{ 0.0f, 40.0f }} }, \
+      { EDataRange::Analog_zeroTo150, {{ 0.0f, 150.0f }} }, \
       { EDataRange::Bindex_fact, {{ NaNFLOAT, NaNFLOAT }} }, \
       { EDataRange::Bindex_rule, {{ NaNFLOAT, NaNFLOAT }} }, \
       { EDataRange::Boolean, {{ 0.0f, 1.0f }} }, \

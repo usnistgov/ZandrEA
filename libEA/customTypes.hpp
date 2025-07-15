@@ -143,6 +143,7 @@ const bool     FIXED_RULE_UNITOUTPUT_PINNED = true;
 const bool     FIXED_RULE_UNITOUTPUT_NOTPINNED = false;
 
 const float    INIT_HVACPARAM_AHU_FRZSTAT_DEGF = 35.0f;
+const float    INIT_HVACPARAM_AHU_FRZSTAT_DEGC = 1.67f;
  // "Min" below is 100% until AHU Rule 10 is redeveloped for IBAL based upon ASHRAE Guideline 10 or etc.
 const float    INIT_HVACPARAM_AHU_OAFRAC_MIN = 1.0f;  // Intended for 2006 APAR (AHU rules) = out-of-date
 
@@ -186,40 +187,72 @@ const float FIXED_PARAM_FRACTION_FULL = 1.0f;
 const float FIXED_PARAM_PERCENT_SHUT = 0.0f;
 const float FIXED_PARAM_PERCENT_FULL = 100.0f;
 
+// Hysteresis, unitless
 const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYFRACTION = {0.0f, 0.0f, 0.1f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYPERCENT =  {0.0f, 0.0f, 10.0f};
+
+// Hysteresis, I-P units
 const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_CFM_0TO3K =   {0.0f, 0.0f, 150.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120 = {0.0f, 0.0f, 4.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_IWG_0TO3 =    {0.0f, 0.0f, 0.1f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_IWG_0TO4 =    {0.0f, 0.0f, 0.1f};
 
+// Hysteresis, SI units
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_LPS_0TO1416 =   {0.0f, 0.0f, 75.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49 =  {0.0f, 0.0f, 2.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_PA_0TO1K =      {0.0f, 0.0f, 50.0f};
 
+// Slack, unitless
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYFRACTION =        {-0.1f, 0.0f, 0.1f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYPERCENT  =        {-10.0f, 0.0f, 10.0f};
+
+// Slack, I-P units
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_CFM_0TO3K =          {-150.0f, 75.0f, 150.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY =   {-4.0f, 2.0f, 4.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_ZERO =   {-4.0f, 0.0f, 4.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_HARD =   {-4.0f, -2.0f, 4.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_IWG_0TO3 =           {-0.1f, 0.0f, 0.1f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_IWG_0TO4 =           {-0.1f, 0.0f, 0.1f};
 
+// Slack, SI units
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_LPS_0TO1416 =        {-75.0f, 37.5f, 75.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY =  {-2.0f, 1.0f, 2.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_ZERO =  {-2.0f, 0.0f, 2.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_HARD =  {-2.0f, -1.0f, 2.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_PA_0TO1K =           {-50.0f, 0.0f, 50.0f};
+
+//------------------------------------------------------------------------------------------------------/
 // "Tracking" = summing into P and N registers data beyond +/- halfband around a "guide" variable,
 // which can be same as "observed" variable (i.e., can be autoregressive)
 
+// Tracking, half-band, unitless
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_ANYFRACTION =   {0.01f, 0.02f, 0.03f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_ANYPERCENT =    {1.0f, 2.0f, 3.0f};
+
+// Tracking, half-band, I-P units
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_CFM_0TO3K =     {10.0f, 50.0f, 90.0f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_DEGF_0TO120 =   {0.5f, 0.5f, 3.0f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_IWG_0TO3 =      {0.1f, 0.3f, 0.6f};
 
+// Tracking, half-band, SI units
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_LPS_0TO1416 =   {5.0f, 25.0f, 45.0f};
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_DEGC_n18TO49 =  {0.3f, 0.3f, 1.5f};
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_PA_0TO1K =      {25.0f, 50.0f, 150.0f};
+
 // warn = (units-of-x)-minutes beyond halfband, summed over the reset period set by APPSBETWEENRESETS
   // i.e., number of (/1.0)-mins summed over reset
+
+// Warn, unitless
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_ANYFRACTION = {0.0f, 1.0f, 5.0f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_ANYPERCENT = {0.0f, 100.0f, 500.0f};
 
-// number of cfm-minutes summed over reset
+// Warn, I-P units (e.g., number of cfm-minutes summed over reset period)
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_CFM_0TO3K = {0.0f, 300.0f, 1000.0f};
-
 // number of degF-minutes summed over reset
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_DEGF_0TO120 = {0.0f, 5.0f, 30.0f};
+
+// Warn, SI units (e.g., number of lps-minutes summed over reset period)
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_LPS_0TO1416 = {0.0f, 150.0f, 500.0f};
+// number of degC-minutes summed over reset
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_DEGC_n18TO49 = {0.0f, 2.5f, 15.0f};
 
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
@@ -523,15 +556,27 @@ enum struct EPlotGroup : unsigned char {
 
 enum struct EDataRange : unsigned char {
 
+/* New or edited data ranges must have all actions below done:
+   1) Declared here as part of this enum
+   2) Define end-bin values and map those to this enum in INIT_DATARANGE of guiShadow.cpp
+   3) Map this enum with same end-bin values to an initializer method in ANALOGBINSDEF of rainfall.cpp
+*/
+
    Undefined = 0u,
-   Analog_percent,
-   Analog_zeroToOne,
-   Analog_zeroTo3,
-   Analog_zeroTo50,
-   Analog_zeroTo120,
-   Analog_zeroTo750,
-   Analog_zeroTo1500,
-   Analog_zeroTo3k,
+   Analog_percent,               // e.g., damper/valve signal (U) or position (Z) (%)
+   Analog_zeroToOne,             // e.g., damper/valve signal (U) or position (Z) (fraction)
+   Analog_zeroTo4,               // e.g., Pressure Range A in inches water gage (iwg) (I-P)
+   Analog_zeroTo1k,              // e.g., Pressure range A in Pascals (Pa) (SI)
+   Analog_zeroTo500,             // e.g., Pressure Range B in psig (I-P)
+   Analog_zeroTo3450,            // e.g., Pressure range B in kPa (SI)
+   Analog_n10To40,               // e.g., Pressure Range C in psig (I-P)
+   Analog_n70To276,              // e.g., Pressure Range C in kPa (SI)
+   Analog_zeroTo120,             // e.g., Temperature Range A in degF (I-P)
+   Analog_n18To49,               // e.g., Temperature Range A in degC (SI)
+   Analog_zeroTo3k,              // e.g., Volumetric Flow Range A in cfm (I-P)
+   Analog_zeroTo1416,            // e.g., Volumetric Flow Range A in liters/sec (L/s) (SI)
+   Analog_zeroTo40,              // e.g., Volumetric Flow Range B in gpm (I-P)
+   Analog_zeroTo150,             // e.g., Volumetric Flow Range B in liters/minute (Lpm) (SI, almost)
    Bindex_fact,
    Bindex_rule,
    Boolean,
@@ -543,6 +588,7 @@ enum struct EDataRange : unsigned char {
 enum struct EDataLabel : unsigned int {
 
   // "label" is a generic descriptor. A "name" identifies a particular thing (instance) bearing a label
+  // Using declaration here, the look-up table mapping these to GUI text is in guiShadow.cpp
 
    Undefined = 0u,
 
@@ -778,6 +824,8 @@ enum struct EDataLabel : unsigned int {
 
 enum struct EAlertMsg : unsigned int {
 
+   // Using declaration here, the look-up table mapping these to GUI text is in guiShadow.cpp
+
    Undefined = 0u,
 
    Common_givenBadKey,
@@ -927,6 +975,8 @@ enum struct EAlertMsg : unsigned int {
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 
 enum struct EDataUnit : unsigned char {
+
+   // Using declaration here, the look-up table mapping these to GUI text is in guiShadow.cpp
 
    Undefined = 0u,
    Area_sqFt,

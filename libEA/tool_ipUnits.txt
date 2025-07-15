@@ -82,9 +82,9 @@ u_Subject = std::make_unique<CSubj_ahu_sdvr>(
                ahuName,
                chwPlantName,
                hwPlantName,
-               2360.0f,    // air flow, rated (L/s)
-               22.0f,      // CHW flow, rated (L/minute)
-               25.0f,      // preheat, rated (kw)
+               5000.0f,    // cfmAirRated
+               22.0f,      // gpmChwRated
+               25.0f,      // kwPreheatRated
                0.30f       // min fraction OA
 );
 
@@ -103,8 +103,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Psas =          std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_pressure_static_air_supply,
-                                                      EDataUnit::PressureGage_Pa,
-                                                      EDataRange::Analog_zeroTo1k,
+                                                      EDataUnit::PressureGage_iwg,
+                                                      EDataRange::Analog_zeroTo4,
                                                       EPlotGroup::Free,
                                       // $$$ TBD to match enum below to actual BAS point list names $$$
                                                       EPointName::Pressure_static_air_supply,
@@ -113,8 +113,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Tao =           std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_outside,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::Free,
                                                       EPointName::Temperature_air_outside,
                                                       ctrlrRef );
@@ -131,8 +131,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Tam =           std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_mixed,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::Free,
                                                       EPointName::Temperature_air_mixed,
                                                       ctrlrRef );
@@ -140,8 +140,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Tar =           std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_return,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::Free,
                                                       EPointName::Temperature_air_return,
                                                       ctrlrRef );
@@ -158,8 +158,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Tas =           std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_supply,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::GroupA,
                                                       EPointName::Temperature_air_supply,
                                                       ctrlrRef );
@@ -167,8 +167,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_TasSetpt =      std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_supply_setpt,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::GroupA,
                                                       EPointName::Temperature_air_supply_setpt,
                                                       ctrlrRef );
@@ -192,8 +192,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Qas =           std::make_unique<CPointAnalog>(   seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_flowVolume_air_supply,
-                                                      EDataUnit::FlowVolume_Lps,
-                                                      EDataRange::Analog_zeroTo1416,
+                                                      EDataUnit::FlowVolume_cfm,
+                                                      EDataRange::Analog_zeroTo3k,
                                                       EPlotGroup::Free,
                                                       EPointName::FlowRateVolume_air_ahu,
                                                       ctrlrRef );
@@ -204,8 +204,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_absDifTaoTar =  std::make_unique<CFormula>(   seq0Ref,
                                                    *u_Subject,
                                                    EDataLabel::Formula_absDif_TarTao,
-                                                   EDataUnit::TemperatureDiff_Cdeg,
-                                                   EDataRange::Analog_n18To49,
+                                                   EDataUnit::TemperatureDiff_Fdeg,
+                                                   EDataRange::Analog_zeroTo120,
                                                    EDataSuffix::None,
                                                    EPlotGroup::GroupA, // segregate; GUI can scale y-axis
                                                    std::vector<CPointAnalog*>(
@@ -240,8 +240,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_maxTaoTar =  std::make_unique<CFormula>(   seq0Ref,
                                                 *u_Subject,
                                                 EDataLabel::Formula_maxTaoTar,
-                                                EDataUnit::Temperature_degC,
-                                                EDataRange::Analog_n18To49,
+                                                EDataUnit::Temperature_degF,
+                                                EDataRange::Analog_zeroTo120,
                                                 EDataSuffix::None,
                                                 EPlotGroup::Free,
                                                 std::vector<CPointAnalog*>(
@@ -257,8 +257,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_minTaoTar =  std::make_unique<CFormula>(   seq0Ref,
                                                 *u_Subject,
                                                 EDataLabel::Formula_minTaoTar,
-                                                EDataUnit::Temperature_degC,
-                                                EDataRange::Analog_n18To49,
+                                                EDataUnit::Temperature_degF,
+                                                EDataRange::Analog_zeroTo120,
                                                 EDataSuffix::None,
                                                 EPlotGroup::Free,
                                                 std::vector<CPointAnalog*>(
@@ -294,16 +294,16 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                       *u_Subject,
                                                       u_Qas.get(),
                                                       u_QasShew.get(),
-                                                      INIT_MINDEFMAX_TRACKING_HALFBAND_LPS_0TO1416,
-                                                      INIT_MINDEFMAX_TRACKING_WARN_LPS_0TO1416,
+                                                      INIT_MINDEFMAX_TRACKING_HALFBAND_CFM_0TO3K,
+                                                      INIT_MINDEFMAX_TRACKING_WARN_CFM_0TO3K,
                                                       ctrlrRef );
 
    u_Tas_VS_auto =     std::make_unique<CChartTracking>( seq0Ref,
                                                          *u_Subject,
                                                          u_Tas.get(),
                                                          u_TasShew.get(),
-                                                         INIT_MINDEFMAX_TRACKING_HALFBAND_DEGC_n18TO49,
-                                                         INIT_MINDEFMAX_TRACKING_WARN_DEGC_n18TO49,
+                                                         INIT_MINDEFMAX_TRACKING_HALFBAND_DEGF_0TO120,
+                                                         INIT_MINDEFMAX_TRACKING_WARN_DEGF_0TO120,
                                                          ctrlrRef );
 
 
@@ -313,8 +313,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                          u_TasShew.get(),
                                                          u_TasSetpt.get(),
                                                          u_TasSetptShew.get(),
-                                                         INIT_MINDEFMAX_TRACKING_HALFBAND_DEGC_n18TO49,
-                                                         INIT_MINDEFMAX_TRACKING_WARN_DEGC_n18TO49,
+                                                         INIT_MINDEFMAX_TRACKING_HALFBAND_DEGF_0TO120,
+                                                         INIT_MINDEFMAX_TRACKING_WARN_DEGF_0TO120,
                                                          ctrlrRef );
 
    u_Uvc_VS_auto = std::make_unique<CChartTracking>(  seq0Ref,
@@ -415,8 +415,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                     u_Psas.get(),
                                     &CRainAnalog::NowY,
                                     FIXED_PARAM_ZERO,
-                                    INIT_MINDEFMAX_RELATE_HYSTER_PA_0TO1K,
-                                    INIT_MINDEFMAX_RELATE_SLACK_PA_0TO1K,
+                                    INIT_MINDEFMAX_RELATE_HYSTER_IWG_0TO4,
+                                    INIT_MINDEFMAX_RELATE_SLACK_IWG_0TO4,
                                     ctrlrRef );
 
    u_QasZero = std::make_unique< CFactRelatingLeftToParam<
@@ -429,8 +429,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                     u_Qas.get(),
                                     &CRainAnalog::NowY,
                                     FIXED_PARAM_ZERO,
-                                    INIT_MINDEFMAX_RELATE_HYSTER_LPS_0TO1416,
-                                    INIT_MINDEFMAX_RELATE_SLACK_LPS_0TO1416,
+                                    INIT_MINDEFMAX_RELATE_HYSTER_CFM_0TO3K,
+                                    INIT_MINDEFMAX_RELATE_SLACK_CFM_0TO3K,
                                     ctrlrRef );
 
    u_UdmFullOA = std::make_unique<  CFactRelatingLeftToParam<
@@ -495,9 +495,9 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                              EDataLabel::Fact_para_Tam_GT_frzStat,
                                              u_Tam.get(),
                                              &CRainAnalog::NowY,
-                                             INIT_HVACPARAM_AHU_FRZSTAT_DEGC,
-                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                             INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                             INIT_HVACPARAM_AHU_FRZSTAT_DEGF,
+                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                             INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                              ctrlrRef );
 
    u_absDifTaoTar_GTE_10F = std::make_unique<   CFactRelatingLeftToParam<
@@ -510,8 +510,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                    u_absDifTaoTar.get(),
                                                    &CRainAnalog::NowY,
                                                    10.0f,
-                                                   INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                                   INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_ZERO,
+                                                   INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                                   INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_ZERO,
                                                    ctrlrRef );
 
 //======================================================================================================/ 
@@ -531,8 +531,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                              &CRainAnalog::NowY,
                                              u_TasSetpt.get(),
                                              &CRainAnalog::NowY,
-                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                             INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                             INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                              ctrlrRef );
 
 
@@ -553,8 +553,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                              &CRainAnalog::NowY,
                                              u_TasSetpt.get(),
                                              &CRainAnalog::NowY,
-                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                             INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                             INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                              ctrlrRef );
 
    u_Tam_GTE_minTaoTar = std::make_unique<   CFactRelatingLeftToRight<
@@ -570,8 +570,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                 &CRainAnalog::NowY,
                                                 u_minTaoTar.get(),
                                                 &CRainAnalog::NowY,
-                                                INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                                INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                                INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                                INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                                 ctrlrRef );
 
 //------------------------------ 
@@ -590,8 +590,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                        &CRainAnalog::NowY,
                                        u_Tar.get(),
                                        &CRainAnalog::NowY,
-                                       INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                       INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                       INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                       INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                        ctrlrRef );
 
 
@@ -608,8 +608,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                              &CRainAnalog::NowY,
                                              u_TasSetpt.get(),
                                              &CRainAnalog::NowY,
-                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                             INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                             INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                              ctrlrRef );
 
    u_Tas_LT_Tam = std::make_unique< CFactRelatingLeftToRight<
@@ -625,8 +625,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                        &CRainAnalog::NowY,
                                        u_Tam.get(),
                                        &CRainAnalog::NowY,
-                                       INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                       INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                       INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                       INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                        ctrlrRef );
 
    u_Tam_LTE_maxTaoTar = std::make_unique<   CFactRelatingLeftToRight<
@@ -642,8 +642,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                 &CRainAnalog::NowY,
                                                 u_maxTaoTar.get(),
                                                 &CRainAnalog::NowY,
-                                                INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                                INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                                INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                                INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                                 ctrlrRef );
 
 //======================================================================================================/
@@ -1403,10 +1403,10 @@ u_Subject = std::make_unique<CSubj_vav_pihr>(
                vavName,
                ahuName,
                hwPlantName,
-               0.305f,     // diam duct (m)
-               1180.0f,    // air flow, rated (L/sec)
-               18.93f,     // HW flow, rated (L/minute)
-               2.0f        // reheat, rated (kW)
+               12.0f,      // inch diam duct
+               2500.0f,    // cfm rated
+               5.0f,       // gpm rated
+               2.0f        // reheat kW
 );
 
 u_RuleKit = std::make_unique<CRuleKit>(
@@ -1424,8 +1424,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Psai =          std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_pressure_static_air_inlet,
-                                                      EDataUnit::PressureGage_Pa,
-                                                      EDataRange::Analog_zeroTo1k,
+                                                      EDataUnit::PressureGage_iwg,
+                                                      EDataRange::Analog_zeroTo4,
                                                       EPlotGroup::Free,
                                          // $$$ TBD to match enum below to actual BAS point list names $$$
                                                       EPointName::Pressure_static_air_supply,
@@ -1434,8 +1434,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Tai =           std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_inlet,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::Free,
                                                       EPointName::Temperature_air_supply,
                                                       ctrlrRef );
@@ -1444,8 +1444,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Tad =           std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_discharge,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::Free,
                                                       EPointName::Temperature_air_discharge,
                                                       ctrlrRef );
@@ -1453,8 +1453,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Taz =           std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_zone,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::GroupA,
                                                       EPointName::Temperature_air_zone,
                                                       ctrlrRef );
@@ -1462,8 +1462,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_TazSetptHtg =   std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_zone_setpt_htg,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::GroupA,
                                                       EPointName::Temperature_air_zone_setpt_htg,
                                                       ctrlrRef );
@@ -1471,8 +1471,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_TazSetptClg =   std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_temperature_air_zone_setpt_clg,
-                                                      EDataUnit::Temperature_degC,
-                                                      EDataRange::Analog_n18To49,
+                                                      EDataUnit::Temperature_degF,
+                                                      EDataRange::Analog_zeroTo120,
                                                       EPlotGroup::GroupA,
                                                       EPointName::Temperature_air_zone_setpt_clg,
                                                       ctrlrRef );
@@ -1498,8 +1498,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_Qad =           std::make_unique<CPointAnalog>(   seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_flowVolume_air_disch,
-                                                      EDataUnit::FlowVolume_Lps,
-                                                      EDataRange::Analog_zeroTo1416,
+                                                      EDataUnit::FlowVolume_cfm,
+                                                      EDataRange::Analog_zeroTo3k,
                                                       EPlotGroup::GroupA,
                                                       EPointName::FlowRateVolume_air_vav,
                                                       ctrlrRef );
@@ -1507,8 +1507,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    u_QadSetpt =      std::make_unique<CPointAnalog>(  seq0Ref,
                                                       *u_Subject,
                                                       EDataLabel::Point_flowVolume_air_disch_setpt,
-                                                      EDataUnit::FlowVolume_Lps,
-                                                      EDataRange::Analog_zeroTo1416,
+                                                      EDataUnit::FlowVolume_cfm,
+                                                      EDataRange::Analog_zeroTo3k,
                                                       EPlotGroup::GroupA,
                                                       EPointName::FlowRateVolume_air_vav_setpt,
                                                       ctrlrRef );
@@ -1567,16 +1567,16 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                       u_QadShew.get(),
                                                       u_QadSetpt.get(),
                                                       u_QadSetptShew.get(),
-                                                      INIT_MINDEFMAX_TRACKING_HALFBAND_LPS_0TO1416,
-                                                      INIT_MINDEFMAX_TRACKING_WARN_LPS_0TO1416,
+                                                      INIT_MINDEFMAX_TRACKING_HALFBAND_CFM_0TO3K,
+                                                      INIT_MINDEFMAX_TRACKING_WARN_CFM_0TO3K,
                                                       ctrlrRef );
 
    u_Tad_VS_auto = std::make_unique<CChartTracking>(  seq0Ref,
                                                       *u_Subject,
                                                       u_Tad.get(),
                                                       u_TadShew.get(),
-                                                      INIT_MINDEFMAX_TRACKING_HALFBAND_DEGC_n18TO49,
-                                                      INIT_MINDEFMAX_TRACKING_WARN_DEGC_n18TO49,
+                                                      INIT_MINDEFMAX_TRACKING_HALFBAND_DEGF_0TO120,
+                                                      INIT_MINDEFMAX_TRACKING_WARN_DEGF_0TO120,
                                                       ctrlrRef );
 
    u_Taz_VS_setptClg = std::make_unique<CChartTracking>( seq0Ref,
@@ -1585,8 +1585,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                          u_TazShew.get(),
                                                          u_TazSetptClg.get(),
                                                          u_TazSetptClgShew.get(),
-                                                         INIT_MINDEFMAX_TRACKING_HALFBAND_DEGC_n18TO49,
-                                                         INIT_MINDEFMAX_TRACKING_WARN_DEGC_n18TO49,
+                                                         INIT_MINDEFMAX_TRACKING_HALFBAND_DEGF_0TO120,
+                                                         INIT_MINDEFMAX_TRACKING_WARN_DEGF_0TO120,
                                                          ctrlrRef );
 
    u_Taz_VS_setptHtg = std::make_unique<CChartTracking>( seq0Ref,
@@ -1595,8 +1595,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                          u_TazShew.get(),
                                                          u_TazSetptHtg.get(),
                                                          u_TazSetptHtgShew.get(),
-                                                         INIT_MINDEFMAX_TRACKING_HALFBAND_DEGC_n18TO49,
-                                                         INIT_MINDEFMAX_TRACKING_WARN_DEGC_n18TO49,
+                                                         INIT_MINDEFMAX_TRACKING_HALFBAND_DEGF_0TO120,
+                                                         INIT_MINDEFMAX_TRACKING_WARN_DEGF_0TO120,
                                                          ctrlrRef );
 
 //======================================================================================================/
@@ -1731,8 +1731,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                     u_Qad.get(),
                                     &CRainAnalog::NowY,
                                     FIXED_PARAM_ZERO,
-                                    INIT_MINDEFMAX_RELATE_HYSTER_LPS_0TO1416,
-                                    INIT_MINDEFMAX_RELATE_SLACK_LPS_0TO1416,
+                                    INIT_MINDEFMAX_RELATE_HYSTER_CFM_0TO3K,
+                                    INIT_MINDEFMAX_RELATE_SLACK_CFM_0TO3K,
                                     ctrlrRef );
 
    u_UddFull = std::make_unique< CFactRelatingLeftToParam<
@@ -1780,8 +1780,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                           &CRainAnalog::NowY,
                                           u_Tai.get(),
                                           &CRainAnalog::NowY,
-                                          INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                          INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_HARD,
+                                          INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                          INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_HARD,
                                           ctrlrRef );
 
    u_Tad_GT_Taz = std::make_unique< CFactRelatingLeftToRight<
@@ -1797,8 +1797,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                       &CRainAnalog::NowY,
                                       u_Taz.get(),
                                       &CRainAnalog::NowY,
-                                      INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                      INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                      INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                      INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                       ctrlrRef );
 
    u_Taz_GT_setptClg = std::make_unique<   CFactRelatingLeftToRight<
@@ -1814,8 +1814,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                           &CRainAnalog::NowY,
                                           u_TazSetptClg.get(),
                                           &CRainAnalog::NowY,
-                                          INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                          INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_HARD,
+                                          INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                          INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_HARD,
                                           ctrlrRef );
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/ 
@@ -1834,8 +1834,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                        &CRainAnalog::NowY,
                                        u_Taz.get(),
                                        &CRainAnalog::NowY,
-                                       INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                       INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                       INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                       INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY,
                                        ctrlrRef );
 
    u_Taz_LT_setptHtg = std::make_unique< CFactRelatingLeftToRight<
@@ -1851,8 +1851,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                           &CRainAnalog::NowY,
                                           u_TazSetptHtg.get(),
                                           &CRainAnalog::NowY,
-                                          INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
-                                          INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_HARD,
+                                          INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120,
+                                          INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_HARD,
                                           ctrlrRef );
 
 //======================================================================================================/

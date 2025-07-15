@@ -195,9 +195,18 @@ SBinParamsAnalogValue CRainAnalog::SpecifyBinParamsForAnalogValues(  float minVa
    { \
       { EDataRange::Analog_percent, SpecifyBinParamsForAnalogValues( 0.0f, 100.0f ) }, \
       { EDataRange::Analog_zeroToOne, SpecifyBinParamsForAnalogValues( 0.0f, 1.0f ) }, \
-      { EDataRange::Analog_zeroTo3, SpecifyBinParamsForAnalogValues( 0.0f, 3.0f ) }, \
+      { EDataRange::Analog_zeroTo4, SpecifyBinParamsForAnalogValues( 0.0f, 4.0f ) }, \
+      { EDataRange::Analog_zeroTo1k, SpecifyBinParamsForAnalogValues( 0.0f, 1000.0f ) }, \
+      { EDataRange::Analog_zeroTo500, SpecifyBinParamsForAnalogValues( 0.0f, 500.0f ) }, \
+      { EDataRange::Analog_zeroTo3450, SpecifyBinParamsForAnalogValues( 0.0f, 3450.0f ) }, \
+      { EDataRange::Analog_n10To40, SpecifyBinParamsForAnalogValues( -10.0f, 40.0f ) }, \
+      { EDataRange::Analog_n70To276, SpecifyBinParamsForAnalogValues( -70.0f, 276.0f ) }, \
       { EDataRange::Analog_zeroTo120, SpecifyBinParamsForAnalogValues( 0.0f, 120.0f ) }, \
-      { EDataRange::Analog_zeroTo3k, SpecifyBinParamsForAnalogValues( 0.0f, 3000.0f ) } \
+      { EDataRange::Analog_n18To49, SpecifyBinParamsForAnalogValues( -17.78f, 48.89f ) }, \
+      { EDataRange::Analog_zeroTo3k, SpecifyBinParamsForAnalogValues( 0.0f, 3000.0f ) }, \
+      { EDataRange::Analog_zeroTo1416, SpecifyBinParamsForAnalogValues( 0.0f, 1416.0f ) }, \
+      { EDataRange::Analog_zeroTo40, SpecifyBinParamsForAnalogValues( 0.0f, 40.0f ) }, \
+      { EDataRange::Analog_zeroTo150, SpecifyBinParamsForAnalogValues( 0.0f, 150.0f ) } \
    }
 
 const SBinParamsAnalogValue& CRainAnalog::lookup_AnalogValueBins(const EDataRange &dr) {
