@@ -662,7 +662,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
                        EDataLabel::Fact_sustained_sysOcc,
                        *u_sysOcc,
                        ESustainedAs::True,
-                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_90,
+                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_60,
                        ctrlrRef );
 
 //======================================================================================================/
@@ -975,7 +975,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
 
 
    LambdaToCopy_if = ( [&]() -> bool {
-                        return ( u_unitOn->Now() &&
+                        return ( false && u_unitOn->Now() &&
                                  u_UvcSteady->Now() &&
                                  u_UvcShutSus->Now() );
                      } );
@@ -1870,7 +1870,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
                        EDataLabel::Fact_sustained_zoneOcc,
                        *u_zoneOcc,
                        ESustainedAs::True,
-                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_90,
+                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_60,
                        ctrlrRef );
 
 //======================================================================================================/
