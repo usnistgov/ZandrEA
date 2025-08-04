@@ -32,7 +32,7 @@ const Krono = (props) => {
     if (!(pids.includes(p.key))) {
       pids.push(p.key);
       panelist.push(
-        <Pane key={`pane-${p.key}`} id={p.key} type={p.type} width={width} yunits={p.yunits} ymin={p.ymin} ymax={p.ymax} traces={p.traces} timestamps={timestamps} reply={p.reply} />
+        <Pane key={`pane-${p.key}`} id={p.key} type={p.type} width={width} yunits={p.yunits} ymin={p.ymin} ymax={p.ymax} traces={p.traces} timestamps={timestamps} reply={p.reply} seq={seq} />
       );
     } else {
       console.log("Krono: removed duplicate pane %d", p.key);
@@ -67,6 +67,7 @@ Krono.propTypes = {
   panes: PropTypes.arrayOf(PropTypes.object).isRequired,
   timestamps: PropTypes.arrayOf(PropTypes.number).isRequired,
   knobs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  seq: PropTypes.number.isRequired,
 };
 
 export default Krono;

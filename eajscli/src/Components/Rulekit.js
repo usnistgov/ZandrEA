@@ -71,7 +71,7 @@ const Rulekit = (props) => {
           </Box>
         </Grid>
       </Grid>
-      <Krono id={krono.key} type={krono.type} caption={krono.caption} panes={krono.panes} timestamps={krono.timestamps} knobs={krono.knobs} />
+      <Krono id={krono.key} type={krono.type} caption={krono.caption} panes={krono.panes} timestamps={krono.timestamps} knobs={krono.knobs} seq={props.seq} />
       <br />
       <table className={classes.table}>
         <thead className={classes.thead}>

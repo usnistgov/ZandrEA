@@ -299,7 +299,7 @@ function App() {
           <AppBar position="static">
             <Toolbar>
               <Typography className="classes.title" variant="h6" noWrap>
-                EA FDD Console for: {domain}
+                ZandrEA AFDD Console for: {domain}
               </Typography>
               <SubjectSelect
                 subjects={subjects}
@@ -370,7 +370,7 @@ function App() {
                 <TabPanel value={opentabindex} index={idx} key={idx}>
                   {
                     (subjects && subjects[sid] && 'features' in subjects[sid] && 'cases' in subjects[sid]) && 'rulekits' in subjects[sid] ?
-                      <SubjectDetail subject={subjects[sid]} />
+                      <SubjectDetail subject={subjects[sid]} seq={seq} />
                     :
                       <Typography>(loading...)</Typography>
                   }

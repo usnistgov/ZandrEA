@@ -38,7 +38,7 @@ const cap = (s) => {
 };
 
 const Pane = (props) => {
-  const { id, type, width, yunits, traces, timestamps, reply } = props;
+  const { id, type, width, yunits, traces, timestamps, reply, seq } = props; // DAV added seq
 
   if (! id) {
     return <Typography>(Cannot render a null pane!)</Typography>;
@@ -70,11 +70,14 @@ const Pane = (props) => {
       for (let i = 0; i < traces[0].values.length; i++) {
         const ts = new Date(timestamps[i] * 1000);
         if (xmin === undefined) {
-          xmin = ts;
+          //xmin = ts; // DAV; rem-out use of timestamps for xmin and xmax
+          xmin = props.seq - (traces[0].values.length - 1);
         }
-        xmax = ts;
+        //xmax = ts;
+        xmax = props.seq;
 
-        data[i] = { x: ts, v: true };
+        //data[i] = { x: ts, v: true };  // DAV: rem-out call to timestamps as x-axis 
+        data[i] = { x: props.seq - (traces[0].values.length - 1 - i), v: true };
         for (const t of traces) {
           if (t.type === 'Trace_analog') {
             const v = t.values[i];
@@ -100,10 +103,14 @@ const Pane = (props) => {
       for (let i = 0; i < traces[0].states.length; i++) {
         const ts = new Date(timestamps[i] * 1000);
         if (xmin === undefined) {
-          xmin = ts;
+          //xmin = ts;
+          xmin = props.seq - (traces[0].states.length - 1);
         }
-        xmax = ts;
-        data[i] = { x: ts };
+        //xmax = ts;
+        xmax = props.seq;
+
+        //data[i] = { x: ts }; // DAV: rem-out call to timestamps as x-axis
+        data[i] = { x: props.seq - (traces[0].states.length - 1 - i) };
         let j = 0;
         for (const t of traces) {
           const tag = t.tag;
@@ -140,6 +147,5 @@ Pane.propTypes = {
   traces: PropTypes.arrayOf(PropTypes.object).isRequired,
   timestamps: PropTypes.arrayOf(PropTypes.number).isRequired,
   reply: PropTypes.string.isRequired,
-};
-
-export default Pane;
+  seq: PropTypes.number.isRequired,
+}

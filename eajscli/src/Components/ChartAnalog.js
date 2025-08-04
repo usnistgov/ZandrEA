@@ -239,7 +239,8 @@ const ChartAnalog = (props) => {
             tickLabels: { angle: -33 },
             axisLabel: { padding: 60, angle: -90 },
           }}
-          tickFormat={(t) => `${t.toFixed(dp(t))}`}
+          //tickFormat={(t) => `${t.toFixed(dp(t))}`} // DAV; rem-out to support seq as x-axis labels
+          tickFormat={(t) => `${t}`}
         />
         {lines}
         {invalidPoints}

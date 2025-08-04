@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 });
 
 const RulekitList = (props) => {
-  const { rulekits } = props;
+  const { rulekits, seq } = props; // DAV; added seq as prop to support pass to Pane as alt x-axis label
   const classes = useStyles();
   let rk_list = [];
   if (rulekits && rulekits.length > 0) {
@@ -31,7 +31,7 @@ const RulekitList = (props) => {
           <Typography className={classes.heading}>{r.caption}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Rulekit id={r.key} caption={r.caption} knobs={r.knobs} histogram={r.histogram} krono={r.krono}
+          <Rulekit id={r.key} caption={r.caption} knobs={r.knobs} histogram={r.histogram} krono={r.krono} seq={props.seq} // DAV: pass seq to RK
                     rulelabels={r.rulelabels} ruletexts_if={r.ruletexts_if} ruletexts_then={r.ruletexts_then}
                     rulestates={r.rulestates} ruleknobs={r.ruleknobs} rulehistograms={r.rulehistograms}
           />
