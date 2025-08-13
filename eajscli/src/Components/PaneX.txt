@@ -56,7 +56,10 @@ const Pane = (props) => {
   };
   let panel = "";
   let data = [];
-  let xmin, xmax;
+  //let xmin = seq - (traces[0].values.length - 1);
+  //let xmax = seq;
+  let xmin = 1;
+  let xmax = traces[0].values.length;
 
   const panetype = type.replace(/^Pane_/, '');
 
@@ -69,15 +72,13 @@ const Pane = (props) => {
       let ymax2 = undefined;
       for (let i = 0; i < traces[0].values.length; i++) {
         const ts = new Date(timestamps[i] * 1000);
-        if (xmin === undefined) {
-          //xmin = ts; // DAV rem-out use of timestamps for xmin and xmax
-          xmin = props.seq - (traces[0].values.length - 1);
-        }
+        //if (xmin === undefined) {
+        //  xmin = ts; // DAV rem-out use of timestamps for xmin and xmax
+        //}
         //xmax = ts;
-        xmax = props.seq;
 
         //data[i] = { x: ts, v: true };  // DAV rem-out call to timestamps as x-axis 
-        data[i] = { x: props.seq - (traces[0].values.length - 1 - i), v: true };
+        data[i] = { x: xmin + i, v: true };
         for (const t of traces) {
           if (t.type === 'Trace_analog') {
             const v = t.values[i];
@@ -92,7 +93,7 @@ const Pane = (props) => {
         }
       }
       if (data !== null && data.length > 0) {
-        panel = <ChartAnalog pane={id} width={width} data={data} argumentField={argumentField} valueFields={valueFields} yunits={yunits} ymin={ymin2} ymax={ymax2} xmin={xmin} xmax={xmax} traceHistograms={traceHistograms}/>;
+        panel = <ChartAnalog pane={id} width={width} data={data} argumentField={argumentField} valueFields={valueFields} yunits={yunits} ymin={ymin2} ymax={ymax2} xmin={xmin} xmax={xmax} traceHistograms={traceHistograms} seq={seq}/>;
       } else {
         panel = <Typography>(insufficient data for {type} chart with {traces.length} traces)</Typography>
       }
@@ -102,15 +103,13 @@ const Pane = (props) => {
       // display a set of states over time,
       for (let i = 0; i < traces[0].states.length; i++) {
         const ts = new Date(timestamps[i] * 1000);
-        if (xmin === undefined) {
-          //xmin = ts;
-          xmin = props.seq - (traces[0].states.length - 1);
-        }
+        //if (xmin === undefined) {
+        //  //xmin = ts;
+        //}
         //xmax = ts;
-        xmax = props.seq;
 
         //data[i] = { x: ts }; // DAV rem-out call to timestamps as x-axis
-        data[i] = { x: props.seq - (traces[0].states.length - 1 - i) };
+        data[i] = { x: xmin + i };
         let j = 0;
         for (const t of traces) {
           const tag = t.tag;
@@ -123,7 +122,7 @@ const Pane = (props) => {
       }
       //console.log("Pane_state calling ChartState with af=%s vf=%o data=%o", argumentField, valueFields, data);
       if (data !== null && data.length > 0) {
-        panel = <ChartStates pane={id} width={width} data={data} name={cap(panetype)} argumentField={argumentField} valueFields={valueFields} stateField="s" fills={fills[panetype]} symbol={symbols[panetype]} traceHistograms={traceHistograms}/>;
+        panel = <ChartStates pane={id} width={width} data={data} name={cap(panetype)} argumentField={argumentField} valueFields={valueFields} stateField="s" fills={fills[panetype]} symbol={symbols[panetype]} traceHistograms={traceHistograms} seq={seq}/>;
       } else {
         panel = <Typography>(insufficient data for {type} chart with {traces.length} traces)</Typography>
       }

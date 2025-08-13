@@ -7,7 +7,7 @@ import CaseList from './CaseList';
 import RulekitList from './RulekitList';
 
 const SubjectDetail = (props) => {
-  const { subject } = props;
+  const { subject, seq } = props;
 
   return (
     <div>

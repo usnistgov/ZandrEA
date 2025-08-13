@@ -9,7 +9,7 @@ import Pane from "./Pane";
 import ModalKnobList from "./ModalKnobList";
 
 const Krono = (props) => {
-  const { id, type, caption, panes, timestamps, knobs } = props;
+  const { id, type, caption, panes, timestamps, knobs, seq } = props; // DAV add seq to support pass to Pane as alt x-axis label
 
   const [width, setWidth] = useState(window.innerWidth);
   const updateWidth = (ev) => {
@@ -32,7 +32,7 @@ const Krono = (props) => {
     if (!(pids.includes(p.key))) {
       pids.push(p.key);
       panelist.push(
-        <Pane key={`pane-${p.key}`} id={p.key} type={p.type} width={width} yunits={p.yunits} ymin={p.ymin} ymax={p.ymax} traces={p.traces} timestamps={timestamps} reply={p.reply} seq={seq} />
+        <Pane key={`pane-${p.key}`} id={p.key} type={p.type} width={width} yunits={p.yunits} ymin={p.ymin} ymax={p.ymax} traces={p.traces} timestamps={timestamps} reply={p.reply} seq={props.seq} />
       );
     } else {
       console.log("Krono: removed duplicate pane %d", p.key);
