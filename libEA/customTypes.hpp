@@ -55,10 +55,9 @@ const Bindex_t          NaNBINDEX   = std::numeric_limits<Bindex_t>::quiet_NaN()
 // for Nzint_t, zero "0" acts as null, NaN value
 
 //======================================================================================================/
-// PRINCIPAL arbitrary Parameters
+// EA timing and data log parameters FIXED for the instance (i.e., not adjustable by a Knob object)
 
-/* Explanatory note:
-   Upon each "bell", "Agent" (MVC Controller) "triggers" one round of its "Sequence" (MVC Model,
+/* Upon each "bell", "Agent" (MVC Controller) "triggers" one round of its "Sequence" (MVC Model,
    e.g., the agent's "task").  So, bell period (in seconds) = trigger period. ISeqElement objects (more
    of the Model) receiving trigger will "cycle" (execute) or ignore that trigger, depending upon each
    object's constant "tpc" (triggers/cycle) value.  Thus, various analysis/rule rates are accommodated,
@@ -96,14 +95,11 @@ const size_t   START_DATALOG_SIZECYCLES = FIXED_DATALOG_SIZECYCLES_MIN;
 const int      START_DATALOG_SECSLOGGING = START_DATALOG_SIZECYCLES * FIXED_SEQUENCE_SECSPERTRIGGER;
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
-// Parameters for charting
-
-const size_t   START_SHEWCHART_CYCLESUSING = 3;          // must be >= 1, $$$ TBD chg to seconds $$$
-const int      START_TRACKCHART_SECSBETWEENRESETS = 360; // trackers use reset interval in secs
-
-//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // Parameters for hierarchical logic passed between Subjects
 
+// A "pinned" Rule must be passed or skipped for its Subject's output (a unit of equipment) to be "okay" 
+const bool     FIXED_RULE_UNITOUTPUT_PINNED = true;
+const bool     FIXED_RULE_UNITOUTPUT_NOTPINNED = false;
 const size_t   FIXED_SUBJECT_CYCLESPINNEDFAILHISTORY = 3;   // 
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
@@ -135,33 +131,98 @@ const size_t FIXED_PANE_ANALOG_NUMTRACES_MAX = 3;
 const size_t FIXED_PANE_FACT_NUMTRACES_MAX = 999;     // No limit on API end, GUI will have one
 const size_t FIXED_PANE_RULE_NUMTRACES_MAX = FIXED_RAIN_NUMRULESINKIT_MAX;
 
-//======================================================================================================/
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // Object initializing values
 
-// "Pinned" means the Rule must be passed or skipped for its Subject's unit output to be "okay" 
-const bool     FIXED_RULE_UNITOUTPUT_PINNED = true;
-const bool     FIXED_RULE_UNITOUTPUT_NOTPINNED = false;
-
 const float    INIT_HVACPARAM_AHU_FRZSTAT_DEGF = 35.0f;
+const float    INIT_HVACPARAM_AHU_FRZSTAT_DEGC = 1.67f;
  // "Min" below is 100% until AHU Rule 10 is redeveloped for IBAL based upon ASHRAE Guideline 10 or etc.
 const float    INIT_HVACPARAM_AHU_OAFRAC_MIN = 1.0f;  // Intended for 2006 APAR (AHU rules) = out-of-date
 
 const size_t   INIT_MAPBUCKETS_DOMAIN_NUMSUBJECTS = 10;
 const size_t   INIT_MAPBUCKETS_DOMAIN_NUMOUTPUTSPERSUBJ = 4;
 
-const std::array<int,3> INIT_KNOB_MINDEFMAX_DATALOG_SECSLOGGING = { FIXED_DATALOG_SECSLOGGING_MIN, START_DATALOG_SECSLOGGING, FIXED_DATALOG_SECSLOGGING_MAX };
+//======================================================================================================/
+// Setting of fixed universal parameters
+
+const float FIXED_PARAM_ZERO = 0.0f;
+const float FIXED_PARAM_FRACTION_SHUT = 0.0f;
+const float FIXED_PARAM_FRACTION_FULL = 1.0f;
+const float FIXED_PARAM_PERCENT_SHUT = 0.0f;
+const float FIXED_PARAM_PERCENT_FULL = 100.0f;
+
+//======================================================================================================/
+// Initialization of [min, default, max] values of parameters adjustable by Knob objects through GUI:
+
+//------------------------------------------------------------------------------------------------------/
+// Knob-adjustable parameters for data logging
+
+const std::array<int,3> INIT_KNOB_MINDEFMAX_DATALOG_SECSLOGGING =
+   { FIXED_DATALOG_SECSLOGGING_MIN, START_DATALOG_SECSLOGGING, FIXED_DATALOG_SECSLOGGING_MAX };
+
+//------------------------------------------------------------------------------------------------------/
+// Parameters in relational Fact objects (i.e. "_RELATE_")
+
+// Hysteresis, unitless
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYFRACTION = {0.0f, 0.0f, 0.1f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYPERCENT =  {0.0f, 0.0f, 10.0f};
+
+// Hysteresis, I-P units
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_CFM_0TO3K =   {0.0f, 0.0f, 150.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120 = {0.0f, 0.0f, 4.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_IWG_0TO4 =    {0.0f, 0.0f, 0.1f};
+
+// Hysteresis, SI units
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_LPS_0TO1416 =   {0.0f, 0.0f, 75.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49 =  {0.0f, 0.0f, 2.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_PA_0TO1K =      {0.0f, 0.0f, 50.0f};
+
+// Slack, unitless
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYFRACTION =    {-0.1f, 0.0f, 0.1f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYPERCENT  =    {-10.0f, 0.0f, 10.0f};
+
+// Slack, I-P units
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_CFM_0TO3K =      {-150.0f, 75.0f, 150.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY =   {-4.0f, 2.0f, 4.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_ZERO =   {-4.0f, 0.0f, 4.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_HARD =   {-4.0f, -2.0f, 4.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_IWG_0TO4 =           {-0.1f, 0.0f, 0.1f};
+
+// Slack, SI units
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_LPS_0TO1416 =        {-75.0f, 37.5f, 75.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY =  {-3.0f, 2.0f, 3.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_ZERO =  {-3.0f, 0.0f, 3.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_HARD =  {-3.0f, -2.0f, 3.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_PA_0TO1K =           {-50.0f, 0.0f, 50.0f};
+
+//------------------------------------------------------------------------------------------------------/
+// Parameters in sustained Fact objects (i.e. "_SUSTAINED_")
+
+// Sets default and Knob slider range on sustained Facts:
+const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_60 = {1, 60, 180};
+const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_15 = {1, 15, 30};
+const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_05 = {1, 3, 15};
+
+//------------------------------------------------------------------------------------------------------/
+// Parameters in Shewhart Chart objects (i.e. "_SHEWHART_")
+
+// "look-back" depth of statistics obtained from Rainfall of the associated Point/Formula object 
+const size_t   START_SHEWCHART_CYCLESUSING = 3;          // must be >= 1, $$$ TBD chg to seconds $$$
 
 // Shewhart passband half-width, in number of std. devs off data mean
 const std::array<float,3> INIT_MINDEFMAX_SHEWHART_ZPASS = {0.0f, 3.0f, 5.0f};
 
-// Sets default and Knob slider range on sustained Facts:
-const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_90 = {1, 90, 180};
-const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_15 = {1, 15, 30};
-const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_05 = {1, 3, 15};
-
-// Bilateral stubbornness (in successive chart apps with no trip) for chart to flip
-// between "isSteady" being "true" or "false"
+// Bilateral stubbornness (in successive chart apps with no trip) for chart to flip between
+// "isSteady" being "true" or "false"
 const std::array<int,3> INIT_MINDEFMAX_SHEWHART_TRIPFREEMARGIN = {0, 3, 5};
+
+//------------------------------------------------------------------------------------------------------/
+// Parameters in Tracking Chart objects (i.e. "_TRACKING_")
+
+// Sum into P and N registers data beyond +/- halfband around a "guide" variable, which can be same as
+// "observed" variable (i.e., can be autoregressive)
+
+const int START_TRACKCHART_SECSBETWEENRESETS = 360; // trackers use reset interval in secs
 
 // An Apply() call ("APP") of chart happens every cycle unless "invalid" is passed from source object
 // (e.g., 5 APPS @ 60s/cycle means 5 minutes between resets
@@ -174,52 +235,36 @@ const std::array<float,3> INIT_MINDEFMAX_TRACKING_LAGFRAC = {0.20f, 0.50f, 1.0f}
 // fraction in P and N registers allowed to "stale off" when not increased during a cycle
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_STALEFRAC = {0.20f, 0.50f, 1.0f};
 
-//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
-/* Min is zero, max is given
-   If experience proves separate min/max needed for any of the params below, then revise c-tor of
-   relevant classes to initialize min and max param values in addition to the "now" (current) value.
-   and add MIN and MAX constants below as done above. 
-*/
-const float FIXED_PARAM_ZERO = 0.0f;
-const float FIXED_PARAM_FRACTION_SHUT = 0.0f;
-const float FIXED_PARAM_FRACTION_FULL = 1.0f;
-const float FIXED_PARAM_PERCENT_SHUT = 0.0f;
-const float FIXED_PARAM_PERCENT_FULL = 100.0f;
-
-const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYFRACTION = {0.0f, 0.0f, 0.1f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYPERCENT =  {0.0f, 0.0f, 10.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_CFM_0TO3K =   {0.0f, 0.0f, 150.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120 = {0.0f, 0.0f, 4.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_IWG_0TO3 =    {0.0f, 0.0f, 0.1f};
-
-
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYFRACTION =        {-0.1f, 0.0f, 0.1f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYPERCENT  =        {-10.0f, 0.0f, 10.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_CFM_0TO3K =          {-150.0f, 75.0f, 150.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY =   {-4.0f, 2.0f, 4.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_ZERO =   {-4.0f, 0.0f, 4.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_HARD =   {-4.0f, -2.0f, 4.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_IWG_0TO3 =           {-0.1f, 0.0f, 0.1f};
-
-// "Tracking" = summing into P and N registers data beyond +/- halfband around a "guide" variable,
-// which can be same as "observed" variable (i.e., can be autoregressive)
-
+// Tracking, half-band, unitless
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_ANYFRACTION =   {0.01f, 0.02f, 0.03f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_ANYPERCENT =    {1.0f, 2.0f, 3.0f};
+
+// Tracking, half-band, I-P units
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_CFM_0TO3K =     {10.0f, 50.0f, 90.0f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_DEGF_0TO120 =   {0.5f, 0.5f, 3.0f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_IWG_0TO3 =      {0.1f, 0.3f, 0.6f};
 
+// Tracking, half-band, SI units
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_LPS_0TO1416 =   {5.0f, 25.0f, 45.0f};
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_DEGC_n18TO49 =  {0.2f, 1.0f, 2.0f};
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_HALFBAND_PA_0TO1K =      {25.0f, 50.0f, 150.0f};
+
 // warn = (units-of-x)-minutes beyond halfband, summed over the reset period set by APPSBETWEENRESETS
-  // i.e., number of (/1.0)-mins summed over reset
+// i.e., number of (/1.0)-mins summed over reset
+
+// Warn, unitless
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_ANYFRACTION = {0.0f, 1.0f, 5.0f};
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_ANYPERCENT = {0.0f, 100.0f, 500.0f};
 
-// number of cfm-minutes summed over reset
+// Warn, I-P units (e.g., number of cfm-minutes summed over reset period)
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_CFM_0TO3K = {0.0f, 300.0f, 1000.0f};
-
 // number of degF-minutes summed over reset
 const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_DEGF_0TO120 = {0.0f, 5.0f, 30.0f};
+
+// Warn, SI units (e.g., number of lps-minutes summed over reset period)
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_LPS_0TO1416 = {0.0f, 150.0f, 500.0f};
+// number of degC-minutes summed over reset
+const std::array<float,3> INIT_MINDEFMAX_TRACKING_WARN_DEGC_n18TO49 = {0.0f, 4.0f, 15.0f};
 
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
@@ -231,7 +276,7 @@ Also for holding the sum across all bin sums (a "sum bin sums" = full count)
 since arithmetic is also done in this type, better to use signed vs. unsigned
 */
 typedef int BinSum_t;
-const BinSum_t FIXED_RULERAIN_FAILSINEMPTYTRAP_MAX = 5; // Max Rule fails in a trap considered "empty"
+const BinSum_t FIXED_RULERAIN_FAILSINEMPTYTRAP_MAX = 3; // Max Rule fails in a trap considered "empty"
 
 // Each "bin row" of Boolean bins represents one "cycle" ("sample", "time step") within rainfall
 // Analog use is "widest" use, so it fixes width of rainfall. Other uses read/write rows of fewer bins
@@ -321,7 +366,7 @@ const size_t INDEX_BINSUMS_ANALOGVALUE_UNAVAIL = static_cast<size_t>(BINDEX_ANAL
 const size_t INDEX_BINSUMS_FACT_UNAVAIL = static_cast<size_t>(BINDEX_FACT_UNAVAIL);
 const size_t INDEX_BINSUMS_RULE_UNAVAIL = static_cast<size_t>(BINDEX_RULE_UNAVAIL);
 
-//======================================================================================================/
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // Further Typedefs and Structs
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
@@ -403,7 +448,7 @@ typedef struct SEnergyPrices {
 } EnergyPrices_t;
 
 
-//======================================================================================================/
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // Enums used either as types for class members or return types kept within API (vs. exported out to GUI)
 
 enum struct EApiReply : unsigned char {
@@ -523,15 +568,27 @@ enum struct EPlotGroup : unsigned char {
 
 enum struct EDataRange : unsigned char {
 
+/* New or edited data ranges must have all actions below done:
+   1) Declared here as part of this enum
+   2) Define end-bin values and map those to this enum in INIT_DATARANGE of guiShadow.cpp
+   3) Map this enum with same end-bin values to an initializer method in ANALOGBINSDEF of rainfall.cpp
+*/
+
    Undefined = 0u,
-   Analog_percent,
-   Analog_zeroToOne,
-   Analog_zeroTo3,
-   Analog_zeroTo50,
-   Analog_zeroTo120,
-   Analog_zeroTo750,
-   Analog_zeroTo1500,
-   Analog_zeroTo3k,
+   Analog_percent,               // e.g., damper/valve signal (U) or position (Z) (%)
+   Analog_zeroToOne,             // e.g., damper/valve signal (U) or position (Z) (fraction)
+   Analog_zeroTo4,               // e.g., Pressure Range A in inches water gage (iwg) (I-P)
+   Analog_zeroTo1k,              // e.g., Pressure range A in Pascals (Pa) (SI)
+   Analog_zeroTo500,             // e.g., Pressure Range B in psig (I-P)
+   Analog_zeroTo3450,            // e.g., Pressure range B in kPa (SI)
+   Analog_n10To40,               // e.g., Pressure Range C in psig (I-P)
+   Analog_n70To276,              // e.g., Pressure Range C in kPa (SI)
+   Analog_zeroTo120,             // e.g., Temperature Range A in degF (I-P)
+   Analog_n18To49,               // e.g., Temperature Range A in degC (SI)
+   Analog_zeroTo3k,              // e.g., Volumetric Flow Range A in cfm (I-P)
+   Analog_zeroTo1416,            // e.g., Volumetric Flow Range A in liters/sec (L/s) (SI)
+   Analog_zeroTo40,              // e.g., Volumetric Flow Range B in gpm (I-P)
+   Analog_zeroTo150,             // e.g., Volumetric Flow Range B in liters/minute (Lpm) (SI, almost)
    Bindex_fact,
    Bindex_rule,
    Boolean,
@@ -543,6 +600,7 @@ enum struct EDataRange : unsigned char {
 enum struct EDataLabel : unsigned int {
 
   // "label" is a generic descriptor. A "name" identifies a particular thing (instance) bearing a label
+  // Using declaration here, the look-up table mapping these to GUI text is in guiShadow.cpp
 
    Undefined = 0u,
 
@@ -778,6 +836,8 @@ enum struct EDataLabel : unsigned int {
 
 enum struct EAlertMsg : unsigned int {
 
+   // Using declaration here, the look-up table mapping these to GUI text is in guiShadow.cpp
+
    Undefined = 0u,
 
    Common_givenBadKey,
@@ -928,6 +988,8 @@ enum struct EAlertMsg : unsigned int {
 
 enum struct EDataUnit : unsigned char {
 
+   // Using declaration here, the look-up table mapping these to GUI text is in guiShadow.cpp
+
    Undefined = 0u,
    Area_sqFt,
    Area_m2,
@@ -1019,7 +1081,7 @@ enum struct EDataSuffix : unsigned char {
       Do no more than simple, "short" +/- math upon this type [can error upon forced upcasts to signed]
 
 [3]   Dispayable snapshots are vector versus array so to match vector container used for realtime traces
-      Oldest value at lowest index, so time plot on GUI display reads "later" going right to left.
+      Oldest value at lowest index, so time plot on GUI display reads "older" from right to left.
 
       Rainfall obj returns empty container should its getter be called with bad ID when an ID is req'd
       So, callers expecting a time-series return will deduce bad ID from zero size and notify

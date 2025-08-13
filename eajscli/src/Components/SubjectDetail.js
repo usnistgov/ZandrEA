@@ -7,7 +7,7 @@ import CaseList from './CaseList';
 import RulekitList from './RulekitList';
 
 const SubjectDetail = (props) => {
-  const { subject } = props;
+  const { subject, seq } = props;
 
   return (
     <div>
@@ -16,13 +16,14 @@ const SubjectDetail = (props) => {
     <Typography variant="h6" style={{ fontWeight: 600 }}>Cases of Subject {subject.name}: {subject.label}</Typography><br />
     <CaseList cases={subject.cases} subject={subject.key} /><br />
     <Typography variant="h6" style={{ fontWeight: 600 }}>Rulekits of Subject {subject.name}: {subject.label}</Typography><br />
-    <RulekitList rulekits={subject.rulekits} /><br />
+    <RulekitList rulekits={subject.rulekits} seq={props.seq} /><br />
     </div>
   );
 };
 
 SubjectDetail.propTypes = {
   subject: PropTypes.object.isRequired,
+  seq: PropTypes.number.isRequired, // DAV added
 };
 
 export default SubjectDetail;

@@ -202,7 +202,8 @@ const ChartAnalog = (props) => {
           <VictoryVoronoiContainer
             //voronoiDimension="x"
             voronoiBlacklist={voronoiBlacklist}
-            labels={({ datum }) => `${datum._x.toLocaleDateString()} ${datum._x.toLocaleTimeString()}: ${Number.isFinite(datum._y) ? datum._y.toFixed(yprecision) : datum._y.toString()}`}
+            //labels={({ datum }) => `${datum._x.toLocaleDateString()} ${datum._x.toLocaleTimeString()}: ${Number.isFinite(datum._y) ? datum._y.toFixed(yprecision) : datum._y.toString()}`}
+            labels={({ datum }) => `${datum.x}`} // DAV use seq as x-axis label
             preserveAspectRatio="none"
             responsive={true}
           />
@@ -239,7 +240,8 @@ const ChartAnalog = (props) => {
             tickLabels: { angle: -33 },
             axisLabel: { padding: 60, angle: -90 },
           }}
-          tickFormat={(t) => `${t.toFixed(dp(t))}`}
+          //tickFormat={(t) => `${t.toFixed(dp(t))}`} // DAV rem-out to support seq as x-axis labels
+          tickFormat={(t) => `${t}`}
         />
         {lines}
         {invalidPoints}

@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 });
 
 const Rulekit = (props) => {
-  const { id, caption, knobs, histogram, krono, rulelabels, ruletexts_if, ruletexts_then, rulestates, ruleknobs, rulehistograms } = props;
+  const { id, caption, knobs, histogram, krono, rulelabels, ruletexts_if, ruletexts_then, rulestates, ruleknobs, rulehistograms, seq } = props;
   const classes = useStyles();
 
   let rows = [];
@@ -71,7 +71,7 @@ const Rulekit = (props) => {
           </Box>
         </Grid>
       </Grid>
-      <Krono id={krono.key} type={krono.type} caption={krono.caption} panes={krono.panes} timestamps={krono.timestamps} knobs={krono.knobs} />
+      <Krono id={krono.key} type={krono.type} caption={krono.caption} panes={krono.panes} timestamps={krono.timestamps} knobs={krono.knobs} seq={props.seq} />
       <br />
       <table className={classes.table}>
         <thead className={classes.thead}>
@@ -104,6 +104,7 @@ Rulekit.propTypes = {
   rulestates: PropTypes.arrayOf(PropTypes.string).isRequired,
   ruleknobs: PropTypes.arrayOf(PropTypes.object).isRequired,
   rulehistograms: PropTypes.arrayOf(PropTypes.object).isRequired,
+  seq: PropTypes.number.isRequired, // DAV added seq prop to support pass to Pane as alt x-axis label
 };
 
 export default Rulekit;
