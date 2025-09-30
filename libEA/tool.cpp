@@ -815,6 +815,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_if.push_back( u_econExpected.get() );
 
    operands_then.push_back( u_Tas_EQ_TasSetpt.get() );
+   operands_if.push_back( u_UvcShut.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_unitOn->Now() &&
@@ -853,6 +854,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
 
    operands_then.push_back( u_TasTrackingHigh.get() );
    operands_then.push_back( u_TasTrackingLow.get() );
+   operands_if.push_back( u_UvcShut.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
                         return ( u_unitOn->Now() &&
