@@ -1,0 +1,17 @@
+#XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXXX
+# Wax script in Python - Use *.txt file extension until ready for interpreter, then change ext. to *.py
+
+import requests
+import time
+
+def main():
+    while True:
+        try:
+            response = requests.get('http://rest:9876')
+            print(response.text)
+        except requests.exceptions.RequestException as e:
+            print(f"Request failed: {e}")
+        time.sleep(5)
+
+if __name__ == "__main__":
+    main()

@@ -89,7 +89,18 @@ services:
       - "traefik.http.services.webapp.loadbalancer.server.port=3000"
     networks:
       - traefik01
-
+# DAV - Begin defn for slater
+#  slater:
+#    build:
+#      context: ./slate
+#      dockerfile: Dockerfile
+#    restart: on-failure
+#    container_name: ex-slater
+#    links:
+#      - rest:rest
+#    networks:
+#      - traefik01
+# DAV - End defn for slater
 networks:
   traefik01:
     name: ea_traefik01
