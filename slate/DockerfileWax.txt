@@ -1,8 +1,35 @@
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
 # Wax Dockerfile - Use *.txt file extension until ready for interpreter, then drop extension
 
+#-------------------------------------------------------------------
+# Per RChat - Most simple, no venv
+
 # Use an official Python image as the base
 FROM python:3.12
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the requirements file
+COPY requirements.txt .
+
+# Install any dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+COPY . .
+
+# Run the command to start the Python program
+CMD ["python", "app.py"]
+
+
+#----------------------------------------------------------------------
+# Per RChat - Less simple , creates a venv in container
+
+# Use an official Python image as the base
+FROM python:3.12
+
+LABEL maintainer="DAV <daniel.veronica@nist.gov>"
 
 # Set the working directory to /app
 WORKDIR /app
@@ -25,3 +52,23 @@ COPY . .
 
 # Run the command to start the Python program
 CMD ["python", "app.py"]
+
+#-----------------------------------------------------
+# SWB Dockerfile at [project root]/EAbacnet :
+
+FROM python:3.12
+LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
+#ENV HOME=${home}
+# We may want to pass in some configuration via env?
+#COPY Pipfile Pipfile.lock ./
+WORKDIR /tmp
+COPY Pipfile /tmp/
+RUN pip install --upgrade pipenv 'pip>=24.0' && \
+  pipenv install --skip-lock --deploy --system && \
+  rm -frv .cache/pip
+RUN mkdir /data && pip install bacpypes3
+WORKDIR /data
+##BIND MOUNT##COPY *.py *.ini /data/
+ENTRYPOINT ["/data/main.py"]
+CMD []
+#VOLUME ["/data"]

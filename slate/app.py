@@ -1,5 +1,5 @@
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXXX
-# Wax script in Python - Use *.txt file extension until ready for interpreter, then change ext. to *.py
+# "app" for tests of Slate
 
 import requests
 import time
@@ -7,7 +7,7 @@ import time
 def main():
     while True:
         try:
-            response = requests.get('http://rest:9876')
+            response = requests.get('http://rest:9876/api/')
             print(response.text)
         except requests.exceptions.RequestException as e:
             print(f"Request failed: {e}")
