@@ -38,7 +38,8 @@ WORKDIR /app
 RUN python -m venv venv
 
 # Activate the virtual environment
-# [According to RChat, this set of PATH to include .venv/bin will persist through container restarts, so the venv does not have to be explicitly activated again. (DAV)]
+# [According to RChat, this set of PATH to include .venv/bin will persist through container restarts,
+# so the venv does not have to be explicitly activated again. (DAV)]
 ENV PATH="/app/venv/bin:$PATH"
 
 # Copy the requirements file
