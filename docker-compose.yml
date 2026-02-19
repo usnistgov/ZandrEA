@@ -89,18 +89,22 @@ services:
       - "traefik.http.services.webapp.loadbalancer.server.port=3000"
     networks:
       - traefik01
-#  DAV - Begin defn for slater
-  slater:
+#  DAV - Begin defn for experior
+  experior:
     build:
-      context: ./slate
+      context: ./experior
       dockerfile: Dockerfile
+    depends_on:
+      - rest
     restart: on-failure
-    container_name: ex-slater
+    container_name: cx-experior
+    environment:
+      - PYTHONUNBUFFERED=1 # otherwise Python buffers STDOUT to reduce interruptions
     links:
       - rest:rest
     networks:
       - traefik01
-# DAV - End defn for slater
+# DAV - End defn for experior
 networks:
   traefik01:
     name: ea_traefik01
