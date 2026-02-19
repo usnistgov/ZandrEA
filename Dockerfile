@@ -39,12 +39,22 @@ RUN make compiler
 # DAV - BEGIN - Install latest version CMake from Kitware repo (v. 4.2.3 on 260218)
 # [Steps as copied from apt.kitware.com on 260218 for Ubuntu 24.04 (Noble Numbat)]
 RUN apt-get update && apt-get install -y ca-certificates gpg wget lsb-release
-RUN test -f /usr/share/doc/kitware-archive-keyring/copyright || wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
-# Use lsb-release to confess the OS release present instead of hardcoding ".../ubuntu/ noble main"
-RUN echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/kitware.list >/dev/null
-RUN test -f /usr/share/doc/kitware-archive-keyring/copyright || rm /usr/share/keyrings/kitware-archive-keyring.gpg
+# If FALSE on kitware-archive-keyring package, manually obtain copy of signing key
+RUN test -f /usr/share/doc/kitware-archive-keyring/copyright || \
+      wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | \
+      gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
+# Add Kitware repo to sources list and update
+# [Use lsb-release to confess the OS release present instead of hardcoding ".../ubuntu/ noble main"]
+RUN echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main' | \
+      tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
+      apt-get update
+# If FALSE on kitware-archive-keyring pkg, remove manually obtained signed key to make room for package
+RUN test -f /usr/share/doc/kitware-archive-keyring/copyright || \
+      rm /usr/share/keyrings/kitware-archive-keyring.gpg
+# Install kitware-archive-keyring pkg to ensure local keyring stays up to date as Kitware rotates them
 RUN apt-get install -y kitware-archive-keyring
-RUN apt-get install -y cmake && rm -rf /var/lib/apt/lists/*
+# Install cmake (apt refers to Kitware), do not remove pkg lists (no "rm -rf /var/lib/apt/lists/*") 
+RUN apt-get install -y cmake
 RUN cmake --version 
 # DAV - END - install of CMake
 
@@ -60,9 +70,10 @@ WORKDIR $PKGROOT
 # BEGIN - gRPC C++ install, mostly per site: https://grpc.io/docs/languages/cpp/quickstart/ on 260218
 # Install gRPC dependencies while at $PKGROOT
 RUN apt install -y autoconf libtool pkg-config libsystemd-dev
+RUN apt-get update && apt-get install -y git
 WORKDIR $PKGROOT/grpc/grpc-src/
 # Clone gRPC src into dedicated dir 
-RUN git clone --recurse-submodules -b v1.78.0 --depth 1 --shallow-submodules https://github.com/grpc/grpc.git .
+RUN git clone --recurse-submodules -b v1.78.0 --depth 1 --shallow-submodules https://github.com/grpc/grpc .
 # Create and switch to a directory dedicated to an out-of-source build
 WORKDIR $PKGROOT/grpc/build/
 # Call cmake w/o the build flag to have it read gRPC's CMakeLists.txt file and config a build env
@@ -77,6 +88,7 @@ RUN cmake -DgRPC_INSTALL=ON \
 ENV PATH=$PATH:$PKGROOT/grpc/bin:$PKGROOT/grpc/include:$PKGROOT/grpc/lib
 # END - gRPC (C++ side) install
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+WORKDIR $PKGROOT
 COPY libEA ./libEA/
 COPY EAd ./EAd/
 RUN make build-ead
