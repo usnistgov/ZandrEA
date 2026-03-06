@@ -66,6 +66,7 @@ endef
 $(foreach ff,$(FEATURE_FLAGS),$(eval $(call FFtemplate,$(flag))))
 
 ##############################################################################
+# "shell" run of "uname -s" returns "Linux" or "Darwin" (MacOS)
 HDF5PLATFORM := $(shell uname -s)
 HDF5VER := 1.14.4-2
 HDF5SRCDIR := hdf5-$(HDF5VER)

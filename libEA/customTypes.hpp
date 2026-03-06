@@ -40,7 +40,8 @@ const float             PI_F        = 3.14159265358979f;
 const Nzint_t           BASETRIGGRP_POINT = 1;
 const Nzint_t           BASETRIGGRP_FORMULA = 2;
 const Nzint_t           BASETRIGGRP_CHART = 3;
-const Nzint_t           BASETRIGGRP_FACT = 4;
+const Nzint_t           BASETRIGGRP_PROCESS = 4;
+const Nzint_t           BASETRIGGRP_FACT = 5;
 const Nzint_t           BASETRIGGRP_RULEKIT = 99;
 
 const double            NaNDBL      = std::numeric_limits<double>::quiet_NaN();
@@ -497,6 +498,7 @@ enum struct EApiType : unsigned int {
    Pane_snapshot_rule,
    Point_analogReadAsAnalog,
    Point_analogReadAsBinary,
+   Process_expClient,
    Rainfall_analog,
    Rainfall_fact,
    Rainfall_ruleKit,
@@ -710,6 +712,8 @@ enum struct EDataLabel : unsigned int {
    Fact_para_ZvcShut,
    Fact_para_ZvhShut,
 
+   Fact_process_exp,
+
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // facts common among subjects of multiple types
  
@@ -816,6 +820,8 @@ enum struct EDataLabel : unsigned int {
    Point_temperature_air_zone_setpt_clg,
    Point_temperature_air_zone_setpt_htg,
    Point_timeDate_local,
+
+   Process_expClient,
 
    RuleKit,  // Rule Kits are labeled, but Rules themselves self-identify thru a SayRuleUaiText() method
 

@@ -19,6 +19,7 @@
 #include "rainfall.hpp"
 #include "formula.hpp"
 #include "chart.hpp"
+#include "process.hpp"
 #include "state.hpp"
 #include "rule.hpp"
 #include "viewParts.hpp"   // needed for CSeqTimeAxis length
@@ -45,7 +46,7 @@ CSequence::CSequence(   CAgent& bArg0,
                            allObjectsUpdated (false),
                            configured (false),
                            p_Points(0),
-                           p_Formulae(0),
+                           p_Formulas(0),
                            p_Charts(0),
                            p_Facts(0),
                            p_RuleKits(0) {
@@ -70,7 +71,7 @@ void CSequence::Register( ADataChannel* arg )  {
 
 void CSequence::Register( CFormula* arg )  {
 
-   p_Formulae.push_back( arg );
+   p_Formulas.push_back( arg );
 
    return;
 }
@@ -78,6 +79,13 @@ void CSequence::Register( CFormula* arg )  {
 void CSequence::Register( AChart* arg )  {
 
    p_Charts.push_back( arg );
+
+   return;
+}
+
+void CSequence::Register( CProcess* arg )  {
+
+   p_Processes.push_back( arg );
 
    return;
 }
@@ -107,9 +115,10 @@ void CSequence::Configure( void ) {
    around a while-loop).
    */
    numObjectsOfClass[0] = static_cast<int>( p_Points.size() ); 
-   numObjectsOfClass[1] = static_cast<int>( p_Formulae.size() );
+   numObjectsOfClass[1] = static_cast<int>( p_Formulas.size() );
    numObjectsOfClass[2] = static_cast<int>( p_Charts.size() );
-   numObjectsOfClass[3] = static_cast<int>( p_Facts.size() );
+   numObjectsOfClass[3] = static_cast<int>( p_Processes.size() );
+   numObjectsOfClass[4] = static_cast<int>( p_Facts.size() );
 
    totalObjects = static_cast<int>(
       std::accumulate( numObjectsOfClass.begin(), numObjectsOfClass.end(), 0 )
@@ -118,7 +127,8 @@ void CSequence::Configure( void ) {
    baseTriggerGrp[0] = BASETRIGGRP_POINT;
    baseTriggerGrp[1] = BASETRIGGRP_FORMULA;
    baseTriggerGrp[2] = BASETRIGGRP_CHART;
-   baseTriggerGrp[3] = BASETRIGGRP_FACT;
+   baseTriggerGrp[3] = BASETRIGGRP_PROCESS;
+   baseTriggerGrp[4] = BASETRIGGRP_FACT;
 
    configured = true;
    return;
@@ -161,7 +171,7 @@ EGuiReply CSequence::Trigger( const SClockRead& clockInfo )  {
          if ( allTriggered[1] == false ) {      // Test for untriggered CFormula objects
             groupTargeted = baseTriggerGrp[1] + lapIncrement;
 
-            for ( auto ptr : p_Formulae ) { 
+            for ( auto ptr : p_Formulas ) { 
 
                objectsTriggered[1] =
                         objectsTriggered[1] + ( ptr->Trigger( groupTargeted, clockInfo ) );
@@ -183,16 +193,29 @@ EGuiReply CSequence::Trigger( const SClockRead& clockInfo )  {
          }
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
-         if ( allTriggered[3] == false ) {      // Test for untriggered AFact objects
+         if ( allTriggered[3] == false ) {      // Test for untriggered AProcess objects
             groupTargeted = baseTriggerGrp[3] + lapIncrement;
 
-            for ( auto ptr : p_Facts ) { 
+            for ( auto ptr : p_Processes ) { 
 
                objectsTriggered[3] =
                         objectsTriggered[3] + ( ptr->Trigger( groupTargeted, clockInfo ) );
             }
 
             if ( objectsTriggered[3] == numObjectsOfClass[3]) { allTriggered[3] = true; }
+         }
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+         if ( allTriggered[4] == false ) {      // Test for untriggered AFact objects
+            groupTargeted = baseTriggerGrp[4] + lapIncrement;
+
+            for ( auto ptr : p_Facts ) { 
+
+               objectsTriggered[4] =
+                        objectsTriggered[4] + ( ptr->Trigger( groupTargeted, clockInfo ) );
+            }
+
+            if ( objectsTriggered[4] == numObjectsOfClass[4]) { allTriggered[4] = true; }
          }
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/

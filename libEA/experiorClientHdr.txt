@@ -1,8 +1,0 @@
-//XXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXXX
-// Header for "app" testing Experior (the microservice intended for experimental Python code)
-
-#include <iostream>
-#include <grpcpp/grpcpp.h>
-#include "microservice.grpc.pb.h"
-
-class CExperiorClient;

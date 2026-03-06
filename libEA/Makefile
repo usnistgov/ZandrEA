@@ -3,6 +3,7 @@
 HDF5_ROOT := $(CURDIR)/../HDF5
 CXX := h5c++
 CXXPATH := $(HDF5_ROOT)/bin/h5c++
+# DAV - unsure why SWB did paths as relative using PREFIX (vs. absolutes) but sticking with it
 PREFIX := ..
 DEFS := -DPOSIX -DSTANDALONE
 
@@ -15,7 +16,12 @@ STATICLIB=lib$(LIBNAME).a
 CXXOPTS=-Wno-comments
 
 # You may need to adjust these for your porting target
-INCLUDES=-I$(HDF5_ROOT)/include -I/opt/homebrew/include
+#INCLUDES=-I$(HDF5_ROOT)/include -I/opt/homebrew/include
+# DAV - Nix above to further include gRPC stub code and library files:
+# Syntax to add many subdirs relative to pwd: $(addprefix -I, $(shell find grpc/ -type d)) 
+INCLUDES=-I$(HDF5_ROOT)/include -I/opt/homebrew/include -I/ea/protobuf \
+         -I/ea/grpc/include/grpcpp
+#$(error INCLUDES is $(INCLUDES))
 LD=		$(CXX)
 LIBS=		#-L../dep/lib -L/opt/homebrew/lib -lhdf5 -lcpprest
 CXXFLAGS +=	-g $(CXXOPTS) $(DEFS) $(INCLUDES)
@@ -25,7 +31,7 @@ AR=ar
 ARFLAGS=rcs
 #DYNAMICLDFLAGS=-Wl,soname=$(DYNAMICLIB)
 
-# How many jobs to run in parallel...
+# NPROC= no. of cores on dev cpu building images (vs. target cpu running them) -> no. jobs by Make -j
 ifeq ($(HDF5PLATFORM),Darwin)
 export NPROC := $(shell sysctl -n hw.logicalcpu)
 else
@@ -39,7 +45,11 @@ SUFFIXES += .d
 
 # These are the source and corresponding dep and object files we need to build
 EXCLPAT = #libmain.%	# Pattern to exclude files that are NOT libEA source files
-SRCS =	$(filter-out $(EXCLPAT), $(wildcard *.cpp))	# match all *.cpp files except files that match EXCLPAT
+# Scan pwd for files except those filtered and assign all to variable
+SRCS =	$(filter-out $(EXCLPAT), $(wildcard *.cpp))
+# Generate object .o filenames from src filenames. This is necessary for Make to build a dependency
+# graph ahead of running the compilation build rule. Otherwise, every src file found gets recompiled
+# Substi ref below is an alternative to OBJS = $(patsubst %.cpp,%.o,$(SRCS))
 OBJS =	$(SRCS:.cpp=.o)
 DEPS =	$(SRCS:.cpp=.d)
 
@@ -61,7 +71,7 @@ ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
     -include $(DEPS)
 endif
 
-#This is the rule for creating the dependency files
+# Create ".d" dependency files listing src headers (.h/.hpp) each .o depends upon
 %.d:	%.cpp $(CXXPATH)
 	@set -e; rm -f $@; \
 		$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
@@ -73,6 +83,8 @@ endif
 %.o:	%.cpp %.d Makefile $(CXXPATH) $(PUBLIC_HEADERS)
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
+# Run archiver utility ("ar") to package the object .o files into a single static .a library file
+# Flag "rcs" does create/replace and indexing of each .o into whole
 $(STATICLIB):	$(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 

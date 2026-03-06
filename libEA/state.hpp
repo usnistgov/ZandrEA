@@ -32,6 +32,7 @@ class CController;
 class CDomain;
 class CPointAnalog;
 class CPointBinary;
+class CProcess;
 class CTraceRealtime;
 class CView;
 
@@ -806,6 +807,40 @@ class CFactFromPoint : public AFact {
                         
    // Methods
       virtual void            Cycle( time_t ) override;
+
+};
+
+
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+/* CStateAnalogSrc (an analog source [of binary true/false values]) = concrete class for binary
+   information that tool must receive as floating point numbers, arriving at tool thru a CPointAnalog
+   object
+*/ 
+
+class CFactFromProcess : public AFact { 
+
+   public:
+
+   // Methods
+      CFactFromProcess(  CSequence&,
+                         ASubject&,
+                         EDataLabel,
+                         const CProcess& ); 
+  
+      ~CFactFromProcess( void );
+
+      virtual void      LendHistogramKeysTo( std::vector<NGuiKey>& ) const override;
+
+   private:
+
+   // Handle
+      const CProcess&     ProcessRef;
+
+   // Field
+      bool                boolPostedByProcess;
+                        
+   // Methods
+      virtual void        Cycle( time_t ) override;
 
 };
 

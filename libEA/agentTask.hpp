@@ -18,6 +18,7 @@
 class AChart;
 class ADataChannel;
 class AFact;
+class CProcess;
 
 class CAgent;
 class CClockPerPort;
@@ -28,8 +29,9 @@ class CSeqTimeAxis;
 class ISeqElement;
 
 
-const size_t NUMCLASSESINTRIGGERLOOP = 4;
-  // 1-channels ("points"), 2-formulas, 3-charts, 4-facts (rules trigger later, outside of "loop")
+const size_t NUMCLASSESINTRIGGERLOOP = 5;
+// 1-channels ("points"), 2-formulas, 3-charts, 4-processes, 5-facts
+// (rules trigger later, outside of "loop")
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 /* Only one "agent task" currently defined -> a real-time "Sequence" of data acquistion, processing, and
@@ -57,6 +59,7 @@ class CSequence {
      void              Register( ADataChannel* );
      void              Register( CFormula* );
      void              Register( AChart* );
+     void              Register( CProcess* );
      void              Register( AFact* );
      void              Register( CRuleKit* ); 
 
@@ -64,7 +67,8 @@ class CSequence {
 
    // Fields
       std::vector<int>        numObjectsOfClass;   // int vs. size_t since called by STL accumulator
-      std::vector<int>        objectsTriggered;    // Indicies: Pts.=0, Formula=1, Chart=2, Fact=3
+      // Class-specific indicies for objectsTriggered: Points=0, Formula=1, Chart=2, Process =3, Fact=4
+      std::vector<int>        objectsTriggered;
       std::vector<Nzint_t>    baseTriggerGrp;
       std::vector<bool>       allTriggered;
       int                     totalObjects;
@@ -75,8 +79,9 @@ class CSequence {
       bool                    configured;
 
       std::vector<ISeqElement*>              p_Points;
-      std::vector<ISeqElement*>              p_Formulae;
+      std::vector<ISeqElement*>              p_Formulas;
       std::vector<ISeqElement*>              p_Charts;
+      std::vector<ISeqElement*>              p_Processes;
       std::vector<ISeqElement*>              p_Facts;
       std::vector<CRuleKit*>                 p_RuleKits;
 

@@ -5,13 +5,13 @@
 FROM python:3.9-slim AS builder
 
 # Create (if non-existent) a /dir/ in this image and make it the PWD
-WORKDIR /app
+WORKDIR /pyapp
 
 # Create a virtual environment
 RUN python -m venv venv
 
 # Activate the virtual environment
-ENV PATH="/app/venv/bin:$PATH"
+ENV PATH="/pyapp/venv/bin:$PATH"
 
 # In "COPY x y", x relative to host's build context (by "docker build" or by "context:" in Compose),
 # and y relative to PWD of the image/container (typically after most recent WORKDIR)
@@ -24,14 +24,20 @@ RUN pip install --no-cache-dir -r requirements.txt
 FROM python:3.9-slim AS runtime
 
 # Put this /dir/ in any container this (runtime) image starts
-WORKDIR /app
+WORKDIR /pyapp
 
 # Copy the virtual environment from the builder image
-COPY --from=builder /app/venv /app/venv
+COPY --from=builder /pyapp/venv /pyapp/venv
 
-# Activate the virtual environment
-ENV PATH="/app/venv/bin:$PATH"
+# Activate the copied virtual environment
+ENV PATH="/pyapp/venv/bin:$PATH"
 
-COPY . .
+#COPY . .
+# Copy application code and its pre-compiled dependenciesinto the runtime image
+COPY microMain.py .
+COPY microservice_pb2.py .
+COPY microservice_pb2_grpc.py .
 
+# Finish image by CMD because "*.py" is not executable unless made an argument of "python" (the runtime)
+# [versus C++, which can finish image by ENTRYPOINT because a C++ build creates a runtime executable]
 CMD ["python", "microMain.py"]

@@ -164,6 +164,7 @@ std::array<float,2> IGuiShadow::LookUpMinMax( EDataRange key ) {
       { EDataLabel::Fact_para_ZdmFullRA,                             "ZdmFullRA" }, \
       { EDataLabel::Fact_para_ZvcShut,                               "ZvcShut" }, \
       { EDataLabel::Fact_para_ZvhShut,                               "ZvhShut" }, \
+      { EDataLabel::Fact_process_exp,                                "ExpFact" }, \
       { EDataLabel::Fact_subject_inputSteady,                        "inpSteady" }, \
       { EDataLabel::Fact_subject_unitOn,                             "unitOn" }, \
       { EDataLabel::Fact_subj_ahu_chwCoolingAir,                     "chwClgAir" }, \
@@ -240,6 +241,7 @@ std::array<float,2> IGuiShadow::LookUpMinMax( EDataRange key ) {
       { EDataLabel::Point_temperature_air_zone_setpt_clg,            "TazSetClg" }, \
       { EDataLabel::Point_temperature_air_zone_setpt_htg,            "TazSetHtg" }, \
       { EDataLabel::Point_timeDate_local,                            "Date and time (local)" }, \
+      { EDataLabel::Process_expClient,                               "Exp!" }, \
       { EDataLabel::RuleKit,                                         "Rule kit" }, \
       { EDataLabel::Subject_vav_pressIndep_hwReheat,  "VAV unit, press. indep., HW reheat" }, \
       { EDataLabel::Subject_ahu_singleDuct_vavReheat, "AHU, single duct, VAV reheat" } \

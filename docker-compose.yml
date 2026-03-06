@@ -104,6 +104,8 @@ services:
       - rest:rest
     networks:
       - traefik01
+    expose:
+    - "50051"
 # DAV - End defn for experior
 networks:
   traefik01:

@@ -55,7 +55,6 @@ RUN test -f /usr/share/doc/kitware-archive-keyring/copyright || \
 RUN apt-get install -y kitware-archive-keyring
 # Install cmake (apt refers to Kitware), do not remove pkg lists (no "rm -rf /var/lib/apt/lists/*") 
 RUN apt-get install -y cmake
-RUN cmake --version 
 # DAV - END - install of CMake
 
 FROM buildbase AS appbuilder
@@ -66,28 +65,35 @@ ENV PKGROOT=${home}
 ENV PATH=$PKGROOT/HDF5/bin:$PATH
 WORKDIR $PKGROOT
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+# DAV - BEGIN - gRPC C++ install, per site: https://grpc.io/docs/languages/cpp/quickstart/ on 260218
 # Since gRPC is a new EA dependency (like HDF5), build and install it (via CMake) before building EA
-# BEGIN - gRPC C++ install, mostly per site: https://grpc.io/docs/languages/cpp/quickstart/ on 260218
 # Install gRPC dependencies while at $PKGROOT
 RUN apt install -y autoconf libtool pkg-config libsystemd-dev
 RUN apt-get update && apt-get install -y git
+# Create directory for gRPC src code and switch to it
 WORKDIR $PKGROOT/grpc/grpc-src/
-# Clone gRPC src into dedicated dir 
-RUN git clone --recurse-submodules -b v1.78.0 --depth 1 --shallow-submodules https://github.com/grpc/grpc .
+# Clone gRPC src code into current directory (".")
+RUN git clone --recurse-submodules -b v1.78.0 --depth 1 --shallow-submodules \
+      https://github.com/grpc/grpc .
 # Create and switch to a directory dedicated to an out-of-source build
 WORKDIR $PKGROOT/grpc/build/
 # Call cmake w/o the build flag to have it read gRPC's CMakeLists.txt file and config a build env
-# then call Make to build and install (using the targets/instructions CMake wrote up for it)
+# then call Make to build and install (using the targets/instructions CMake parsed for it)
 RUN cmake -DgRPC_INSTALL=ON \
       -DgRPC_BUILD_TESTS=OFF \
       -DCMAKE_CXX_STANDARD=17 \
       -DCMAKE_INSTALL_PREFIX=$PKGROOT/grpc \
-      ../grpc-src && \
-      make -j 4 && \
-      make install
-ENV PATH=$PATH:$PKGROOT/grpc/bin:$PKGROOT/grpc/include:$PKGROOT/grpc/lib
-# END - gRPC (C++ side) install
+      ../grpc-src
+RUN make -j 4 && make install
+# Copy from host the gRPC/PB .proto file and the C++ and Python stub codes compiled from it off-line
+# [Location on host (first argument of COPY) is relative to directory holding this Dockerfile]
+WORKDIR $PKGROOT
+COPY ./protobuf/microservice.proto $PKGROOT/protobuf/
+# PATH holds only paths to executables; paths to includes must be flagged (i.e., -I) within Make recipes
+ENV PATH=$PATH:$PKGROOT/grpc/bin:$PKGROOT/protobuf
+# DAV - END - gRPC (C++ side) install
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+# Build EA
 WORKDIR $PKGROOT
 COPY libEA ./libEA/
 COPY EAd ./EAd/
@@ -98,16 +104,19 @@ LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
 ARG home=/ea
 ENV HOME=${home}
 ENV PKGROOT=${home}
-RUN mkdir -p /data /ea/bin /ea/include /ea/lib /ea/EAd /ea/libEA /ea/.vscode \
+RUN mkdir -p /data /ea/bin /ea/include /ea/lib /ea/EAd /ea/libEA /ea/ \
+  /ea/grpc/bin /ea/grpc/include /ea/grpc/lib .vscode \
   && rm -rf /var/lib/apt/lists/*
+COPY --from=appbuilder /ea/grpc/bin/ /ea/grpc/bin/
+COPY --from=appbuilder /ea/grpc/include/ /ea/grpc/include/
+COPY --from=appbuilder /ea/grpc/lib/ /ea/grpc/lib/
+COPY --from=appbuilder /ea/protobuf/ /ea/protobuf/
 COPY .gdbinit ./ea/.gdbinit
 COPY --from=appbuilder /ea/include/ /ea/include/
 COPY --from=appbuilder /ea/lib/ /ea/lib/
 COPY --from=appbuilder /ea/bin/ /ea/bin/
 COPY .vscode ./.vscode/
-COPY --from=appbuilder /ea/grpc/bin/ /ea/grpc/bin/
-COPY --from=appbuilder /ea/grpc/include/ /ea/grpc/include/
-COPY --from=appbuilder /ea/grpc/lib/ /ea/grpc/lib/
+
 WORKDIR /ea
 RUN ln -s bin/ead /ea/
 WORKDIR /data
