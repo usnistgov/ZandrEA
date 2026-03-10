@@ -11,7 +11,7 @@
 
 #include "seqElement.hpp"    // Inheiritance requires type completion, also brings "customTypes.hpp"
 #include "guiShadow.hpp"
-#include "grpcpp.h"
+#include "/ea/grpc/include/grpcpp/grpcpp.h"
 
 // Prior to EA build, compile .proto files using protoc with the --cpp_out option to generate these:
 #include "microservice.pb.h"

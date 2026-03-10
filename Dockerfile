@@ -1,7 +1,10 @@
+#XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+# ZandrEA repo root directory multistage Dockerfile to build image that runs as the "ea-rest" container. 
+#==================================================================================================C====5
 FROM ubuntu:24.04 AS baseos
 LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
-# Bare minimum of libraries needed to run the above executable
-# Put build-essential into baseos when want to debug EA inside its dev container - DAV
+# Bare minimum of libraries needed to run the ZandrEA executable ("ead")
+# build-essential in baseos if want to debug C and C++ src via VS Code remoting to REST (dev) container
 # Default "user" upon any "RUN" etc. is "root" unless another is specified by a "USER" command
 RUN apt update && DEBIAN_FRONTEND="noninteractive" apt upgrade -y && DEBIAN_FRONTEND="noninteractive" apt install -y \
     libboost-chrono-dev \
@@ -22,6 +25,7 @@ RUN apt update && DEBIAN_FRONTEND="noninteractive" apt upgrade -y && DEBIAN_FRON
 
 FROM baseos AS buildbase
 LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
+# "ARG var" creates build-time argument "var" sent to "docker build" by flag:"--build-arg <var>=<value>"
 ARG home=/ea
 ENV HOME=${home}
 ENV PKGROOT=${home}
@@ -36,6 +40,7 @@ WORKDIR $PKGROOT
 COPY hdf5-1.14.4-2.tar.gz h5c++.tmpl Makefile ./
 RUN make compiler
 
+#==================================================================================================C====5
 # DAV - BEGIN - Install latest version CMake from Kitware repo (v. 4.2.3 on 260218)
 # [Steps as copied from apt.kitware.com on 260218 for Ubuntu 24.04 (Noble Numbat)]
 RUN apt-get update && apt-get install -y ca-certificates gpg wget lsb-release
@@ -43,7 +48,7 @@ RUN apt-get update && apt-get install -y ca-certificates gpg wget lsb-release
 RUN test -f /usr/share/doc/kitware-archive-keyring/copyright || \
       wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | \
       gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
-# Add Kitware repo to sources list and update
+# Add Kitware repo to sources list of apt and update
 # [Use lsb-release to confess the OS release present instead of hardcoding ".../ubuntu/ noble main"]
 RUN echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main' | \
       tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
@@ -77,13 +82,14 @@ RUN git clone --recurse-submodules -b v1.78.0 --depth 1 --shallow-submodules \
       https://github.com/grpc/grpc .
 # Create and switch to a directory dedicated to an out-of-source build
 WORKDIR $PKGROOT/grpc/build/
-# Call cmake w/o the build flag to have it read gRPC's CMakeLists.txt file and config a build env
-# then call Make to build and install (using the targets/instructions CMake parsed for it)
+# Call cmake w/o the build flag to have it read gRPC's CMakeLists.txt file and config a build env.
+
 RUN cmake -DgRPC_INSTALL=ON \
       -DgRPC_BUILD_TESTS=OFF \
       -DCMAKE_CXX_STANDARD=17 \
       -DCMAKE_INSTALL_PREFIX=$PKGROOT/grpc \
       ../grpc-src
+# Call the WORKDIR Makefile that CMake generated to build and install gRPC per a customized environmemt
 RUN make -j 4 && make install
 # Copy from host the gRPC/PB .proto file and the C++ and Python stub codes compiled from it off-line
 # [Location on host (first argument of COPY) is relative to directory holding this Dockerfile]
@@ -97,6 +103,7 @@ ENV PATH=$PATH:$PKGROOT/grpc/bin:$PKGROOT/protobuf
 WORKDIR $PKGROOT
 COPY libEA ./libEA/
 COPY EAd ./EAd/
+# Call stage's copy of root Makefile; "build-ead" is phony target labeling compile and link of EAD_EXES
 RUN make build-ead
 
 FROM baseos
