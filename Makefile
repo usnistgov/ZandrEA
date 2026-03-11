@@ -4,7 +4,7 @@
 # followed by a jump to the rule at "docker-up" target (below). That rule first sends execution out of
 # this file to Docker Compose, which eventually returns execution to new targets here as outlined below.
 # Where traceablity helps, comments by principal NIST developers are identified as "SWB" and "DAV"
-#=======================================================================================================/
+#==================================================================================================C====5
 # CLI call to this file presumes HDF5 tarball of ver. specified and its h5c++.tmpl file are in the pwd.
 # (SWB) Must define the following variables:
 # DOCKER_REGISTRY
@@ -84,12 +84,13 @@ HDF5VER := 1.14.4-2
 HDF5SRCDIR := hdf5-$(HDF5VER)
 HDF5SRCTGZ := $(HDF5SRCDIR).tar.gz
 HDF5INSTALLDIR := HDF5
-#======================================================================================================5
-# Assign with enable of export to $(PROJROOT)/libEA/Makefile
+#==================================================================================================C====5
+# Assign these while enabling export (presumably to sub-Makefile at $(PROJROOT)/libEA/Makefile)
+# [Several EA src code files in PROJROOT/libEA/ depend on HDF5]
 export HDF5CXX := $(HDF5INSTALLDIR)/bin/h5c++
 export ABSHDF5CXX := $(CURDIR)/$(HDF5INSTALLDIR)/bin/h5c++
 export CXX := $(ABSHDF5CXX)
-#======================================================================================================5
+#==================================================================================================C====5
 
 ifeq ($(HDF5PLATFORM),Darwin)
 export NPROC := $(shell sysctl -n hw.logicalcpu)
@@ -111,7 +112,7 @@ all: docker-build
 # Each call to "docker compose [etc.]" in recipes below cause exit from this file and a jump to
 # docker-compose.yml, which in turn may call this Makefile again using a new target (e.g., build-ead).
 # "In turn" means this and other Makefiles are called per "services" dependencies defined in the
-# docker-compose.yml. Exports above initialize or pass variables (esp., statically expanded paths).
+# docker-compose.yml. "Exports" above initialize and pass variables (e.g., statically expanded paths).
 
 docker-build:
 	docker compose build
@@ -159,14 +160,19 @@ docker-production-down:
 
 docker-production-retest:	docker-production-down .WAIT docker-production-up .WAIT pushtestdata
 
-# !!! DAV -> Take this (and other) <tab> out once other more immanent issues are resolved
-compiler:	$(HDF5CXX)
+#==================================================================================================C====5
+# Phony target expressing dependency HDF5 compilation has upon HDF5CXX being present;
+# Given the HDF5CXX assignment above, that means "Is /HDF5/bin/h5C++ built from template and available?"
+compiler: $(HDF5CXX)
 
-$(HDF5SRCDIR):	$(HDF5SRCTGZ)
+# Is the target (a directory) absent, OR is the HDF5 tarball newer than it? [error if tarball missing]
+# If yes, whack any dir present and extract HDF5 src code from tarball (which creates a new target dir)  
+$(HDF5SRCDIR): $(HDF5SRCTGZ)
 	rm -rf $@ && tar xzf $<
-
+# HDF5 tarball extract automatically creates a new HDF5SRCDIR (src dir) but not the "installation dirs" 
 $(HDF5INSTALLDIR):
 	mkdir -p $@/bin $@/lib $@/include
+#==================================================================================================C====5
 
 # On Mac build with: `./configure --enable-cxx --disable-shared --enable-static --enable-symbols=yes --prefix=$HOME/Git/ea_ConApp/dep CC=gcc CXX=g++ CXXFLAGS="-std=c++14"`
 # On Linux build with: `./configure --enable-cxx --with-gnu-ld --disable-shared --enable-static --enable-symbols=yes --prefix=/Users/steveb/Git/ea_ConApp/dep CC=gcc CXX=g++`
@@ -182,13 +188,14 @@ $(HDF5INSTALLDIR):
 #endif
 
 #VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
-# Overview of what is ahead:
+# FIRST: Overview of what is ahead:
 # Upon jump to root Dockerfile "builder" stage: system (apt) install of dependencies (incl. some Boost).
 # Dockerfile: COPY to builder the HDF5 .tar w/ its embedded kit of GNU Autotools and h5c++.tmpl template.
 # Dockerfile: COPY this file and call "compile" target => HDF5 compiled per a h5c++ "wrapper" (script).
 # The h5c++ script is generated locally from the h5c++.tmpl downloaded as part of the HDF5 package
-# Dockerfile: gRPC built from src files by install and call of separate build system (CMake)
-# Object ".o" files from both are linked to objs from /libEA/ src code using Make rules below.
+
+#==================================================================================================C====5
+# HDF5CONFIGURE scripts the GNU Autotools method "configure" and flags to set up adjacent call of "h5c++"
 
 ifeq ($(HDF5PLATFORM),Darwin)
 HDF5CONFIGURE := ./configure --enable-threadsafe --disable-hl --disable-shared --enable-static --enable-symbols=yes --prefix=$(CURDIR)/$(HDF5INSTALLDIR) CC=$(NATIVE_CC) CXX=$(NATIVE_CXX) CXXFLAGS="-std=c++14"
@@ -197,14 +204,19 @@ else
 HDF5CONFIGURE := ./configure --enable-threadsafe --disable-hl --with-gnu-ld --enable-shared --enable-static --enable-symbols=yes --prefix=$(CURDIR)/$(HDF5INSTALLDIR) CC=$(NATIVE_CC) CXX=$(NATIVE_CXX) CXXFLAGS="-std=c++14 -pthread" #LIBS=-lpthread
 endif
 
-# Rule for HDF5 builds an executable "h5c++" compiling (wrapper) script from a ".tmpl" text template
-# First recipe line calls "install"  
-# Since "sed" creates 
+# Rule for HDF5 builds an executable "h5c++" compiler ("wrapper" script) from a ".tmpl" text template
+# $(MAKE) is a GNU Make built-in for calling "make" by the exact path as the current call, typically
+# that results in recursion to the current Makefile as it is most local. Here, HDF5CONFIGURE instead
+# causes an Autotools-generated Makefile in the HDF5INSTALLDIR to be called to build/install HDF5:
+
 $(HDF5CXX):	$(HDF5INSTALLDIR) $(HDF5SRCDIR) $(HDF5SRCTGZ) h5c++.tmpl
 	(cd $(HDF5SRCDIR) && $(HDF5CONFIGURE) && $(MAKE) -j$(JOBS) install)
 	rm -f $@ && sed -e s/BASEDIR/$(HDF5INSTALLDIR)/g < h5c++.tmpl > $@ && chmod 0555 $@
 
-
+#==================================================================================================C====5
+# NEXT:
+# Dockerfile: gRPC built from src files by install and call of separate build system (CMake)
+# Object ".o" files from both are linked to objs from /libEA/ src code using Make rules below.
 #VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
 
 DEFS	:= -DPOSIX -DSTANDALONE
@@ -315,12 +327,15 @@ ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
 endif
 
 #VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+# EXTRA: Apparently, the GNU-Autotools build of HDF5 (circa Line 212, above) does not do what is done
+# here, so an entirely redundant HDF5 build is performed here just for linking to the libEA build (???)
+
 # Automate generation of dependency (".d") files in order to individualize the deps of each src file
 # Each .d file accompanys its src file in the compiler rule's dep list so it recompiles only as required.
-# This intervening layer of .d target is effected by -M flag upon compiler (e.g., 2nd line of recipe) 
+# This intervening layer of .d target is effected by -M flag upon compiler (e.g., 2nd line of recipe). 
 # Rule for creating dependecy (.d) files from source code in the root directory (i.e., HDF5 src files):
 
-%.d:    %.cpp $(HDF5CXX)
+%.d: %.cpp $(HDF5CXX)
 	@set -e; rm -f $@; \
 		$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
 		sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
@@ -328,14 +343,12 @@ endif
 #       $(CXX) $(CXXFLAGS) -MM -MT '$(patsubst %.cpp,%.o,$<)' $< -MF $@
 
 # Step 2: Call compiler again to generate obj files from src files and dependency files (i.e., HDF5):
-%.o:    %.cpp %.d Makefile $(HDF5CXX) $(PUBLIC_HEADERS)
+%.o: %.cpp %.d Makefile $(HDF5CXX) $(PUBLIC_HEADERS)
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 
-
 ##################################################################################################
-# I have no idea how Make was previously able to process prerequistes in these five rules
-# correctly given SWB had a <tab> after the full-colons instead of a whitespace (???).
+# Five rules where <tab> after full-colons in target : deps lines are replaced with a whitespace.
 # [same change made at rule for PUBLIC_HEADERS above]
 # [refer to GNU Make Reference Manual ver. 4.2] 
 
@@ -373,7 +386,7 @@ reinstall:	clean .WAIT install
 
 recompile:	reinstall
 
-# This target switches directory (so "./" prefix not req'd) in order to start a Node.js application
+# This target switches directory (so "./" prefix not req'd) in order to start a Node.js app (app.js ?)
 jscli:
 	(cd eajscli && npm start)
 
