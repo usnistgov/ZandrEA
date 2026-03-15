@@ -103,7 +103,7 @@ ENV PATH=$PATH:$PKGROOT/grpc/bin:$PKGROOT/protobuf
 WORKDIR $PKGROOT
 COPY libEA ./libEA/
 COPY EAd ./EAd/
-# Call stage's copy of root Makefile; "build-ead" is phony target labeling compile and link of EAD_EXES
+# Call stage's copy of root Makefile; "build-ead" is phony label of rule building executable /ea/bin/ead
 RUN make build-ead
 
 FROM baseos
