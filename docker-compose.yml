@@ -34,6 +34,9 @@ services:
     volumes:
       #      - ea-rest-kb:/data
       - ./data/:/data/
+      # Optional "dev-container" volumes for "side-loading" the C++ src code (vs. direct load into
+      # runtime stage container). Volumes synch to host files so gdb and editor act upon both at once.
+      # Thread complexity in "ea-rest" means this, if used, would be mostly to effect gdb breakpoints. 
       - ./libEA:/ea/libEA:ro
       - ./EAd:/ea/EAd:ro
     labels:

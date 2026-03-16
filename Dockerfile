@@ -5,6 +5,8 @@ FROM ubuntu:24.04 AS baseos
 LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
 # Bare minimum of libraries needed to run the ZandrEA executable ("ead")
 # build-essential in baseos if want to debug C and C++ src via VS Code remoting to REST (dev) container
+# Ubuntu 24 "apt" defaults build-essential g++ to C++17, which is the minimum C++ for gRPC while still
+# okay for (the relativley old) HDF5 v. 1.14 (vv. check HDF5 tarball copied to "buildbase" stage below)
 # Default "user" upon any "RUN" etc. is "root" unless another is specified by a "USER" command
 RUN apt update && DEBIAN_FRONTEND="noninteractive" apt upgrade -y && DEBIAN_FRONTEND="noninteractive" apt install -y \
     libboost-chrono-dev \
@@ -41,7 +43,7 @@ COPY hdf5-1.14.4-2.tar.gz h5c++.tmpl Makefile ./
 RUN make compiler
 
 #==================================================================================================C====5
-# DAV - BEGIN - Install latest version CMake from Kitware repo (v. 4.2.3 on 260218)
+# DAV - Install latest CMake from Kitware repo (v. 4.2.3 on 260218); apt default CMake too old for gRPC.
 # [Steps as copied from apt.kitware.com on 260218 for Ubuntu 24.04 (Noble Numbat)]
 RUN apt-get update && apt-get install -y ca-certificates gpg wget lsb-release
 # If FALSE on kitware-archive-keyring package, manually obtain copy of signing key
@@ -58,7 +60,7 @@ RUN test -f /usr/share/doc/kitware-archive-keyring/copyright || \
       rm /usr/share/keyrings/kitware-archive-keyring.gpg
 # Install kitware-archive-keyring pkg to ensure local keyring stays up to date as Kitware rotates them
 RUN apt-get install -y kitware-archive-keyring
-# Install cmake (apt refers to Kitware), do not remove pkg lists (no "rm -rf /var/lib/apt/lists/*") 
+# Install cmake (apt deflects to Kitware), do not remove pkg lists (no "rm -rf /var/lib/apt/lists/*") 
 RUN apt-get install -y cmake
 # DAV - END - install of CMake
 
@@ -69,37 +71,36 @@ ENV HOME=${home}
 ENV PKGROOT=${home}
 ENV PATH=$PKGROOT/HDF5/bin:$PATH
 WORKDIR $PKGROOT
-#XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+#==================================================================================================C====5
 # DAV - BEGIN - gRPC C++ install, per site: https://grpc.io/docs/languages/cpp/quickstart/ on 260218
-# Since gRPC is a new EA dependency (like HDF5), build and install it (via CMake) before building EA
 # Install gRPC dependencies while at $PKGROOT
 RUN apt install -y autoconf libtool pkg-config libsystemd-dev
 RUN apt-get update && apt-get install -y git
-# Create directory for gRPC src code and switch to it
+# Create directory for gRPC src code and switch pwd to it
 WORKDIR $PKGROOT/grpc/grpc-src/
-# Clone gRPC src code into current directory (".")
+# Clone gRPC src code into current directory ("." at end)
 RUN git clone --recurse-submodules -b v1.78.0 --depth 1 --shallow-submodules \
       https://github.com/grpc/grpc .
 # Create and switch to a directory dedicated to an out-of-source build
 WORKDIR $PKGROOT/grpc/build/
-# Call cmake w/o the build flag to have it read gRPC's CMakeLists.txt file and config a build env.
-
+# Call cmake w/o the build flag to have it read gRPC's CMakeLists.txt file and config a happy build env.
+# Note flagging of C++ version, 17 is minimum yet needs to be binary compatible w/ any other library
 RUN cmake -DgRPC_INSTALL=ON \
       -DgRPC_BUILD_TESTS=OFF \
       -DCMAKE_CXX_STANDARD=17 \
       -DCMAKE_INSTALL_PREFIX=$PKGROOT/grpc \
       ../grpc-src
-# Call the WORKDIR Makefile that CMake generated to build and install gRPC per a customized environmemt
+# Call the focused Makefile that CMake generated to build/install gRPC per the happy build environment
 RUN make -j 4 && make install
-# Copy from host the gRPC/PB .proto file and the C++ and Python stub codes compiled from it off-line
+# Copy from host the Protobuf .proto file and the C++ and Python stub codes Protoc compiled (off-line !)
 # [Location on host (first argument of COPY) is relative to directory holding this Dockerfile]
 WORKDIR $PKGROOT
 COPY ./protobuf/microservice.proto $PKGROOT/protobuf/
 # PATH holds only paths to executables; paths to includes must be flagged (i.e., -I) within Make recipes
 ENV PATH=$PATH:$PKGROOT/grpc/bin:$PKGROOT/protobuf
 # DAV - END - gRPC (C++ side) install
-#XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
-# Build EA
+#==================================================================================================C====5
+# Build "ead" executable
 WORKDIR $PKGROOT
 COPY libEA ./libEA/
 COPY EAd ./EAd/

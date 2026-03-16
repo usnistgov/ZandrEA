@@ -1,14 +1,18 @@
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
 # Typical ZandrEA dev-phase builds/startups begin with "make docker-up" at CLI with this file in the pwd.
-# Per GNU Make behavior, that results in first a full parse that hash stores all variables in this file,
-# followed by a jump to the rule at "docker-up" target (below). That rule first sends execution out of
-# this file to Docker Compose, which calls the root Dockerfile to copy this file into a "buildbase"
-# stage where it immediately makes calls on that copy, the first building the HDF5 compiler "wrapper".
-# Then further calls are made on that copy of this file, but using targets other than "docker-up".
-# Some of those targets invoke the sub-Makefiles in each project subdirectory holding C++ source code. 
-# So, strictly speaking, this process is not recursive, because a completely separate copy is called.
-# However, the "docker-up" target call in the instance of this file on the host computer cannot return
-# the host CLI to its user prompt until its recipe returns from "docker compose --build --detach".
+# Per GNU Make behavior, that results first in a parse of this file followed by a jump to the rule at its
+# target "docker-up" (below). That rule sends execution out of this file to Docker Compose, which finds
+# docker-compose.yml directing "rest" service builds to the project root Dockerfile on host computer.
+# That Dockefile copies this file from host to a "buildbase" stage to make a call using that copy.
+# The parse of this file on the host was superfluous, but now its parse in the Dockerfile copy matters.
+# The target called is "compiler", which builds the HDF5 compiler "wrapper" script "h5c++" into "/ea/".
+# Subsequent calls are made on the stage's copy of this file, but using targets other than "docker-up".
+# So, strictly speaking, this process is not recursive, because a completely separate copy is now open.
+# However, the initiating "docker-up" target call in the instance of this file on the host computer
+# cannot return the host process and its CLI to a user prompt until the recipe of "docker-up" returns
+# from "docker compose --build --detach", meaning calls to Makefiles copied to Docker stages are exited.
+
+# While the host process call to Docker Compose is still "out", it 
 
 #==================================================================================================C====5
 # CLI call to this file presumes HDF5 tarball of ver. specified and its h5c++.tmpl file are in the pwd.
