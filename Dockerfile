@@ -85,17 +85,19 @@ RUN git clone --recurse-submodules -b v1.78.0 --depth 1 --shallow-submodules \
 WORKDIR $PKGROOT/grpc/build/
 # Call cmake w/o the build flag to have it read gRPC's CMakeLists.txt file and config a happy build env.
 # Note flagging of C++ version, 17 is minimum yet needs to be binary compatible w/ any other library
+# Note flag to build shared (dynamic) libs (.so files) versus default (vv. CMake) static (.a files)
 RUN cmake -DgRPC_INSTALL=ON \
       -DgRPC_BUILD_TESTS=OFF \
       -DCMAKE_CXX_STANDARD=17 \
+      -DBUILD_SHARED_LIBS=ON \
       -DCMAKE_INSTALL_PREFIX=$PKGROOT/grpc \
       ../grpc-src
 # Call the focused Makefile that CMake generated to build/install gRPC per the happy build environment
 RUN make -j 4 && make install
-# Copy from host the Protobuf .proto file and the C++ and Python stub codes Protoc compiled (off-line !)
+# Copy dir from host holding Protobuf .proto file and C++ and Python stub codes Protoc compiled off-line
 # [Location on host (first argument of COPY) is relative to directory holding this Dockerfile]
 WORKDIR $PKGROOT
-COPY ./protobuf/microservice.proto $PKGROOT/protobuf/
+COPY ./protobuf/  $PKGROOT/protobuf/
 # PATH holds only paths to executables; paths to includes must be flagged (i.e., -I) within Make recipes
 ENV PATH=$PATH:$PKGROOT/grpc/bin:$PKGROOT/protobuf
 # DAV - END - gRPC (C++ side) install

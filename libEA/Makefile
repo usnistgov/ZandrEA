@@ -10,7 +10,7 @@
 HDF5_ROOT := $(CURDIR)/../HDF5
 CXX := h5c++
 CXXPATH := $(HDF5_ROOT)/bin/h5c++
-# DAV - unsure why SWB did paths as relative using PREFIX (vs. absolutes) but sticking with it
+# ** DAV - unsure why SWB did paths as relative using PREFIX (vs. absolutes)
 PREFIX := ..
 DEFS := -DPOSIX -DSTANDALONE
 
@@ -23,13 +23,16 @@ STATICLIB=lib$(LIBNAME).a
 CXXOPTS=-Wno-comments
 
 # Provide variable listng all paths to files called by #include in /libEA/ src files
-#INCLUDES=-I$(HDF5_ROOT)/include -I/opt/homebrew/include
-# DAV - Nix above to further include gRPC stub code and library files:
-INCLUDES=-I$(HDF5_ROOT)/include -I/opt/homebrew/include -I/ea/protobuf
+INCLUDES = -I$(HDF5_ROOT)/include -I/opt/homebrew/include
 
 # Syntax to add many subdirs relative to pwd: $(addprefix -I, $(shell find [rel path] -type d))
-INCLUDES += $(addprefix -I,$(shell find $(PREFIX)/grpc/include -type d))
-#$(error INCLUDES is $(INCLUDES))
+# INCLUDES for major libraries typically path down ONLY to libraries top-level "/include/" directories.
+# A "major" library has symlinks in "/include/" as necessary to obviate INCLUDE vars of deeper pathing.
+# Use app's src file to define any deeper path needed (e.g., a header with #include <grpcpp/grpcpp.h>).
+# Else, INCLUDE of deeper library dirs can shadow calls app makes to system libraries (e.g., <ctime>).
+
+INCLUDES += -I$(PREFIX)/grpc/include -I$(PREFIX)/protobuf
+#bad way was += $(addprefix -I,$(shell find $(PREFIX)/grpc/include -type d)) -I$(PREFIX)/protobuf
 
 LD=		$(CXX)
 LIBS=		#-L../dep/lib -L/opt/homebrew/lib -lhdf5 -lcpprest

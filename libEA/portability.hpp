@@ -10,10 +10,10 @@
 // Microsoft Visual Studio was the original build platform so things that
 // required workarounds outside of that environment are put here.
 
-# include <ctime>
-# include <cerrno>
-# include <errno.h>
-# include <cstring>
+#include <ctime>
+#include <cerrno>
+#include <errno.h>
+#include <cstring>
 //# include <string.h>
 
 //# ifdef __linux
