@@ -339,7 +339,12 @@ GRPC_LIBS := -lgrpc++ -lgrpc -lgpr -lprotobuf \
              -labsl_strings \
              -labsl_strings_internal \
              -labsl_status \
-             -labsl_cord
+             -labsl_cord \
+             -labsl_cordz_info \
+             -labsl_cordz_functions \
+             -labsl_cordz_handle \
+             -labsl_time \
+             -labsl_time_zone
 
 EAD_LIBS += $(GRPC_LDFLAGS) $(GRPC_LIBS)
 

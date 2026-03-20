@@ -1,6 +1,11 @@
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
-# ZandrEA repo root directory multistage Dockerfile to build image that runs as the "ea-rest" container. 
+# ZandrEA repo root directory multi-stage Dockerfile: builds image that runs as the "ea-rest" container.
+# Each FROM starts a "stage"; each COPY, ADD, and RUN caches a "layer" credited to rebuilds if unedited.
+# "Heavy" libraries are built and layer-cached by two "builder" stages, but any edit to this file or to
+# any Makefile (since calls by both builders lead to them) invokes rebuild of ALL libraries (~20 mins).
+# Edits made only to src code in /libEA/ or /EAd/ will skip to faster rebuilds ( ~seconds)
 #==================================================================================================C====5
+
 FROM ubuntu:24.04 AS baseos
 LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
 # Bare minimum of libraries needed to run the ZandrEA executable ("ead")
