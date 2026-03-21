@@ -119,6 +119,8 @@ LABEL maintainer="Steve Barber <steve.barber@nist.gov>"
 ARG home=/ea
 ENV HOME=${home}
 ENV PKGROOT=${home}
+# Add gRPC lib sub-deps to runtime dynamic linking paths known to OS (here, averts "ea-rest" crash loop):
+ENV LD_LIBRARY_PATH=/ea/grpc/lib:$LD_LIBRARY_PATH 
 RUN mkdir -p /data /ea/bin /ea/include /ea/lib /ea/EAd /ea/libEA /ea/ \
   /ea/grpc/bin /ea/grpc/include /ea/grpc/lib .vscode \
   && rm -rf /var/lib/apt/lists/*

@@ -26,8 +26,7 @@ def serve():
     server.add_insecure_port('[::]:50051')
     server.start()
     print("Server started. Listening on port 50051.")
-    while True:
-        time.sleep(60)  # Keep the server running
+    server.wait_for_termination()
 
 if __name__ == '__main__':
     serve()

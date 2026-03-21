@@ -37,7 +37,7 @@ CProcess::CProcess(  CSequence& bArg0,
                            grpc::CreateChannel( "experior:50051", grpc::InsecureChannelCredentials()) ),
                         u_rpcStub ( microservice::MakeComparisons::NewStub(s_rpcChannel) ),
                         firstCall (true),
-                        resultNow (NaNBOOL),
+                        resultNow (false),
                         resultLastValid (false) {
 
    CalcOwnTriggerGroup();                                              
@@ -117,7 +117,7 @@ void CProcess::Cycle( time_t timestampNow ) {
     grpc::ClientContext context;
 
     grpc::Status status = u_rpcStub->Is_x_GT_y(&context, request, &response);
-
+    resultNow = response.reply();
    }
 
    resultLastValid = ( validNow ? resultNow : resultLastValid );

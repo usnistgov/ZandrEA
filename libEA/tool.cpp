@@ -18,6 +18,7 @@
 #include "mvc_ctrlr.hpp"
 #include "mvc_view.hpp"
 #include "portOmni.hpp"
+#include "process.hpp"
 
 #include "rule.hpp"
 #include "seqElement.hpp"
@@ -270,6 +271,18 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                    }
                                                 )
    );
+
+//======================================================================================================/
+// Process objects - Pass data to experior and receive results
+
+   u_Xtest = std::make_unique<CProcess>(  seq0Ref,
+                                          *u_Subject,
+                                          1,
+                                          std::vector<CPointAnalog*>(
+                                             { u_Tao.get(), u_Tar.get(), u_TasSetpt.get() }
+                                          )
+   );
+
 
 //======================================================================================================/
 // Chart objects - Shewhart charts
@@ -665,6 +678,12 @@ u_RuleKit = std::make_unique<CRuleKit>(
                        INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_60,
                        ctrlrRef );
 
+
+   u_Xfact =  std::make_unique<CFactFromProcess>(  seq0Ref,
+                                                   *u_Subject,
+                                                   EDataLabel::Fact_process_exp,
+                                                   *u_Xtest );
+
 //======================================================================================================/
 // Define CFactFromFacts objects
 
@@ -809,6 +828,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
 //'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // Rule 1
 
+   operands_if.push_back( u_Xfact.get() );
    operands_if.push_back( u_unitOn.get() );
    operands_if.push_back( u_sysOccSus.get() );
    operands_if.push_back( u_inputSteadySus.get() );
@@ -818,7 +838,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_if.push_back( u_UvcShut.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
-                        return ( u_unitOn->Now() &&
+                        return ( u_Xfact &&
+                                 u_unitOn->Now() &&
                                  u_sysOccSus->Now() &&
                                  u_inputSteadySus->Now() &&
                                  (! u_econExpected->Now()) );

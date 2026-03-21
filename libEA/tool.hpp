@@ -14,7 +14,7 @@
    function-pointer type parameters.  See no advantage to fwd-declare classes in the header to tool.cpp
 */
 
-#include "state.hpp"
+#include "state.hpp"          // Includes all AFact subclasses
 #include "chart.hpp"
 #include "rainfall.hpp"
 
@@ -34,6 +34,7 @@ class CKnowBaseH5;
 class CPointAnalog;
 class CPointBinary;
 class CPortOmni;
+class CProcess;
 class CRule;
 class CRuleKit;
 class CSequence;
@@ -110,6 +111,8 @@ class CTool_ahu_ibal : public ATool {
       std::unique_ptr<CFormula>     u_fracOA;
       std::unique_ptr<CFormula>     u_maxTaoTar;
       std::unique_ptr<CFormula>     u_minTaoTar;
+
+      std::unique_ptr<CProcess>     u_Xtest;
 
       std::unique_ptr<CChartShewhart> u_TasShew;
       std::unique_ptr<CChartShewhart> u_TasSetptShew;
@@ -194,6 +197,8 @@ class CTool_ahu_ibal : public ATool {
 
       std::unique_ptr<CFactFromPoint> u_sysOcc;
       std::unique_ptr<CFactSustained> u_sysOccSus;
+
+      std::unique_ptr<CFactFromProcess> u_Xfact;
 //======================================================================================================/
 // Declare facts from facts and any sustainers
 
