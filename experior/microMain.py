@@ -19,6 +19,8 @@ class MakeComparisonsServicer(microservice_pb2_grpc.MakeComparisonsServicer):
         response.reply = request.y < request.z
         return response
 
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+#def main():
 def serve():
     
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -29,29 +31,10 @@ def serve():
     server.wait_for_termination()
 
 if __name__ == '__main__':
-    serve()
-
-
-#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
-#def main():
- 
-    #The main function to test execution.
-
-#    print("Python main() success!")
-    # Calling further Python functions
-#    run_test_logic()
-    
-#def run_test_logic():
-
-    # A helper function called from main().
-#    print("Helper function success.")
-
-#if __name__ == '__main__':
 # above TRUE if this file run from a shell, Docker RUN (in build), or Docker CMD/ENTRYPOINT (at runtime)
 # [i.e., exempts file from default Py top-to-bottom exec, instead giving it an entry point and exec order
 # Otherwise, FALSE, as __name__ is set to the filename (w/ no *.py), e.g., when imported as a module.]
-#   logging.basicConfig()
-#    main()
+        serve()
 
 #EOF
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5

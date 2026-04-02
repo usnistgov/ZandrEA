@@ -1,5 +1,6 @@
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
-# Subordinate Makefile residing on host in [project root]/EAd/
+# To allow EAd C++ src build and tests without involving Docker, this file resided in [root]/EAd/.
+#==================================================================================================C====5
 # CURDIR is a GNU Make built-in set to pwd existing in the context from which this Makefile was called.
 # Given that call is inside the Dockerfile appbuilder stage, context here is in that stage, not on host.
 #==================================================================================================C====5
@@ -21,8 +22,8 @@ DEFS=-DPOSIX -DSTANDALONE
 #EALIBFILE=$(LIBDIR)/lib$(LIBNAME).a
 CXXOPTS=-Wno-comments
 
-# Boost libraries needed
-# (The actual link flags are generated below based on platform)
+# "BASE_***" merely lists which Boost libraries are needed
+# (The actual linker flags are generated below based on platform)
 BASE_BOOST_LIBS := system chrono thread program_options filesystem iostreams atomic
 BOOSTLIBPREFIX := boost_
 

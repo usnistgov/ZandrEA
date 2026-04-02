@@ -1,16 +1,15 @@
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
 # Typical ZandrEA dev-phase builds/startups begin with "make docker-up" at CLI with this file in the pwd.
 # Per GNU Make behavior, that results first in a parse of this file followed by a jump to the rule at its
-# target "docker-up" (below). That rule sends execution out of this file to Docker Compose, which finds
-# docker-compose.yml directing "rest" service builds to the project root Dockerfile on host computer.
-# That Dockefile copies this file from host to a "buildbase" stage and calls a target on that copy.
-# The parse of this file on the host was superfluous, but now its parse in the Dockerfile copy matters.
-# The target is "compiler", which builds the HDF5 compiler wrapper script "h5c++" in directory "/ea/".
-# Subsequent calls are made on the stage's copy of this file, but using targets other than "docker-up".
-# So, strictly speaking, this process is not recursive, because a completely separate copy is now open.
-# However, the initiating "docker-up" target call in the instance of this file on the host computer
+# target "docker-up" (below). That rule's recipe sends execution out of this file to Docker Compose.
+# Compose finds docker-compose.yml, which directs "rest" service build to the project root Dockerfile in
+# host directory structure. That Dockefile copies this file from host to its own "buildbase" stage.
+# The parse of this file on the host was superfluous, but its parse in the Dockerfile copy matters.
+# Subsequently, calls are made to two targets in the stage's copy of this file.
+# Strictly speaking, this process is not recursive, because a separate copy of this file is now open.
+# However, the initiating "docker-up" target call upon the instance of this file on the host computer
 # cannot return the host process and its CLI to a user prompt until the recipe of "docker-up" returns
-# from "docker compose --build --detach", after calls to Makefiles copied to Docker stages have exited.
+# from "docker compose --build --detach". After that, a Python script is called to run data through.
 
 #==================================================================================================C====5
 # CLI call to this file presumes HDF5 tarball of ver. specified and its h5c++.tmpl file are in the pwd.
@@ -120,7 +119,7 @@ all: docker-build
 #VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
 # Each call to "docker compose [etc.]" in recipes below cause a jump (but not exit) from this file to
 # docker-compose.yml, which in turn may call a separate copy of this Makefile using a different target
-# (e.g., build-ead). "In turn" means per the "services" dependencies defined in the docker-compose.yml.
+# (e.g., build-ead). "In turn" refers to the "services" dependencies defined in the docker-compose.yml.
 
 docker-build:
 	docker compose build
@@ -210,7 +209,9 @@ $(HDF5INSTALLDIR):
 # The h5c++ script is generated locally from the h5c++.tmpl downloaded as part of the HDF5 package
 
 #==================================================================================================C====5
-# HDF5CONFIGURE scripts the Autotools method "configure" and flags so it works next to a call to "h5c++"
+# HDF5CONFIGURE sets Autotools method "configure" with flags to act upon an adjacent call to "h5c++"
+# A g++ linker defaults to --enable-dynamic over --enable-static given a path to both .so and .o files
+# So, for Linux this will dynamically link HDF5
 
 ifeq ($(HDF5PLATFORM),Darwin)
 HDF5CONFIGURE := ./configure --enable-threadsafe --disable-hl --disable-shared --enable-static --enable-symbols=yes --prefix=$(CURDIR)/$(HDF5INSTALLDIR) CC=$(NATIVE_CC) CXX=$(NATIVE_CXX) CXXFLAGS="-std=c++17"
@@ -285,13 +286,12 @@ endif
 #==================================================================================================C====5
 # Paths to the directories holding "#include" files. These are needed by the dependency rule**
 # [ ** or the compilation rule had it not been preceded by a dependency rule]
-# Up to the linker rule it is irrelevant whether these will be statically or dynamically linked. 
-# The Makefile in /libEA/ builds a static library of files in /libEA/. But, because the root Makefile
-# (this file) has its own %.o: %.cpp rule, it needs its own INCLUDES variable.
+# Until reaching the linker rule it not relevant whether these will be statically or dynamically linked. 
 
 # INCLUDES for major libraries typically path down ONLY to libraries top-level "/include/" directories.
-# Any further pathing is defined in the application src file (e.g., #include <grpcpp/grpcpp.h>)
-# Else, INCLUDE of library's deeper dirs shadow calls by app src files to system library (e.g., <ctime>).
+# A "major" library has symlinks in its "/include/" so to not need a lot of INCLUDE vars to deeper paths.
+# Use app's src file to define any deeper path needed (e.g., a header with #include <grpcpp/grpcpp.h>).
+# Else, INCLUDE of deeper library dirs can shadow calls app makes to system libraries (e.g., <ctime>).
 
 INCLUDES = -I$(PREFIX)/libEA -I$(PREFIX)/include -I$(HDF5INSTALLDIR)/include $(HB_INCLUDES)
 
@@ -299,14 +299,10 @@ INCLUDES += -I$(PREFIX)/grpc/include -I$(PREFIX)/protobuf
 #bad way was += $(addprefix -I,$(shell find $(PREFIX)/grpc/include -type d)) -I$(PREFIX)/protobuf
 
 #==================================================================================================C====5
-# Passing this in linker rule tells it to dynamically (-l) link Boost library
+# Define a variable holding paths to Boost library files
+# The (lower case) -l flag tells g++ linker to default to dynamic linking if ".so" files are in the path.
+# Ubuntu "apt install" will have defaulted to intalling .so files (versus .a or .o for static linking). 
 BOOSTLIBS := $(patsubst %,-l$(BOOSTLIBPREFIX)%$(BOOSTLIBSUFFIX),$(BASE_BOOST_LIBS))
-
-#==================================================================================================C====5
-# Paths and filenames are assigned here on the basis that the root Dockerfile and the calls its
-# stages make on their copy of this file and its sub-Makefiles will together create and populate
-# these paths and filenames before the $(EAD_EXES) target (which needs them) is hit and must resolve.
-# [So, no path these variables list needs to be exported elsewhere to end up actually populated]:
 
 LIBEA_EXCLPAT = libEA/EAwin32DLL.% # libEA/dllmain.%
 # Define a variable pathing to all .cpp files in /libEA/ (.hpp not required yet as revealed later)
@@ -323,7 +319,17 @@ EAD_OBJS := $(EAD_SRCS:.cpp=.o)
 EAD_DEPS := $(EAD_SRCS:.cpp=.d)
 
 #EAD_LIBS := -L$(HDF5INSTALLDIR)/lib -L./lib -L$(HOMEBREW_PREFIX)/opt/openssl@1.1/lib -L$(HOMEBREW_PREFIX)/lib -lcpprest $(BOOSTLIBS) -lhdf5 -lssl -lcrypto -lstdc++
-EAD_LIBS := -L$(HDF5INSTALLDIR)/lib -L./lib $(HB_LDFLAGS) -lcpprest $(BOOSTLIBS) -lhdf5 -lsz -lssl -lcrypto -lstdc++
+
+
+EAD_LIBS := -L$(HDF5INSTALLDIR)/lib \
+            -L./lib $(HB_LDFLAGS) \
+            -lcpprest $(BOOSTLIBS) \
+            -lhdf5 \
+            -lsz \
+            -lssl \
+            -lcrypto \
+            -lstdc++
+
 EAD_EXES := bin/ead
 EAD_PUBLIC_HEADERS := 
 
@@ -409,11 +415,13 @@ endif
 
 #==================================================================================================C====5
 # (1) Generation of dependency (".d") files in order to individualize the deps of each src file.
+# This is necessary for Make to build a dependency graph AHEAD of running the compilation build rule.
 # Each .d file accompanys its src file in the compiler rule's dep list so it recompiles only if revised.
 # This intervening layer of .d target is effected by -M flag upon compiler (e.g., 2nd line of recipe). 
 # Rule for creating dependecy (.d) files from source code in the root directory (i.e., HDF5 src files):
 
-# Unless Make "define" employed, full %-match means a separate but similar rule for each src extension:
+# Unless Make "define" employed, full %-match means a separate but similar rule for each src extension.
+# [i.e., .cpp files and .cc files each need their own rule and recipe] :
 
 # For src files with .cpp extension (compiler uses their #include stmts to find all related .hpp)  
 %.d: %.cpp $(HDF5CXX)
@@ -423,7 +431,7 @@ endif
 		rm -f $@.$$$$
 #       $(CXX) $(CXXFLAGS) -MM -MT '$(patsubst %.cpp,%.o,$<)' $< -MF $@
 
-# For src files with .cc extension (i.e., Protobuf stubs, so no #includes)
+# For src files with .cc extension (i.e., Protobuf stubs, so no #includes are associated)
 %.d: %.cc $(HDF5CXX)
 	@set -e; rm -f $@; \
 		$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
@@ -446,17 +454,16 @@ $(EAD_EXES): Makefile bin include/ea $(HDF5CXX) $(PUBLIC_HEADERS) $(LIBEA_OBJS) 
 	$(CXX) $(LDFLAGS) $(LIBEA_OBJS) $(EAD_OBJS) -o $@ $(EAD_LIBS)
 	-chmod 755 $@
 
-
 #VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
-# General targets not pointing to Docker Compose nor other Docker componentry:
+# Further (collateral-purpose) targets, not involving Docker or Compose:
 
 all: ; @$(MAKE) _all
 
-_all:	compiler $(EXES)
+_all: compiler $(EXES)
 
 build-ead: $(EAD_EXES)
 
-test:	$(EXES)
+test: $(EXES)
 	for c in bin/desktopTestTheDll_IowaVAV_Interact_FeaturesAndMore ; do /bin/rm -f *.h5; $$c || exit 1; /bin/rm -f *.h5; done
 	$(MAKE) -C EAd/tests test
 
@@ -468,13 +475,13 @@ clean:
 	  test -f $$d/Makefile && $(MAKE) -C $$d clean ; \
 	done
 
-compile:	$(EXES)
+compile: $(EXES)
 
-install:	$(EXES)
+install: $(EXES)
 
-reinstall:	clean .WAIT install
+reinstall: clean .WAIT install
 
-recompile:	reinstall
+recompile: reinstall
 
 #==================================================================================================C====5
 # This target switches to a local directory (so "./" prefix not req'd as it is when directly pathing an

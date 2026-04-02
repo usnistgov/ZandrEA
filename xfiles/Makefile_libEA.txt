@@ -1,7 +1,9 @@
 #XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+# To allow libEA C++ src build and tests without involving Docker, this file resided in [root]/libEA/.
+#==================================================================================================C====5
 # The C++ src code in [root]/libEA/ is built into a static library interacting at runtime with another
 # part of the "ead" executable built from C++ src code in [root]/EAd/ by the Makefile in [root]/ea/EAd/.
-# So, this Makefile (in [root]/libEA/) is called at its default target by the Makefile in [root]/EAd/.
+# So, this Makefile (in [root]/libEA/) is called to its default target by the Makefile in [root]/EAd/.
 # Contexts: In the "appbuilder" stage of Dockerfile, "[root]" is "/ea/". On host, it is your repo root.
 # CURDIR is a GNU Make built-in set to the pwd existing in the context from which a Makefile is called.
 # Given that call is only in the Dockerfile stage, context here is in that stage, not on your host.
@@ -22,7 +24,7 @@ STATICLIB=lib$(LIBNAME).a
 #DYNAMICLIB=lib$(LIBNAME).so
 CXXOPTS=-Wno-comments
 
-# Provide variable listng all paths to files called by #include in /libEA/ src files
+# Declare variable listng all paths to files called by #include in /libEA/ src files
 INCLUDES = -I$(HDF5_ROOT)/include -I/opt/homebrew/include
 
 # Syntax to add many subdirs relative to pwd: $(addprefix -I, $(shell find [rel path] -type d))
