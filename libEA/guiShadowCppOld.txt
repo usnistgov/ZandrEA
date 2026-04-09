@@ -445,16 +445,16 @@ std::string IGuiShadow::LookUpText( EDataUnit key ) {
 
 #define INIT_DISKFILE \
    { \
-      { ERealName::Undefined,                "undefined_" }, \
-      { ERealName::Domain_ibal,              "ibal_" }, \
-      { ERealName::Subject_chwPlant,         "chwPlant_" }, \
-      { ERealName::Subject_hwPlant_sim,      "hwPlantSim_" }, \
-      { ERealName::Subject_ahu1,             "ahu1_" }, \
-      { ERealName::Subject_ahu2,             "ahu2_" }, \
-      { ERealName::Subject_vav1,             "vav1_" }, \
-      { ERealName::Subject_vav2,             "vav2_" }, \
-      { ERealName::Subject_vav3,             "vav3_" }, \
-      { ERealName::Subject_vav4,             "vav4_" } \
+      { ERealName::Undefined,             "undefined_" }, \
+      { ERealName::Domain_ibal,           "ibal_" }, \
+      { ERealName::Subject_chwPlant,      "chwPlant_" }, \
+      { ERealName::Subject_hwPlant,       "hwPlant_" }, \
+      { ERealName::Subject_ahu1,          "ahu1_" }, \
+      { ERealName::Subject_ahu2,          "ahu2_" }, \
+      { ERealName::Subject_vav1,          "vav1_" }, \
+      { ERealName::Subject_vav2,          "vav2_" }, \
+      { ERealName::Subject_vav3,          "vav3_" }, \
+      { ERealName::Subject_vav4,          "vav4_" } \
    }
 
 std::string IGuiShadow::LookUpDiskFile( ERealName key ) {
@@ -518,7 +518,7 @@ std::string IGuiShadow::LookUpText( ETimeSpan key ) {
       { ERealName::Undefined,             "Undefined" }, \
       { ERealName::Domain_ibal,           "IBAL" }, \
       { ERealName::Subject_chwPlant,      "CHW Plant" }, \
-      { ERealName::Subject_hwPlant_sim,   "HW PlantSim" }, \
+      { ERealName::Subject_hwPlant,       "HW Plant" }, \
       { ERealName::Subject_ahu1,          "AHU-1" }, \
       { ERealName::Subject_ahu2,          "AHU-2" }, \
       { ERealName::Subject_vav1,          "VAV-1" }, \

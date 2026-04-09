@@ -124,6 +124,7 @@ void CSequence::Configure( void ) {
       std::accumulate( numObjectsOfClass.begin(), numObjectsOfClass.end(), 0 )
    );   
 
+// Load base trigger groups into an array; values are defined in customTypes.hpp
    baseTriggerGrp[0] = BASETRIGGRP_POINT;
    baseTriggerGrp[1] = BASETRIGGRP_FORMULA;
    baseTriggerGrp[2] = BASETRIGGRP_CHART;
