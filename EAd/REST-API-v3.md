@@ -204,7 +204,7 @@ The REST endpoints for HTTP PUT are as follows:
 | ----- | ------------- | ---------- | ------------- | ------------- |
 | `/ctrl/time` | `time:INT`| | | Submits a new timestamp to libEA to be associated with the next batch(es) of data |
 | `/ctrl/sample` | `subject:INT`<br>`values:DBL[]`| | `returncode:INT` | Submits an array containing all the point data for the specified subject key using the last set timestamp (above) |
-| `/ctrl/sampletimestamp` | `time:INT`<br>`values_by_subject:OBJ[]`| | `returncode:INT` | This function combines the 3 steps of setting a timestamp, submitting data to one or more subjects corresponding to that timestamp, and then calling the SingleStep function to process it in a single atomic operation. `values_by_subject` is an array of objects with attributes `subject:INT` and `values:DBL[]` like the calls above |
+| `/ctrl/sampletimestep` | `time:INT`<br>`values_by_subject:OBJ[]`| | `returncode:INT` | This function combines the 3 steps of setting a timestamp, submitting data to one or more subjects corresponding to that timestamp, and then calling the SingleStep function to process it in a single atomic operation. `values_by_subject` is an array of objects with attributes `subject:INT` and `values:DBL[]` like the calls above |
 | `/ctrl/answercase` | `case:INT`<br>`answer:INT` | | `success:BOOL` | Reply to the specified case key with the answer of zero-based option `answer` (from the list of options in the case) |
 | `/set/knob` | `key:INT`<br>`value:INT\|FLT` | | `success:BOOL` | Sets the knob specified by `key` to an integer or float value |
 | `/set/histogram/mode` | `key:INT`<br>`value:INT` | | `success:BOOL` | Sets the mode of the histogram specified by `key` to `value` |
