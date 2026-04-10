@@ -1,4 +1,8 @@
 {
+    "github.copilot.editor.enableAutoCompletions": false,
+    // inhibit "code actions" (a.k.a. "sparkles") at new line beginnings (typ after hit return key)
+    "github.copilot.editor.enableCodeActions": false,
+    // "editor.lightbulb.enabled": "onCode" // code actions only non-empty lines (the old behavior)
     "python.pythonPath": "/bin/python3",
     "files.associations": {
         "*.json": "jsonc",

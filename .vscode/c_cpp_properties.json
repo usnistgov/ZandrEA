@@ -1,17 +1,18 @@
 {
+    // If valid changes here appear to not work, "Reset Intellisense DB" at VSC command pallette.
     "configurations": [
         {
             "name": "GCC",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/hdf5/serial"
+                "${env:HOME}/grpc/**"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "/usr/bin/g++",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-x64"

@@ -12,6 +12,7 @@
 #include "subject.hpp"        // call getters on subject
 #include "dataChannel.hpp"    // call getters on binary point
 #include "taskClock.hpp"
+#include "process.hpp"
 #include "mvc_ctrlr.hpp"
 
 #include <algorithm>
@@ -447,12 +448,6 @@ CFactFromPoint::~CFactFromPoint( void ) { /* empty */ }
 
 void CFactFromPoint::LendHistogramKeysTo( std::vector<NGuiKey>& borrowerRef ) const {
 
-/* Note what method must do here:  e.g., a chart has no own rain or own histogram, but a chart's
-   (analog) input object has both, and the Fact(s) a chart feeds into has both.  Lending keys out so
-   to be delivered to GUI in a GuiPack must accommodate that.
-   not workable to have u_Rain in IRainfall
-*/
-
    NGuiKey ownHistogramKey = u_Rain->SayHistogramKey();
 
    bool borrowerNotAlreadyHoldingSameKey = ( std::find(
@@ -498,6 +493,82 @@ void CFactFromPoint::Cycle(  time_t timestampNow ) {
    firstCycle = false;
    return;
 }
+
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+// Implementation for CFactFromProcess 
+
+CFactFromProcess::CFactFromProcess( CSequence& bArg0,
+                                    ASubject& bArg1,
+                                    EDataLabel bArg2,
+                                    const CProcess& arg)
+                                    :  AFact(   bArg0,
+                                                bArg1,
+                                                bArg2,
+                                                std::vector<AFact*>(0) 
+                                    ),
+                                    ProcessRef (arg),
+                                    boolPostedByProcess (NaNBOOL) {
+
+   CalcOwnTriggerGroup();
+}
+ 
+CFactFromProcess::~CFactFromProcess( void ) { /* empty */ }
+
+
+void CFactFromProcess::LendHistogramKeysTo( std::vector<NGuiKey>& borrowerRef ) const {
+
+/* Note what method must do here:  e.g., a process has no own rain or own histogram, but a process's
+   (analog) input object has both, and the Fact(s) a process feeds into has both.  Lending keys out so
+   to be delivered to GUI in a GuiPack must accommodate that.
+   not workable to have u_Rain in ARainfall
+*/
+
+   NGuiKey ownHistogramKey = u_Rain->SayHistogramKey();
+
+   bool borrowerNotAlreadyHoldingSameKey = ( std::find(
+                                                borrowerRef.begin(),
+                                                borrowerRef.end(),
+                                                ownHistogramKey
+                                             ) == borrowerRef.end() ?
+                                                true :
+                                                false
+   ); 
+   if ( borrowerNotAlreadyHoldingSameKey ) {
+
+      borrowerRef.push_back( ownHistogramKey );
+   }
+   return;
+}
+
+
+void CFactFromProcess::Cycle(  time_t timestampNow ) {
+
+   validWas = validNow;
+   claimWas = claimNow;
+
+   validNow = ProcessRef.IsValid();
+
+   boolPostedByProcess = ProcessRef.SayBoolPosted();
+   claimNow = ( validNow ? boolPostedByProcess : claimWas );
+
+   claimHasFlipped = (claimNow != claimWas);
+
+   timeOfClaimNow = (   ( claimHasFlipped || (validWas != validNow) || firstCycle ) ?
+                           timestampNow :
+                           timeOfClaimNow );
+
+   u_Rain->Cycle( timestampNow,
+                  cycleBeginsNewClockHour,
+                  cycleBeginsNewCalendarDay,
+                  claimNow,
+                  validNow
+ 
+   );
+
+   firstCycle = false;
+   return;
+}
+
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // Implementations for CFactFromFacts

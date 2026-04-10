@@ -30,7 +30,7 @@ namespace ssl = boost::asio::ssl;
 
 std::unique_ptr<handler> g_httpHandler;
 std::atomic<int> stop_main;   // store true when ready to shut down
-IExportOmni* tool;     // master pointer to the DLL API
+IExportOmni* tool;     // master pointer to the EA Runtime API
 
 #ifdef USE_SSL
 http_listener_config server_config;

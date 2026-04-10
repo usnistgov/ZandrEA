@@ -34,6 +34,9 @@ services:
     volumes:
       #      - ea-rest-kb:/data
       - ./data/:/data/
+      # Optional "dev-container" volumes for "side-loading" the C++ src code (vs. direct load into
+      # runtime stage container). Volumes synch to host files so gdb and editor act upon both at once.
+      # Thread complexity in "ea-rest" means this, if used, would be mostly to effect gdb breakpoints. 
       - ./libEA:/ea/libEA:ro
       - ./EAd:/ea/EAd:ro
     labels:
@@ -89,7 +92,24 @@ services:
       - "traefik.http.services.webapp.loadbalancer.server.port=3000"
     networks:
       - traefik01
-
+#  DAV - Begin defn for experior
+  experior:
+    build:
+      context: ./experior
+      dockerfile: Dockerfile
+    depends_on:
+      - rest
+    restart: on-failure
+    container_name: cx-experior
+    environment:
+      - PYTHONUNBUFFERED=1 # otherwise Python buffers STDOUT to reduce interruptions
+    links:
+      - rest:rest
+    networks:
+      - traefik01
+    expose:
+    - "50051"
+# DAV - End defn for experior
 networks:
   traefik01:
     name: ea_traefik01

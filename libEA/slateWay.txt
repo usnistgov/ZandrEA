@@ -1,0 +1,38 @@
+//XXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+// Wax file in C++ - Use *.txt file extension until ready for compiler, then change ext. to *.hpp/cpp
+
+// This file is in library EA of the ZandrEA (tm) open-source software development project for research
+// in automated fault detection and diagnostics (AFDD) of the mechanical systems in commercial buildings.
+// File origin: DAV at U.S. National Institute of Standards and Technology (NIST). See ZandrEA on GitHub.
+/*
+In this example, the C++ function send_value sends an HTTP POST request to the Python program running on port 8080 in the "ea-python-app" container. The request includes a JSON payload with the integer value.
+
+The Python program listens for incoming requests on port 8080 and parses the JSON data. If the data is valid, it prints the received value and sends a successful response back to the C++ program.    
+*/
+//XXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXXX
+
+#include <cpprest/http_client.h>
+#include <cpprest/json.h>
+
+using namespace web;
+using namespace web::http;
+using namespace web::http::client;
+
+void send_value(int value) {
+    http_client client("http://ea-python-app:8080");
+    json::value json_data;
+    json_data["value"] = json::value::number(value);
+
+    http_request request(methods::POST);
+    request.headers().add("Content-Type", "application/json");
+    request.set_body(json_data.serialize());
+
+    client.request(request).then([](http_response response) {
+        if (response.status_code() == status_codes::OK) {
+            auto body = response.extract_json().get();
+            // Handle successful response
+        } else {
+            // Handle error
+        }
+    }).wait();
+}
