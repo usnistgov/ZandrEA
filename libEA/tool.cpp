@@ -1285,10 +1285,10 @@ u_Subject = std::make_unique<CSubj_ahu_ibal>(
                ahuName,
                chwPlantName,
                hwPlantName,
-               2360.0f,    // air flow, rated (L/s)
-               22.0f,      // CHW flow, rated (L/minute)
-               25.0f,      // preheat, rated (kw)
-               0.30f       // min fraction OA
+               660.7f,  // air flow, rated (L/s)
+               34.0f,   // CHW flow, rated (L/minute)
+               9.0f,    // preheat, rated (kw)
+               0.30f    // min fraction OA
 );
 
 
@@ -2632,8 +2632,8 @@ u_Subject = std::make_unique<CSubj_vav_ibal>(
                hwPlantName,
                0.305f,        // duct diam (m)
                5.555f,        // duct area (m^2)
-               1180.0f,       // air flow, rated (L/sec)
-               18.93f,        // HW flow, rated (L/minute)
+               330.4f,        // air flow, rated (L/sec)
+               0.0f,          // HW flow, rated (L/minute)
                2.0f           // reheat, rated (kW)
 );
 
