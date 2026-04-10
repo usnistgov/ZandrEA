@@ -21,9 +21,10 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // Implementation of abstract base class for all Subject objects
 
-ASubject::ASubject(  CDomain& arg0,
-                     EDataLabel arg1,
-                     ERealName arg2 )
+ASubject::ASubject(  EUnitSystem arg0,
+                     CDomain& arg1,
+                     EDataLabel arg2,
+                     ERealName arg3 )
                      :  IGuiShadow( EApiType::Subject ),
                         pinnedRuleFailHistories_byRuleKit(),
                         infoText(0),
@@ -32,16 +33,17 @@ ASubject::ASubject(  CDomain& arg0,
                         ruleKitDisplayKeys(0),
                         uaiInUse_features(0),
                         sgiInUse_ruleKits(0),
-                        ownLabel (arg1),
-                        ownName(arg2),
+                        unitSys (arg0),
+                        ownLabel (arg2),
+                        ownName(arg3),
                         nextSgiForCases (1u),
                         nextSgiForRuleKits (1u),
                         unitOutputOkay (true),
-                        DomainRef (arg0),
+                        DomainRef (arg1),
                         u_CaseKit ( std::make_unique<CCaseKit>(
                                        *this,
-                                       arg0.SayEnergyPricesRef(),
-                                       arg0.SayRootTextForDiskFilenames() + LookUpDiskFile( arg2 ) )
+                                       arg1.SayEnergyPricesRef(),
+                                       arg1.SayRootTextForDiskFilenames() + LookUpDiskFile( arg3 ) )
                         ) {
 // empty ABC c-tor
 }
@@ -208,75 +210,173 @@ void ASubject::TagAndPostAlertToDomain(   time_t timestamp,
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 
-CSubj_vav_pihr::CSubj_vav_pihr(  CDomain& bArg0,
-                                 EDataLabel bArg1,
-                                 ERealName bArg2,
-                                 ERealName arg0,
-                                 ERealName arg1,
-                                 float arg2,              // diaAirInch
-                                 float arg3,              // cfmAirRated
-                                 float arg4,              // gpmChwRated
-                                 float arg5 )             // btuReheatRated
+CSubj_vav_ibal::CSubj_vav_ibal(  EUnitSystem bArg0,
+                                 CDomain& bArg1,
+                                 EDataLabel bArg2, // own label
+                                 ERealName bArg3,  // own name
+                                 ERealName arg0,   // AHU name
+                                 ERealName arg1,   // Reheat source name (electric or HW plant sim)
+                                 float arg2,       // duct diameter
+                                 float arg3,       // duct area
+                                 float arg4,       // air flow, rated
+                                 float arg5,       // reheat HW flow, rated (zero if electric RH)
+                                 float arg6 )      // kW reheat, rated (zero if RH by HW plant sim)
                                  :  ASubject(bArg0,
                                              bArg1,
-                                             bArg2
+                                             bArg2,
+                                             bArg3
                                     ),
                                     nameAntecedentAhu (arg0),
                                     nameAntecedentHwPlant (arg1),
-                                    inchDiaDuct (arg2),
-                                    sqFtAirflow ( PI_F * ( (arg2 * arg2)/144.0f) ),
-                                    cfmAirRated (arg3),
-                                    gpmChwRated (arg4),
-                                    btuReheatRated (arg5) {
+                                    diamDuct (arg2),
+                                    areaAirflow ( arg3),
+                                    airFlowRated (arg4),
+                                    hwFlowRated (arg5),
+                                    kWReheatRated (arg6) {
 
-   bArg0.Register( this, ownName );
+   bArg1.Register( this, ownName );
 }
 
 
-CSubj_vav_pihr::~CSubj_vav_pihr( void ) {
+CSubj_vav_ibal::~CSubj_vav_ibal( void ) {
 
    // empty
 }
 
-ERealName CSubj_vav_pihr::SayNameOfAntecedentAhu( void ) const { return nameAntecedentAhu; }
+ERealName CSubj_vav_ibal::SayNameOfAntecedentAhu( void ) const { return nameAntecedentAhu; }
 
-ERealName CSubj_vav_pihr::SayNameOfAntecedentHwPlant( void ) const { return nameAntecedentHwPlant; }
+ERealName CSubj_vav_ibal::SayNameOfAntecedentHwPlant( void ) const { return nameAntecedentHwPlant; }
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 
-CSubj_ahu_sdvr::CSubj_ahu_sdvr(  CDomain& bArg0,
-                                 EDataLabel bArg1,
-                                 ERealName bArg2,
-                                 ERealName arg0,
-                                 ERealName arg1,
-                                 float arg2,             // cfmAirRated
-                                 float arg3,             // gpmChwRated
-                                 float arg4,             // kwReheatRated
-                                 float arg5 )            // minimum OA fraction
+CSubj_ahu_ibal::CSubj_ahu_ibal(  EUnitSystem bArg0,
+                                 CDomain& bArg1,
+                                 EDataLabel bArg2,          // own label
+                                 ERealName bArg3,           // own name
+                                 ERealName arg0,            // CHW plant name
+                                 ERealName arg1,            // preheat source name
+                                 float arg2,                // air flow, rated
+                                 float arg3,                // chw flow, rated
+                                 float arg4,                // kW preheat, rated
+                                 float arg5 )               // min fraction OA
                                  :  ASubject(bArg0,
                                              bArg1,
-                                             bArg2
+                                             bArg2,
+                                             bArg3
                                     ),
                                     nameAntecedentChwPlant (arg0),
                                     nameAntecedentHwPlant (arg1),
-                                    cfmAirRated (arg2),
-                                    gpmChwRated (arg3),
+                                    airFlowRated (arg2),
+                                    chwFlowRated (arg3),
                                     kwPreheatRated (arg4),
                                     minFracOA (arg5) {
 
-   bArg0.Register( this, ownName );
+   bArg1.Register( this, ownName );
 }
 
 
-CSubj_ahu_sdvr::~CSubj_ahu_sdvr( void ) {
+CSubj_ahu_ibal::~CSubj_ahu_ibal( void ) {
 
    // empty
 }
 
-ERealName CSubj_ahu_sdvr::SayNameOfAntecedentChwPlant( void ) const { return nameAntecedentChwPlant; }
+ERealName CSubj_ahu_ibal::SayNameOfAntecedentChwPlant( void ) const { return nameAntecedentChwPlant; }
 
-ERealName CSubj_ahu_sdvr::SayNameOfAntecedentHwPlant( void ) const { return nameAntecedentHwPlant; }
+ERealName CSubj_ahu_ibal::SayNameOfAntecedentHwPlant( void ) const { return nameAntecedentHwPlant; }
 
+
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+
+CSubj_chlr_ibal::CSubj_chlr_ibal(   EUnitSystem bArg0,
+                                    CDomain& bArg1,
+                                    EDataLabel bArg2, //own
+                                    ERealName bArg3,  // own
+                                    ERealName arg0,   // of antecdent cooling tower (CT) or heat sink
+                                    float arg1,       // kw, rated ( = 3.517 x tons)
+                                    float arg2,       // evap CHW flow, rated
+                                    float arg3 )      // cond CTW flow, rated
+                                    :  ASubject(   bArg0,
+                                                   bArg1,
+                                                   bArg2,
+                                                   bArg3
+                                    ),
+                                    nameAntecedentCT (arg0),
+                                    kWRated (arg1),
+                                    evapFlowRated (arg2),
+                                    condFlowRated (arg3) {
+
+   bArg1.Register( this, ownName );
+}
+
+
+CSubj_chlr_ibal::~CSubj_chlr_ibal( void ) {
+
+   // empty
+}
+
+ERealName CSubj_chlr_ibal::SayNameOfAntecedentCT( void ) const { return nameAntecedentCT; }
+
+
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+
+CSubj_tes_ibal::CSubj_tes_ibal(  EUnitSystem bArg0,
+                                 CDomain& bArg1,
+                                 EDataLabel bArg2, //own
+                                 ERealName bArg3,  // own
+                                 ERealName arg0,   // of antecdent chw plant (primary loop)
+                                 float arg2,       // kw-hours, rated ( = 3.517 x ton-hours)
+                                 float arg3 )      // CHW flow, rated
+                                 :  ASubject(bArg0,
+                                             bArg1,
+                                             bArg2,
+                                             bArg3
+                                    ),
+                                    nameAntecedentChwPlant (arg0),
+                                    kWhRated (arg2),
+                                    tubeFlowRated (arg3) {
+
+   bArg1.Register( this, ownName );
+}
+
+
+CSubj_tes_ibal::~CSubj_tes_ibal( void ) {
+
+   // empty
+}
+
+ERealName CSubj_tes_ibal::SayNameOfAntecedentChwPlant( void ) const { return nameAntecedentChwPlant; }
+
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+
+CSubj_chwp_ibal::CSubj_chwp_ibal(   EUnitSystem bArg0,
+                                    CDomain& bArg1,
+                                    EDataLabel bArg2, //own
+                                    ERealName bArg3,  // own
+                                    ERealName arg0,   // of antecdent chiller #1
+                                    ERealName arg1,   // of antecdent chiller #2
+                                    float arg2,       // total plant kW, rated ( = 3.517 x tons)
+                                    float arg3 )      // primary loop flow, rated
+                                    :  ASubject(   bArg0,
+                                                   bArg1,
+                                                   bArg2,
+                                                   bArg3
+                                    ),
+                                    nameAntecedentChlrOne (arg0),
+                                    nameAntecedentChlrTwo (arg1),
+                                    plantkWRated (arg2),
+                                    loopFlowRated (arg3) {
+
+   bArg1.Register( this, ownName );
+}
+
+
+CSubj_chwp_ibal::~CSubj_chwp_ibal( void ) {
+
+   // empty
+}
+
+ERealName CSubj_chwp_ibal::SayNameOfAntecedentChlrOne( void ) const { return nameAntecedentChlrOne; }
+ERealName CSubj_chwp_ibal::SayNameOfAntecedentChlrTwo( void ) const { return nameAntecedentChlrTwo; }
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 //CDomain implementation

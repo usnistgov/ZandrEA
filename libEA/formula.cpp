@@ -61,7 +61,7 @@ CFormula::CFormula(  CSequence& bArg0,
                         resultLastValid (NaNFLOAT) {
 
    CalcOwnTriggerGroup();                                              
-   bArg0.Register(this);
+   bArg0.Register( this );
    ConfigureCycling();
 
 }

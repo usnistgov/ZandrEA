@@ -13,8 +13,8 @@
    Including headers here to avert nasty amount of fwd-declares having templated classes that involve
    function-pointer type parameters.  See no advantage to fwd-declare classes in the header to tool.cpp
 */
-
-#include "state.hpp"
+#include "customTypes.hpp"
+#include "state.hpp"          // Includes all AFact subclasses
 #include "chart.hpp"
 #include "rainfall.hpp"
 
@@ -34,14 +34,17 @@ class CKnowBaseH5;
 class CPointAnalog;
 class CPointBinary;
 class CPortOmni;
+class CProcess;
 class CRule;
 class CRuleKit;
 class CSequence;
 class CSeqTimeAxis;
-class CSubj_ahu_sdvr;
-class CSubj_vav_pihr;
+class CSubj_ahu_ibal;
+class CSubj_chlr_ibal;
+class CSubj_chwp_ibal;
+class CSubj_tes_ibal;
+class CSubj_vav_ibal;
 class CView;
-
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // CApplication needs an abstract interface to any Tool object
@@ -54,21 +57,296 @@ class ATool {
      ~ATool( void );
 
    protected:
+   // fields
+      EUnitSystem                 unitSys;
 
-   // Declare handles to owned objects
+   // handles to owned objects
+      std::unique_ptr<CRuleKit>   u_RuleKit;
 
-      std::unique_ptr<CRuleKit>        u_RuleKit;
-
-      ATool(   CDomain&,   // registration as observer requires ref passed non-const
-               EDataLabel,
-               ERealName,
-               const CClockPerPort&,       // const = enforced as read-only
+      ATool(   EUnitSystem,
+               CDomain&,   // registration as observer requires ref passed non-const
+               EDataLabel,                // own label
+               ERealName,                 // own name
+               const CClockPerPort&,      // const = enforced as read-only
                CSequence&,
                CController&,
                CView&,
                CPortOmni& );
 };
 
+
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+// Declare a concrete subclass for either chiller in IBAL
+
+class CTool_chlr_ibal : public ATool { 
+
+   public:
+    // Methods
+
+      CTool_chlr_ibal(  EUnitSystem,
+                        CDomain&,
+                        EDataLabel,             // own
+                        ERealName,              // own
+                        ERealName,              // antecedent cooling tower (CT) name
+                        const CClockPerPort&,
+                        CSequence&,
+                        CController&,
+                        CView&,
+                        CPortOmni& );
+
+      ~CTool_chlr_ibal( void );
+
+   private:
+
+      std::unique_ptr<CSubj_chlr_ibal> u_Subject;
+
+// Point objects (analog and binary)
+// Input Channel 0, zero-based to match vector indices
+// Decl order must agree with order of data in push-in vec
+
+      std::unique_ptr<CPointAnalog> u_Twl;
+      std::unique_ptr<CPointAnalog> u_Tgl;
+      std::unique_ptr<CPointAnalog> u_TglSetpt;
+      std::unique_ptr<CPointAnalog> u_Qwc;
+      std::unique_ptr<CPointAnalog> u_Qge;
+      std::unique_ptr<CPointAnalog> u_Prd;
+      std::unique_ptr<CPointAnalog> u_Prs;
+      std::unique_ptr<CPointAnalog> u_Wec;
+      std::unique_ptr<CPointAnalog> u_Wep;
+      std::unique_ptr<CPointAnalog> u_TrLiq;
+      std::unique_ptr<CPointAnalog> u_TrVap;
+      std::unique_ptr<CPointAnalog> u_PgPout;
+      std::unique_ptr<CPointAnalog> u_PgPin;
+      std::unique_ptr<CPointAnalog> u_Uvg;
+      std::unique_ptr<CPointAnalog> u_Zvg;
+      std::unique_ptr<CPointAnalog> u_Ups;
+      std::unique_ptr<CPointBinary> u_BchlrEnable;
+      std::unique_ptr<CPointBinary> u_BpumpOn;
+
+ 
+      std::unique_ptr<CChartShewhart> u_TglShew;
+      std::unique_ptr<CChartShewhart> u_TglSetptShew;
+
+      std::unique_ptr<CChartTracking> u_Tgl_VS_auto;
+      std::unique_ptr<CChartTracking> u_Tgl_VS_setpt;
+
+      std::unique_ptr< CFactFromChart<CChartShewhart, PtrShewGetr_t> > u_TglSteady;
+      std::unique_ptr< CFactFromChart<CChartShewhart, PtrShewGetr_t> > u_TglSetptSteady;
+ 
+      std::unique_ptr< CFactFromChart<CChartTracking, PtrTrakGetr_t> > u_TglHunting;
+
+//======================================================================================================/ 
+// CFactRelatingLeftToParam objects relate a "left" analog value to a parameter on "right", w/ bool result
+// Specializations based upon left value greater than (GT), less than (LT), or equal to (EQ) the param
+//------------------------------ 
+// EQ specializations
+
+      //std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_PsasZero;
+
+ //======================================================================================================/ 
+// CFactRelatingLeftToRight objects relate two ("left" and "right") analog values, with bool result
+// Specializations based upon left value greater than (GT), less than (LT), or equal to (EQ) the right
+// value (which can be a sampled Point object or a CONST param supplied as argument to object constructor)
+//------------------------------ 
+//   Specializations ["oor" (out of operating range) is not necessarily bad (e.g., at machine idle)]
+
+      std::unique_ptr<
+         CFactRelatingLeftToRight<
+            CPointAnalog, PtrRainGetr_t, Left_EQ_Right, CPointAnalog, PtrRainGetr_t>
+         >  u_Tgl_EQ_setpt;
+
+   std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_UvgFull;
+   std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_GT_Right> >  u_WecDraw;
+   
+   std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_LT_Right> >  u_QgeLowOOR;
+   std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_LT_Right> >  u_PrsLowOOR;
+   std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_GT_Right> >  u_PrdHighOOR;
+
+//======================================================================================================/ 
+// Declare direct Facts and any sustainers
+
+   std::unique_ptr<CFactFromPoint> u_chlrEnable;
+   std::unique_ptr<CFactFromPoint> u_pumpOn;
+
+//======================================================================================================/
+// Declare facts from facts and any sustainers
+   std::unique_ptr<CFactFromFacts> u_readyForUnitOn;
+   std::unique_ptr<CFactFromFacts> u_unitOn;
+   std::unique_ptr<CFactFromFacts> u_runSteady;
+   std::unique_ptr<CFactSustained> u_runSteadySus;
+
+
+//======================================================================================================/
+// Declare "rule" objects
+
+     std::unique_ptr<CRule>  u_Rule1;
+     std::unique_ptr<CRule>  u_Rule2;
+     std::unique_ptr<CRule>  u_Rule3;
+     std::unique_ptr<CRule>  u_Rule4;
+     std::unique_ptr<CRule>  u_Rule5;
+
+
+//======================================================================================================/
+// Declare objects implementing knowledge-base for chiller
+//----------------------------------------------------------------------------------------
+// Declare "Hypo 1" through "Hypo 15"
+
+      std::unique_ptr<CHypo>   u_Hypo1;
+      std::unique_ptr<CHypo>   u_Hypo2;
+      std::unique_ptr<CHypo>   u_Hypo3;
+      std::unique_ptr<CHypo>   u_Hypo4;
+      std::unique_ptr<CHypo>   u_Hypo5;
+
+//----------------------------------------------------------------------------------------
+// Declare "Evid 1" through "Evid 14"
+
+      std::unique_ptr<CEvid>   u_Evid1;
+      std::unique_ptr<CEvid>   u_Evid2;
+      std::unique_ptr<CEvid>   u_Evid3;
+      std::unique_ptr<CEvid>   u_Evid4;
+      std::unique_ptr<CEvid>   u_Evid5;
+
+
+//======================================================================================================/
+// Declare GUI Features
+
+      //std::unique_ptr<CFeatureFact>    u_GuiFeat01; // Initially, no chlr dashboard (Feature objects)
+ 
+};
+
+// End of CTool_chlr_ibal declaration
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+// Declare a concrete subclass for thermal energy storage (TES, a.k.a. ice tank) in IBAL
+
+class CTool_tes_ibal : public ATool { 
+
+   public:
+    // Methods
+
+      CTool_tes_ibal(   EUnitSystem,
+                        CDomain&,
+                        EDataLabel,             // own
+                        ERealName,              // own
+                        ERealName,              // antecedent cooling tower (CT) name
+                        const CClockPerPort&,
+                        CSequence&,
+                        CController&,
+                        CView&,
+                        CPortOmni& );
+
+      ~CTool_tes_ibal( void );
+
+   private:
+
+      std::unique_ptr<CSubj_tes_ibal> u_Subject;
+
+// Point objects (analog and binary)
+// Input Channel 0, zero-based to match vector indices
+// Decl order must agree with order of data in push-in vec
+
+      std::unique_ptr<CPointAnalog> u_Tgi;
+      std::unique_ptr<CPointAnalog> u_Tgo;
+      std::unique_ptr<CPointAnalog> u_QgTes;
+      std::unique_ptr<CPointAnalog> u_UvTes;
+      std::unique_ptr<CPointAnalog> u_ZvTes;
+      std::unique_ptr<CPointAnalog> u_Xice;
+  
+      std::unique_ptr<CChartShewhart> u_QgTesShew;
+      std::unique_ptr<CChartShewhart> u_XiceShew;
+
+      std::unique_ptr<CChartTracking> u_Xice_VS_auto;
+      std::unique_ptr<CChartTracking> u_ZvTes_VS_UvTes;
+
+      std::unique_ptr< CFactFromChart<CChartShewhart, PtrShewGetr_t> > u_QgTesSteady;
+      std::unique_ptr< CFactFromChart<CChartShewhart, PtrShewGetr_t> > u_XiceSteady;
+
+      std::unique_ptr< CFactFromChart<CChartTracking, PtrTrakGetr_t> > u_XiceFalling;
+      std::unique_ptr< CFactFromChart<CChartTracking, PtrTrakGetr_t> > u_XiceRising;
+
+//======================================================================================================/ 
+// CFactRelatingLeftToParam objects relate a "left" analog value to a parameter on "right", w/ bool result
+// Specializations based upon left value greater than (GT), less than (LT), or equal to (EQ) the param
+//------------------------------ 
+// EQ specializations
+
+      //std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_PsasZero;
+
+ //======================================================================================================/ 
+// CFactRelatingLeftToRight objects relate two ("left" and "right") analog values, with bool result
+// Specializations based upon left value greater than (GT), less than (LT), or equal to (EQ) the right
+// value (which can be a sampled Point object or a CONST param supplied as argument to object constructor)
+//------------------------------ 
+//   Specializations ["oor" (out of operating range) is not necessarily bad (e.g., at machine idle)]
+
+      std::unique_ptr<
+         CFactRelatingLeftToRight<
+            CPointAnalog, PtrRainGetr_t, Left_GT_Right, CPointAnalog, PtrRainGetr_t>
+         >  u_Tgo_GT_Tgi;
+
+      std::unique_ptr<
+         CFactRelatingLeftToRight<
+            CPointAnalog, PtrRainGetr_t, Left_LT_Right, CPointAnalog, PtrRainGetr_t>
+         >  u_Tgo_LT_Tgi;
+
+   std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_TgiAtChargeTemp;
+   std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_ZvTesShut;
+   std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_QgTesZero;
+   std::unique_ptr<CFactSustained> u_QgTesNonzeroSus;
+   std::unique_ptr< CFactRelatingLeftToParam<CPointAnalog, PtrRainGetr_t, Left_EQ_Right> >  u_XiceZero;
+   std::unique_ptr<CFactSustained> u_XiceZeroSus; 
+//======================================================================================================/ 
+// Declare direct Facts and any sustainers
+
+
+//======================================================================================================/
+// Declare facts from facts and any sustainers
+
+   std::unique_ptr<CFactFromFacts> u_iceBeingMade;
+   std::unique_ptr<CFactSustained> u_iceBeingUsed;
+   std::unique_ptr<CFactFromFacts> u_tesAbsorbingHeat;
+   std::unique_ptr<CFactFromFacts> u_tesReleasingHeat;
+
+
+
+//======================================================================================================/
+// Declare "rule" objects
+
+     std::unique_ptr<CRule>  u_Rule1;
+     std::unique_ptr<CRule>  u_Rule2;
+     std::unique_ptr<CRule>  u_Rule3;
+     std::unique_ptr<CRule>  u_Rule4;
+     std::unique_ptr<CRule>  u_Rule5;
+
+
+//======================================================================================================/
+// Declare objects implementing knowledge-base for chiller
+//----------------------------------------------------------------------------------------
+// Declare "Hypo 1" through "Hypo 15"
+
+      std::unique_ptr<CHypo>   u_Hypo1;
+      std::unique_ptr<CHypo>   u_Hypo2;
+      std::unique_ptr<CHypo>   u_Hypo3;
+      std::unique_ptr<CHypo>   u_Hypo4;
+      std::unique_ptr<CHypo>   u_Hypo5;
+
+//----------------------------------------------------------------------------------------
+// Declare "Evid 1" through "Evid 14"
+
+      std::unique_ptr<CEvid>   u_Evid1;
+      std::unique_ptr<CEvid>   u_Evid2;
+      std::unique_ptr<CEvid>   u_Evid3;
+      std::unique_ptr<CEvid>   u_Evid4;
+      std::unique_ptr<CEvid>   u_Evid5;
+
+
+//======================================================================================================/
+// Declare GUI Features
+
+      //std::unique_ptr<CFeatureFact>    u_GuiFeat01; // Initially, no chlr dashboard (Feature objects)
+ 
+};
+
+// End of CTool_tes_ibal declaration
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // Declare a concrete subclass for single-duct AHU tool
 
@@ -77,8 +355,9 @@ class CTool_ahu_ibal : public ATool {
    public:
     // Methods
 
-      CTool_ahu_ibal(   CDomain&,
-                        EDataLabel,
+      CTool_ahu_ibal(   EUnitSystem,
+                        CDomain&,
+                        EDataLabel,             // ahu own label
                         ERealName,              // ahu own name
                         ERealName,              // antecedent chw plant name
                         ERealName,              // antecedent hw plant name
@@ -92,7 +371,7 @@ class CTool_ahu_ibal : public ATool {
 
    private:
 
-      std::unique_ptr<CSubj_ahu_sdvr> u_Subject;
+      std::unique_ptr<CSubj_ahu_ibal> u_Subject;
 
       std::unique_ptr<CPointAnalog> u_Psas;  // Input Channel 0, zero-based to match vector indices
       std::unique_ptr<CPointAnalog> u_Tao;   // Decl order must agree with order of data in push-in vec
@@ -110,6 +389,8 @@ class CTool_ahu_ibal : public ATool {
       std::unique_ptr<CFormula>     u_fracOA;
       std::unique_ptr<CFormula>     u_maxTaoTar;
       std::unique_ptr<CFormula>     u_minTaoTar;
+
+      std::unique_ptr<CProcess>     u_Xtest; // Temporary to test Experior
 
       std::unique_ptr<CChartShewhart> u_TasShew;
       std::unique_ptr<CChartShewhart> u_TasSetptShew;
@@ -194,6 +475,8 @@ class CTool_ahu_ibal : public ATool {
 
       std::unique_ptr<CFactFromPoint> u_sysOcc;
       std::unique_ptr<CFactSustained> u_sysOccSus;
+
+      std::unique_ptr<CFactFromProcess> u_Xfact;    // Temporary to test Experior
 //======================================================================================================/
 // Declare facts from facts and any sustainers
 
@@ -291,22 +574,23 @@ class CTool_vav_ibal : public ATool {
    public:
     // Methods
 
-      CTool_vav_ibal( CDomain&,
-                      EDataLabel,
-                      ERealName,     // vav own name (real-world)
-                      ERealName,     // antecedent ahu name
-                      ERealName,     // antecedent hw plant name
-                      const CClockPerPort&,
-                      CSequence&,
-                      CController&,
-                      CView&,
-                      CPortOmni& );
+      CTool_vav_ibal(   EUnitSystem,
+                        CDomain&,
+                        EDataLabel,
+                        ERealName,     // vav own name (real-world)
+                        ERealName,     // antecedent ahu name
+                        ERealName,     // antecedent hw plant name
+                        const CClockPerPort&,
+                        CSequence&,
+                        CController&,
+                        CView&,
+                        CPortOmni& );
 
       ~CTool_vav_ibal( void );
 
    private:
 
-      std::unique_ptr<CSubj_vav_pihr> u_Subject;
+      std::unique_ptr<CSubj_vav_ibal> u_Subject;
 
       std::unique_ptr<CPointAnalog> u_Psai;     // Input Channel 0, zero-based to match vector indices
       std::unique_ptr<CPointAnalog> u_Tai;      // *** TBD that AHU points passed from an AHU object ***
@@ -499,6 +783,7 @@ class CApplication {
 
    private:
 
+      EUnitSystem                                     unitSys;
       std::unique_ptr<CDomain>                        u_Domain;
       std::unique_ptr<CClockPerPort>                  u_Clock;
       std::unique_ptr<CAgent>                         u_Agent;

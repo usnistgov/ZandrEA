@@ -1,0 +1,9 @@
+# gRPC stack:
+# grpcio = core lib;
+# grpcio-tools = protoc compiler to generate Py code from *.proto
+# protobuf = library to serialize/deserialize
+grpcio>=1.60.0
+grpcio-tools>=1.60.0
+protobuf>=4.25.0
+
+#Analytical stack

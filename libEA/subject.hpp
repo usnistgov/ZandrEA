@@ -70,6 +70,8 @@ class ASubject : public IGuiShadow {
       std::vector<NGuiKey>                ruleKitDisplayKeys;
       std::vector<Nzint_t>                uaiInUse_features;
       std::vector<Nzint_t>                sgiInUse_ruleKits;
+
+      const EUnitSystem                   unitSys;     
       const EDataLabel                    ownLabel;
       const ERealName                     ownName;
       Nzint_t                             nextSgiForCases;
@@ -81,7 +83,8 @@ class ASubject : public IGuiShadow {
       std::unique_ptr<CCaseKit> const     u_CaseKit;
  
    // Methods
-      ASubject(   CDomain&,
+      ASubject(   EUnitSystem,
+                  CDomain&,
                   EDataLabel,
                   ERealName );
 };
@@ -89,33 +92,35 @@ class ASubject : public IGuiShadow {
 //=====================================================================================================/
 // Concrete Subject class for (generic) VAV unit with pressure-independent control and hot-water reheat
 
-class CSubj_vav_pihr : public ASubject {
+class CSubj_vav_ibal : public ASubject {
 
    public:
    // Methods
 
-      CSubj_vav_pihr(   CDomain&,
-                        EDataLabel,
+      CSubj_vav_ibal(   EUnitSystem,
+                        CDomain&,
+                        EDataLabel,    // own label
                         ERealName,     // own name
                         ERealName,     // AHU name
-                        ERealName,     // HW plant name
-                        float,         // inchDiaDuct
-                        float,         // cfmAirRated
-                        float,         // gpmChwRated
-                        float );       // btuReheatRated
+                        ERealName,     // Reheat source name (electric or HW plant sim)
+                        float,         // duct diameter
+                        float,         // duct area
+                        float,         // air flow, rated
+                        float,         // reheat HW flow, rated (zero if electric RH)
+                        float );       // kW reheat, rated (zero if RH by HW plant sim)
 
-      ~CSubj_vav_pihr( void );
+      ~CSubj_vav_ibal( void );
 
    private:
 
    // Fields
       const ERealName      nameAntecedentAhu;
       const ERealName      nameAntecedentHwPlant;      
-      const float          inchDiaDuct;
-      const float          sqFtAirflow;
-      const float          cfmAirRated;
-      const float          gpmChwRated;
-      const float          btuReheatRated;
+      const float          diamDuct;
+      const float          areaAirflow;
+      const float          airFlowRated;
+      const float          hwFlowRated;
+      const float          kWReheatRated;
 
    // Methods
       ERealName            SayNameOfAntecedentAhu( void ) const;
@@ -129,30 +134,31 @@ class CSubj_vav_pihr : public ASubject {
 // Concrete Subject class for (generic) AHU that is single-duct, variable-volume, with terminal reheat
 
 
-class CSubj_ahu_sdvr : public ASubject {
+class CSubj_ahu_ibal : public ASubject {
 
    public:
    // Methods
 
-      CSubj_ahu_sdvr(   CDomain&,
-                        EDataLabel,
-                        ERealName,
+      CSubj_ahu_ibal(   EUnitSystem,
+                        CDomain&,
+                        EDataLabel,          // own label
+                        ERealName,           // own name
                         ERealName,           // CHW plant name
-                        ERealName,           // HW plant name
-                        float,               // cfmAirRated
-                        float,               // gpmChwRated
-                        float,               // kwPreheatRated
+                        ERealName,           // preheat source name
+                        float,               // air flow, rated
+                        float,               // CHW flow, rated
+                        float,               // kW preheat, rated
                         float );             // min fraction OA
 
-      ~CSubj_ahu_sdvr( void );
+      ~CSubj_ahu_ibal( void );
 
    private:
 
    // Fields
       const ERealName      nameAntecedentChwPlant;
       const ERealName      nameAntecedentHwPlant; 
-      const float          cfmAirRated;
-      const float          gpmChwRated;
+      const float          airFlowRated;
+      const float          chwFlowRated;
       const float          kwPreheatRated;
       const float          minFracOA;
 
@@ -163,6 +169,105 @@ class CSubj_ahu_sdvr : public ASubject {
       //void                 AttachOwnKnobs( CController& );   // Knobs for Subjects and Domain are TBD
 };
 
+
+//=====================================================================================================/
+// Concrete Subject class for IBAL chiller machine
+
+
+class CSubj_chlr_ibal : public ASubject {
+
+   public:
+   // Methods
+
+      CSubj_chlr_ibal(  EUnitSystem,
+                        CDomain&,
+                        EDataLabel,          // own  
+                        ERealName,           // own
+                        ERealName,           // CT name
+                        float,               // kW, rated ( = 3.517 x tons)
+                        float,               // evap chw flow, rated (Lpm)
+                        float );             // cond ctw flow, rated (Lpm)
+ 
+      ~CSubj_chlr_ibal( void );
+
+   private:
+
+   // Fields
+      const ERealName      nameAntecedentCT;
+      const float          kWRated;
+      const float          evapFlowRated;
+      const float          condFlowRated;
+
+   // Methods
+      ERealName            SayNameOfAntecedentCT( void ) const;
+      //void                 AttachOwnKnobs( CController& );   // Knobs for Subjects and Domain are TBD
+};
+
+//=====================================================================================================/
+// Concrete Subject class for IBAL thermal energy storage (TES) (i.e., ice) tank and ctrl valve
+
+
+class CSubj_tes_ibal : public ASubject {
+
+   public:
+   // Methods
+
+      CSubj_tes_ibal(   EUnitSystem,
+                        CDomain&,
+                        EDataLabel,          // own  
+                        ERealName,           // own
+                        ERealName,           // chw plant name
+                        float,               // kW-hours, rated ( = 3.517 x ton-hours)
+                        float );             // chw tube flow, rated
+ 
+      ~CSubj_tes_ibal( void );
+
+   private:
+
+   // Fields
+      const ERealName      nameAntecedentChwPlant;
+      const float          kWhRated;
+      const float          tubeFlowRated;
+
+   // Methods
+      ERealName            SayNameOfAntecedentChwPlant( void ) const;
+      //void                 AttachOwnKnobs( CController& );   // Knobs for Subjects and Domain are TBD
+};
+
+//=====================================================================================================/
+// Concrete Subject class for IBAL CHW plant (CHWP)
+// (i.e., primary loop around two antecedent chillers, itself antecedent to TES and AHUs)
+
+
+class CSubj_chwp_ibal : public ASubject {
+
+   public:
+   // Methods
+
+      CSubj_chwp_ibal(  EUnitSystem,
+                        CDomain&,
+                        EDataLabel,          // own  
+                        ERealName,           // own
+                        ERealName,           // chillerOne name
+                        ERealName,           // chillerTwo name
+                        float,               // total plant kW, rated ( = 3.517 x tons)
+                        float );             // pri loop CHW flow, rated
+ 
+      ~CSubj_chwp_ibal( void );
+
+   private:
+
+   // Fields
+      const ERealName      nameAntecedentChlrOne;
+      const ERealName      nameAntecedentChlrTwo;
+      const float          plantkWRated;
+      const float          loopFlowRated;
+
+   // Methods
+      ERealName            SayNameOfAntecedentChlrOne( void ) const;
+      ERealName            SayNameOfAntecedentChlrTwo( void ) const;
+      //void                 AttachOwnKnobs( CController& );   // Knobs for Subjects and Domain are TBD
+};
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 /*
@@ -206,6 +311,7 @@ class CDomain : public IGuiShadow {
       std::queue<std::string>                            unsaidAlertsFifo;
       EnergyPrices_t                                     energyPrices;
       const ERealName                                    domainName;
+   
 
 
 };

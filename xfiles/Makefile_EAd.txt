@@ -1,3 +1,10 @@
+#XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+# To allow EAd C++ src build and tests without involving Docker, this file resided in [root]/EAd/.
+#==================================================================================================C====5
+# CURDIR is a GNU Make built-in set to pwd existing in the context from which this Makefile was called.
+# Given that call is inside the Dockerfile appbuilder stage, context here is in that stage, not on host.
+#==================================================================================================C====5
+
 # These should all be inherited from the top level Makefile, but here are defaults just in case
 # (Remember that := can be overridden by variables passed in)
 HDF5_ROOT := $(CURDIR)/../HDF5
@@ -15,8 +22,8 @@ DEFS=-DPOSIX -DSTANDALONE
 #EALIBFILE=$(LIBDIR)/lib$(LIBNAME).a
 CXXOPTS=-Wno-comments
 
-# Boost libraries needed
-# (The actual link flags are generated below based on platform)
+# "BASE_***" merely lists which Boost libraries are needed
+# (The actual linker flags are generated below based on platform)
 BASE_BOOST_LIBS := system chrono thread program_options filesystem iostreams atomic
 BOOSTLIBPREFIX := boost_
 
@@ -78,12 +85,28 @@ recompile:	reinstall
 
 rebuild:	reinstall
 
+
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+# Two-way fork in path to an "ead" executable; either (a) ignore /ea/libEA/ or (b) build it and link it.
+#==================================================================================================C====5
+# Option (a) builds a limited, provisional "ead" for testing /ea/EAd/ code without /libEA/ code working. 
+
 ead:	$(LIBOBJS) $(OBJS)
 	$(CXX) $(LDFLAGS) $(OBJS) -o $@
+
+#==================================================================================================C====5
+# Option (b); src code in /libEA/ is built as a static library whose location the root Makefile accesses
+# when building its target $(EAD_EXES) (the fully complete "ead" executable).
 
 $(LIBOBJS):
 	$(MAKE) -C ../libEA
 
+# A rule with a non-phony target but no prereqs runs its recipe only if target (files) does not exist.
+# So, when target above is first hit, it calls $(MAKE) to change dir (-C flag) to ../libEA and run the
+# Makefile there. Since no target arg is given, Make lands at default (topmost), canonically, "all".
+
+
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
 #Don't create dependencies when we're cleaning, for instance
 ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
     #Chances are, these files don't exist.  GMake will create them and

@@ -208,7 +208,10 @@ enum class EPointName : unsigned int {
    Temperature_air_supply_setpt,
    Temperature_air_zone,
    Temperature_air_zone_setpt_clg,
-   Temperature_air_zone_setpt_htg
+   Temperature_air_zone_setpt_htg,
+   Temperature_glycol_leaving,
+   Temperature_glycol_leaving_setpt,
+   Temperature_water_leaving
 };
 
 

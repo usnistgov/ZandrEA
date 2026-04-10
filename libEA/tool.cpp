@@ -8,6 +8,9 @@
 
 #include "tool.hpp"           // brings along state.hpp and stateParts.hpp
 
+// *** REMOVE THESE upon updating their originals (i.e., no " *PX.* ) in the zandv project ***
+#include "customTypes.hpp"
+ 
 #include "agentTask.hpp"
 #include "case.hpp"
 #include "dataChannel.hpp"
@@ -18,11 +21,11 @@
 #include "mvc_ctrlr.hpp"
 #include "mvc_view.hpp"
 #include "portOmni.hpp"
+#include "process.hpp" // okay on linter error because of a dep that resolves only in Docker container
 
 #include "rule.hpp"
 #include "seqElement.hpp"
-#include "state.hpp"
-#include "subject.hpp"
+#include "subject.hpp" 
 #include "taskClock.hpp"
 #include "viewParts.hpp"
 #include "mvc_model.hpp"
@@ -33,7 +36,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // Tool Interface Implementation
 
-ATool::ATool(  CDomain& domainRef,           // registration as observer requires ref passed non-const
+ATool::ATool(  EUnitSystem unitSys,
+               CDomain& domainRef,  // registration as observer requires ref passed non-const
                EDataLabel label,             // passes through direct to Subject c-tor; not CTool info
                ERealName name,               // passes through direct to Subject c-tor; not CTool info
                const CClockPerPort& clockRef,   // const = enforced as read-only
@@ -51,9 +55,1206 @@ ATool::~ATool( void ) { /* empty d-tor */ }
 
 // End of Abstract Tool Definition
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
-// Start of AHU (concrete) Tool Definition
+// Start of Chiller (a concrete) Tool Definition
 
-CTool_ahu_ibal::CTool_ahu_ibal(  CDomain& domainRef,
+/* [un-comment chiller, TES, CHW Plant, and HW plant tools once code components are added to configure
+ALL points in IBAL]:
+
+CTool_chlr_ibal::CTool_chlr_ibal(   EUnitSystem unitSys,
+                                    CDomain& domainRef,
+                                    EDataLabel chlrLabel,
+                                    ERealName chlrName,
+                                    ERealName clgTwrName,
+                                    const CClockPerPort& clockRef,
+                                    CSequence& seq0Ref,
+                                    CController& ctrlrRef,
+                                    CView& viewRef,
+                                    CPortOmni& portRef )
+                                    :  ATool(unitSys,
+                                             domainRef,
+                                             chlrLabel,
+                                             chlrName, 
+                                             clockRef,
+                                             seq0Ref,
+                                             ctrlrRef,
+                                             viewRef,
+                                             portRef
+                                    ) {
+
+//======================================================================================================/
+// $$$ TBD to move these reassignments to ATool initialization list (i.e., learn smt ptr move-semantics)
+
+u_Subject = std::make_unique<CSubj_chlr_ibal>(
+               unitSys,
+               domainRef,
+               chlrLabel,
+               chlrName,
+               clgTwrName,
+               // TBD: move following params into a tool.cpp array passed thru CTool c-tor (TBD for all Subjects) 
+               17.0f,      // kW, rated
+               160.0f,     // evap CHW flow, rated (Lpm)
+               160.0f      // cond CTW flow, rated (Lpm)
+ 
+);
+
+
+u_RuleKit = std::make_unique<CRuleKit>(
+               seq0Ref,
+               *u_Subject,
+               EDataLabel::RuleKit, 
+               START_RULEKIT_SECSBETWEENTRAPS,
+               ctrlrRef
+);
+
+//======================================================================================================/
+// Point objects
+
+   u_Twl =          std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_temperature_water_out,
+                                                      EDataUnit::Temperature_degC,
+                                                      EDataRange::Analog_n18To49,
+                                                      EPlotGroup::GroupB,
+                                      // $$$ TBD to match enum below to actual BAS point list names $$$
+                                                      EPointName::Temperature_water_leaving,
+                                                      ctrlrRef );
+
+   u_Tgl =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_temperature_glycol_out,
+                                                      EDataUnit::Temperature_degC,
+                                                      EDataRange::Analog_n18To49,
+                                                      EPlotGroup::GroupB,
+                                                      EPointName::Temperature_glycol_leaving,
+                                                      ctrlrRef );
+
+   u_TglSetpt =        std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_temperature_glycol_out_setpt,
+                                                      EDataUnit::Temperature_degC,
+                                                      EDataRange::Analog_n18To49,
+                                                      EPlotGroup::GroupB,
+                                                      EPointName::Temperature_glycol_leaving_setpt,
+                                                      ctrlrRef );
+
+   u_Qwc =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_flowVolume_water,
+                                                      EDataUnit::FlowVolume_Lpm,
+                                                      EDataRange::Analog_zeroTo150,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+   
+   u_Qge =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_flowVolume_glycol,
+                                                      EDataUnit::FlowVolume_Lpm,
+                                                      EDataRange::Analog_zeroTo150,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_Prd =            std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_pressure_refrig_disch,
+                                                      EDataUnit::PressureGage_kPa,
+                                                      EDataRange::Analog_zeroTo3450,
+                                                      EPlotGroup::GroupA,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_Prs =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_pressure_refrig_suction,
+                                                      EDataUnit::PressureGage_kPa,
+                                                      EDataRange::Analog_zeroTo3450,
+                                                      EPlotGroup::GroupA,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_Wec =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_power_electric_chiller,
+                                                      EDataUnit::Power_kiloWatt,
+                                                      EDataRange::Analog_zeroTo40,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_Wep =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_power_electric_pump,
+                                                      EDataUnit::Power_kiloWatt,
+                                                      EDataRange::Analog_zeroTo40,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_TrLiq =            std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_temperature_refrig_liquid,
+                                                      EDataUnit::Temperature_degC,
+                                                      EDataRange::Analog_n18To49,
+                                                      EPlotGroup::GroupB,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_TrVap =           std::make_unique<CPointAnalog>( seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_temperature_refrig_vapor,
+                                                      EDataUnit::Temperature_degC,
+                                                      EDataRange::Analog_n18To49,
+                                                      EPlotGroup::GroupB,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+  u_PgPout =          std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_pressure_glycol_pumpOutlet,
+                                                      EDataUnit::PressureGage_kPa,
+                                                      EDataRange::Analog_n70To276,
+                                                      EPlotGroup::GroupC,
+                                      // $$$ TBD to match enum below to actual BAS point list names $$$
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_PgPin =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_pressure_glycol_pumpInlet,
+                                                      EDataUnit::PressureGage_kPa,
+                                                      EDataRange::Analog_n70To276,
+                                                      EPlotGroup::GroupC,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_Uvg =        std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_command_valve_glycol,
+                                                      EDataUnit::Ratio_percent,
+                                                      EDataRange::Analog_percent,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_Zvg =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_position_valve_glycol,
+                                                      EDataUnit::Ratio_percent,
+                                                      EDataRange::Analog_percent,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+   
+   u_Ups =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_command_fan_speed,
+                                                      EDataUnit::Ratio_percent,
+                                                      EDataRange::Analog_percent,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_BchlrEnable =           std::make_unique<CPointBinary>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_binary_chiller_enable,
+                                                      EDataLabel::Fact_direct_BchlrEnable,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+  u_BpumpOn =                std::make_unique<CPointBinary>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_binary_pump_on,
+                                                      EDataLabel::Fact_direct_BpumpOn,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+//======================================================================================================/
+// Formula objects
+
+
+//======================================================================================================/
+// Chart objects - Shewhart charts
+
+   u_TglShew =
+      std::make_unique<CChartShewhart>(seq0Ref, *u_Subject, u_Tgl.get(), ctrlrRef);
+
+   u_TglSetptShew =
+      std::make_unique<CChartShewhart>(seq0Ref, *u_Subject, u_TglSetpt.get(), ctrlrRef);
+//======================================================================================================/
+// Chart objects - tracking charts
+// float halfband = (+/-),  float warn = (units-of-x)-minutes over a reset
+
+   u_Tgl_VS_auto = std::make_unique<CChartTracking>(  seq0Ref,
+                                                      *u_Subject,
+                                                      u_Tgl.get(),
+                                                      u_TglShew.get(),
+                                                      INIT_MINDEFMAX_TRACKING_HALFBAND_DEGC_n18TO49,
+                                                      INIT_MINDEFMAX_TRACKING_WARN_DEGC_n18TO49,
+                                                      ctrlrRef );
+
+
+   u_Tgl_VS_setpt =     std::make_unique<CChartTracking>( seq0Ref,
+                                                         *u_Subject,
+                                                         u_Tgl.get(),
+                                                         u_TglShew.get(),
+                                                         u_TglSetpt.get(),
+                                                         u_TglSetptShew.get(),
+                                                         INIT_MINDEFMAX_TRACKING_HALFBAND_DEGC_n18TO49,
+                                                         INIT_MINDEFMAX_TRACKING_WARN_DEGC_n18TO49,
+                                                         ctrlrRef );
+
+ //======================================================================================================/
+// Fact objects based on charts - Shewhart charts 
+
+   u_TglSteady =
+      std::make_unique< CFactFromChart<CChartShewhart, PtrShewGetr_t> >(  seq0Ref,
+                                                                           *u_Subject,
+                                                                           EDataLabel::Fact_data_TasSteady,
+                                                                           *u_TglShew,
+                                                                           &CChartShewhart::IsSteady );
+
+   u_TglSetptSteady =
+      std::make_unique< CFactFromChart<CChartShewhart, PtrShewGetr_t> >( seq0Ref,
+                                                                           *u_Subject,
+                                                                           EDataLabel::Fact_data_TasSetptSteady,
+                                                                           *u_TglSetptShew,
+                                                                           &CChartShewhart::IsSteady );
+
+   u_runSteadySus =  std::make_unique<CFactSustained>(
+                       seq0Ref,
+                       *u_Subject,
+                       EDataLabel::Fact_sustained_runSteady,
+                       *u_runSteady,
+                       ESustainedAs::True,
+                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_60,
+                       ctrlrRef );
+
+//'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Fact objects based on charts - tracking charts
+
+   u_TglHunting =
+      std::make_unique< CFactFromChart<CChartTracking, PtrTrakGetr_t> >( seq0Ref,
+                                                                           *u_Subject,
+                                                                           EDataLabel::Fact_data_QasHunting,
+                                                                           *u_Tgl_VS_auto,
+                                                                           &CChartTracking::IsHunting );
+
+
+//======================================================================================================/ 
+// CFactRelatingLeftToParam
+
+   u_UvgFull = std::make_unique<  CFactRelatingLeftToParam<
+                                    CPointAnalog,
+                                    PtrRainGetr_t,
+                                    Left_EQ_Right>
+                                 >( seq0Ref,
+                                    *u_Subject,
+                                    EDataLabel::Fact_para_UvgFull,
+                                    u_Uvg.get(),
+                                    &CRainAnalog::NowY,
+                                    FIXED_PARAM_PERCENT_FULL,
+                                    INIT_MINDEFMAX_RELATE_HYSTER_ANYPERCENT,
+                                    INIT_MINDEFMAX_RELATE_SLACK_ANYPERCENT,
+                                    ctrlrRef );
+
+   u_WecDraw = std::make_unique<  CFactRelatingLeftToParam<
+                                    CPointAnalog,
+                                    PtrRainGetr_t,
+                                    Left_GT_Right>
+                                 >( seq0Ref,
+                                    *u_Subject,
+                                    EDataLabel::Fact_para_WecDraw,
+                                    u_Wec.get(),
+                                    &CRainAnalog::NowY,
+                                    0.40f,
+                                    INIT_MINDEFMAX_RELATE_HYSTER_ALLZEROS,
+                                    INIT_MINDEFMAX_RELATE_SLACK_ALLZEROS,
+                                    ctrlrRef );
+
+   u_QgeLowOOR = std::make_unique<  CFactRelatingLeftToParam<
+                                       CPointAnalog,
+                                       PtrRainGetr_t,
+                                       Left_LT_Right>
+                                    >( seq0Ref,
+                                       *u_Subject,
+                                       EDataLabel::Fact_para_QgeLowOOR,
+                                       u_Qge.get(),
+                                       &CRainAnalog::NowY,
+                                       56.8f,
+                                       INIT_MINDEFMAX_RELATE_HYSTER_ALLZEROS,
+                                       INIT_MINDEFMAX_RELATE_SLACK_ALLZEROS,
+                                       ctrlrRef );
+
+   u_PrsLowOOR = std::make_unique<  CFactRelatingLeftToParam<
+                                       CPointAnalog,
+                                       PtrRainGetr_t,
+                                       Left_LT_Right>
+                                    >( seq0Ref,
+                                       *u_Subject,
+                                       EDataLabel::Fact_para_PrsLowOOR,
+                                       u_Prs.get(),
+                                       &CRainAnalog::NowY,
+                                       344.8f,
+                                       INIT_MINDEFMAX_RELATE_HYSTER_ALLZEROS,
+                                       INIT_MINDEFMAX_RELATE_SLACK_ALLZEROS,
+                                       ctrlrRef );
+
+   u_PrdHighOOR = std::make_unique<  CFactRelatingLeftToParam<
+                                       CPointAnalog,
+                                       PtrRainGetr_t,
+                                       Left_GT_Right>
+                                    >( seq0Ref,
+                                       *u_Subject,
+                                       EDataLabel::Fact_para_PrdHighOOR,
+                                       u_Prd.get(),
+                                       &CRainAnalog::NowY,
+                                       3400.0f,
+                                       INIT_MINDEFMAX_RELATE_HYSTER_ALLZEROS,
+                                       INIT_MINDEFMAX_RELATE_SLACK_ALLZEROS,
+                                       ctrlrRef );
+
+
+
+//======================================================================================================/ 
+// CFactRelatingLeftToRight
+// EQ specializations
+
+   u_Tgl_EQ_setpt = std::make_unique<  CFactRelatingLeftToRight<
+                                          CPointAnalog,
+                                          PtrRainGetr_t,
+                                          Left_EQ_Right,
+                                          CPointAnalog,
+                                          PtrRainGetr_t>
+                                          >( seq0Ref,
+                                             *u_Subject,
+                                             EDataLabel::Fact_data_Tgl_EQ_setpt,
+                                             u_Tgl.get(),
+                                             &CRainAnalog::NowY,
+                                             u_TglSetpt.get(),
+                                             &CRainAnalog::NowY,
+                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
+                                             INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                             ctrlrRef );
+
+
+
+//======================================================================================================/
+// Define Fact objects for occupancy; current and sustained 
+
+   // "system" (ahu) occupied means at least one of its zones being occupied
+   u_chlrEnable = std::make_unique<CFactFromPoint>( 
+                      seq0Ref,
+                     *u_Subject,
+                     EDataLabel::Fact_direct_BchlrEnable,
+                     *u_BchlrEnable); // Direct from a CPointBinary object that reads a BAS channel
+
+ 
+
+//======================================================================================================/
+// Define CFactFromFacts objects
+
+   std::vector<AFact*> operands(0);
+   operands.reserve(6);
+   std::function<bool(void)>LambdaToCopy( [&]() -> bool { return NaNBOOL; } );
+
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// readyForUnitOn
+
+   operands.clear();
+   operands.push_back( u_UvgFull.get() );
+   operands.push_back( u_pumpOn.get() );  // ** TBD add cooling tower check, also new Fact for Qge check
+
+  LambdaToCopy =  (  [&]() -> bool {
+                        return ( u_UvgFull->Now() &&
+                                 u_pumpOn->Now() );
+                     } );
+
+   u_unitOn =  std::make_unique<CFactFromFacts>(
+                              seq0Ref,
+                              *u_Subject,
+                              EDataLabel::Fact_subject_readyForUnitOn,
+                              operands,
+                              LambdaToCopy );
+ 
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// unitOn
+
+   operands.clear();
+   operands.push_back( u_chlrEnable.get() );
+   operands.push_back( u_WecDraw.get() );
+
+  LambdaToCopy =  (  [&]() -> bool {
+                        return ( u_chlrEnable->Now() &&
+                                 u_WecDraw->Now() );
+                     } );
+
+   u_unitOn =  std::make_unique<CFactFromFacts>(
+                              seq0Ref,
+                              *u_Subject,
+                              EDataLabel::Fact_subject_unitOn,
+                              operands,
+                              LambdaToCopy );
+ 
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// runSteady, current and sustained
+
+   operands.clear();
+   operands.push_back( u_unitOn.get() );
+   operands.push_back( u_TglSetptSteady.get() );
+  
+   LambdaToCopy = (  [&]() -> bool {
+                        return ( u_unitOn->Now() && 
+                                 u_TglSetptSteady->Now() );
+                     } );
+
+   u_runSteady =  std::make_unique<CFactFromFacts>(
+                          seq0Ref,
+                          *u_Subject,
+                          EDataLabel::Fact_subject_runSteady,
+                          operands,
+                          LambdaToCopy );
+
+   u_runSteadySus =  std::make_unique<CFactSustained>(
+                       seq0Ref,
+                       *u_Subject,
+                       EDataLabel::Fact_sustained_runSteady,
+                       *u_runSteady,
+                       ESustainedAs::True,
+                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_15,
+                       ctrlrRef );
+
+
+//VVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVVV
+// Instantiate Knowledge Base
+//======================================================================================================/
+// first - instantiate Rule objects
+
+   std::vector<AFact*> operands_if(0);
+   std::vector<AFact*> operands_then(0);
+   std::function<bool(void)> LambdaToCopy_if( [&]() -> bool { return NaNBOOL; } );
+   std::function<bool(void)> LambdaToCopy_then( [&]() -> bool { return NaNBOOL; } );
+
+//'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Rule 1
+
+   operands_if.push_back( u_chlrEnable.get() );
+
+   operands_then.push_back( u_readyForUnitOn.get() );
+
+   LambdaToCopy_if = ( [&]() -> bool {
+                        return ( u_chlrEnable->Now() );
+                     } );
+
+   LambdaToCopy_then =  ( [&]() -> bool {
+                           return ( u_readyForUnitOn->Now() );
+                        } );
+
+   u_Rule1 = std::make_unique<CRule>(  ctrlrRef,
+                                       *u_RuleKit,
+                                       static_cast<Nzint_t>(1u),
+                                       EAlertMsg::Rule_chlr_1_focus,
+                                       EAlertMsg::Rule_chlr_1_if,
+                                       EAlertMsg::Rule_chlr_1_then,
+                                       EAlertMsg::Rule_chlr_1_onFail,
+                                       operands_if,
+                                       operands_then,
+                                       LambdaToCopy_if,
+                                       LambdaToCopy_then,
+                                       FIXED_RULE_UNITOUTPUT_PINNED );
+ 
+//'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Rule 2
+
+   operands_if.clear();
+   operands_then.clear();
+
+   operands_if.push_back( u_runSteadySus.get() );
+
+   operands_then.push_back( u_TglSteady.get() );
+   operands_then.push_back( u_Tgl_EQ_setpt.get() );
+
+   LambdaToCopy_if = ( [&]() -> bool {
+                        return ( u_runSteadySus->Now() );
+                        }
+   );
+
+   LambdaToCopy_then =  ( [&]() -> bool {
+                           return ( u_TglSteady->Now() && 
+                                    u_Tgl_EQ_setpt->Now() );
+                           }
+   );
+
+   u_Rule2 = std::make_unique<CRule>(  ctrlrRef,
+                                       *u_RuleKit,
+                                       static_cast<Nzint_t>(2u),
+                                       EAlertMsg::Rule_chlr_2_focus,
+                                       EAlertMsg::Rule_chlr_2_if,
+                                       EAlertMsg::Rule_chlr_2_then,
+                                       EAlertMsg::Rule_chlr_2_onFail,
+                                       operands_if,
+                                       operands_then,
+                                       LambdaToCopy_if,
+                                       LambdaToCopy_then,
+                                       FIXED_RULE_UNITOUTPUT_PINNED );
+
+ 
+//'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Rule 3
+
+   operands_if.clear();
+   operands_then.clear();
+
+   operands_if.push_back( u_unitOn.get() );
+
+   operands_then.push_back( u_QgeLowOOR.get() );
+
+   LambdaToCopy_if = ( [&]() -> bool {
+                        return ( u_unitOn->Now() );
+                     } );
+
+   LambdaToCopy_then =  ( [&]() -> bool {
+                           return ( ! u_QgeLowOOR->Now() );
+                        } );
+
+   u_Rule3 = std::make_unique<CRule>(  ctrlrRef,
+                                       *u_RuleKit,
+                                       static_cast<Nzint_t>(3u),
+                                       EAlertMsg::Rule_chlr_3_focus,
+                                       EAlertMsg::Rule_chlr_3_if,
+                                       EAlertMsg::Rule_chlr_3_then,
+                                       EAlertMsg::Rule_chlr_3_onFail,
+                                       operands_if,
+                                       operands_then,
+                                       LambdaToCopy_if,
+                                       LambdaToCopy_then,
+                                       FIXED_RULE_UNITOUTPUT_PINNED );
+
+ 
+//'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Rule 4
+
+   operands_if.clear();
+   operands_then.clear();
+
+   operands_if.push_back( u_unitOn.get() );
+
+   operands_then.push_back( u_PrdHighOOR.get() );
+
+   LambdaToCopy_if = ( [&]() -> bool {
+                        return ( u_unitOn->Now() );
+                     } );
+
+   LambdaToCopy_then =  ( [&]() -> bool {
+                           return ( ! u_PrdHighOOR->Now() );
+                        } );
+
+   u_Rule3 = std::make_unique<CRule>(  ctrlrRef,
+                                       *u_RuleKit,
+                                       static_cast<Nzint_t>(3u),
+                                       EAlertMsg::Rule_chlr_4_focus,
+                                       EAlertMsg::Rule_chlr_4_if,
+                                       EAlertMsg::Rule_chlr_4_then,
+                                       EAlertMsg::Rule_chlr_4_onFail,
+                                       operands_if,
+                                       operands_then,
+                                       LambdaToCopy_if,
+                                       LambdaToCopy_then,
+                                       FIXED_RULE_UNITOUTPUT_PINNED );
+
+//'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Rule 5
+
+   operands_if.clear();
+   operands_then.clear();
+
+   operands_if.push_back( u_unitOn.get() );
+
+   operands_then.push_back( u_PrsLowOOR.get() );
+
+   LambdaToCopy_if = ( [&]() -> bool {
+                        return ( u_unitOn->Now() );
+                     } );
+
+   LambdaToCopy_then =  ( [&]() -> bool {
+                           return ( ! u_PrsLowOOR->Now() );
+                        } );
+
+   u_Rule3 = std::make_unique<CRule>(  ctrlrRef,
+                                       *u_RuleKit,
+                                       static_cast<Nzint_t>(3u),
+                                       EAlertMsg::Rule_chlr_5_focus,
+                                       EAlertMsg::Rule_chlr_5_if,
+                                       EAlertMsg::Rule_chlr_5_then,
+                                       EAlertMsg::Rule_chlr_5_onFail,
+                                       operands_if,
+                                       operands_then,
+                                       LambdaToCopy_if,
+                                       LambdaToCopy_then,
+                                       FIXED_RULE_UNITOUTPUT_PINNED );
+
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Instantiate Hypotheses objects
+
+   u_Hypo1 = std::make_unique<CHypo>(1u, "Spurious failure on rule. Adjust parameters in rule operands.");
+   u_Hypo2 = std::make_unique<CHypo>(2u, "Glycol temperature sensor bad.");
+   u_Hypo3 = std::make_unique<CHypo>(3u, "Chiller refrigeration circuit or ECM trouble.");
+   u_Hypo4 = std::make_unique<CHypo>(4u, "Heat sink trouble.");
+   u_Hypo5 = std::make_unique<CHypo>(5u, "Glycol circuit trouble.");
+
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Instantiate Evidence objects
+
+   u_Evid1 = std::make_unique<CEvid>(1u, "Does case appear spurious, a 'false alarm'? (e.g., Are zone conditions okay?)");
+   u_Evid2 = std::make_unique<CEvid>(2u, "Does glycol temp. signal agree adequately with a ref. measurement?");
+   u_Evid3 = std::make_unique<CEvid>(3u, "Does ECM return an error message?");
+   u_Evid4 = std::make_unique<CEvid>(4u, "Is CTW thermal capacity sufficient for full load?");
+   u_Evid5 = std::make_unique<CEvid>(5u, "Is CHW (glycol solution) thermal capacity sufficient for full load?");
+
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Associate Hypos to Rules (and, thus, to the implied CRuleKit object)
+
+   u_Rule1->AssociateHypo( u_Hypo1.get() );
+ 
+   u_Rule2->AssociateHypo( u_Hypo1.get() );
+   u_Rule2->AssociateHypo( u_Hypo2.get() );
+ 
+   u_Rule3->AssociateHypo( u_Hypo1.get() );
+   u_Rule3->AssociateHypo( u_Hypo3.get() ); 
+
+   u_Rule4->AssociateHypo( u_Hypo1.get() );
+   u_Rule4->AssociateHypo( u_Hypo4.get() );
+
+   u_Rule5->AssociateHypo( u_Hypo1.get() );
+   u_Rule5->AssociateHypo( u_Hypo5.get() );
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Associate Evids to Hypos : u_Hypo->AssociateEvid( p_Evid, direct?, invertible? );
+
+   u_Hypo1->AssociateEvid( u_Evid1.get(), true, true );
+   u_Hypo2->AssociateEvid( u_Evid2.get(), false, true );
+   u_Hypo3->AssociateEvid( u_Evid3.get(), false, true );
+   u_Hypo4->AssociateEvid( u_Evid4.get(), false, true );
+   u_Hypo5->AssociateEvid( u_Evid5.get(), false, true );
+
+
+
+// *** !!! DON'T FORGET ME: !!! ***
+
+   u_RuleKit->FinalizeRuleKitAndBuildKbase();
+
+//======================================================================================================/
+// Instantiate GUI Features (none)
+
+
+}  // End of Constructor
+
+//=======================================================================================================/
+// Destructor
+
+CTool_chlr_ibal::~CTool_chlr_ibal( void ) { }
+
+
+// End of Chiller Tool Definition
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+// Start of Thermal Energy Storage (TES, a.k.a. "ice tank") Tool Definition
+
+CTool_tes_ibal::CTool_tes_ibal(  EUnitSystem unitSys,
+                                 CDomain& domainRef,
+                                 EDataLabel chlrLabel,
+                                 ERealName chlrName,
+                                 ERealName clgTwrName,
+                                 const CClockPerPort& clockRef,
+                                 CSequence& seq0Ref,
+                                 CController& ctrlrRef,
+                                 CView& viewRef,
+                                 CPortOmni& portRef )
+                                 :  ATool(   unitSys,
+                                             domainRef,
+                                             chlrLabel,
+                                             chlrName, 
+                                             clockRef,
+                                             seq0Ref,
+                                             ctrlrRef,
+                                             viewRef,
+                                             portRef
+                                    ) {
+
+//======================================================================================================/
+// $$$ TBD to move these reassignments to ATool initialization list (i.e., learn smt ptr move-semantics)
+
+u_Subject = std::make_unique<CSubj_tes_ibal>(
+               unitSys,
+               domainRef,
+               chlrLabel,
+               chlrName,
+               clgTwrName,
+               // TBD: move following params into a tool.cpp array passed thru CTool c-tor (TBD for all Subjects) 
+               17.0f,      // kW, rated
+               160.0f,     // evap CHW flow, rated (Lpm)
+               160.0f      // cond CTW flow, rated (Lpm)
+ 
+);
+
+
+u_RuleKit = std::make_unique<CRuleKit>(
+               seq0Ref,
+               *u_Subject,
+               EDataLabel::RuleKit, 
+               START_RULEKIT_SECSBETWEENTRAPS,
+               ctrlrRef
+);
+
+//======================================================================================================/
+// Point objects
+
+
+   u_Tgi =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_temperature_glycol_in,
+                                                      EDataUnit::Temperature_degC,
+                                                      EDataRange::Analog_n18To49,
+                                                      EPlotGroup::GroupB,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+
+
+   u_Tgo =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_temperature_glycol_out,
+                                                      EDataUnit::Temperature_degC,
+                                                      EDataRange::Analog_n18To49,
+                                                      EPlotGroup::GroupB,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_QgTes =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_flowVolume_glycol,
+                                                      EDataUnit::FlowVolume_Lpm,
+                                                      EDataRange::Analog_zeroTo150,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+
+   u_UvTes =        std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_command_valve_glycol,
+                                                      EDataUnit::Ratio_percent,
+                                                      EDataRange::Analog_percent,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+   u_ZvTes =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_position_valve_glycol,
+                                                      EDataUnit::Ratio_percent,
+                                                      EDataRange::Analog_percent,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+   
+   u_Xice =           std::make_unique<CPointAnalog>(  seq0Ref,
+                                                      *u_Subject,
+                                                      EDataLabel::Point_transducer_iceLevel,
+                                                      EDataUnit::Ratio_percent,
+                                                      EDataRange::Analog_percent,
+                                                      EPlotGroup::Free,
+                                                      EPointName::Undefined,
+                                                      ctrlrRef );
+
+
+//======================================================================================================/
+// Formula objects
+
+
+//======================================================================================================/
+// Chart objects - Shewhart charts
+
+   u_QgTesShew =
+      std::make_unique<CChartShewhart>(seq0Ref, *u_Subject, u_QgTes.get(), ctrlrRef);
+
+   u_XiceShew =
+      std::make_unique<CChartShewhart>(seq0Ref, *u_Subject, u_Xice.get(), ctrlrRef);
+
+
+//======================================================================================================/
+// Chart objects - tracking charts
+// float halfband = (+/-),  float warn = (units-of-x)-minutes over a reset
+
+   u_Xice_VS_auto = std::make_unique<CChartTracking>(  seq0Ref,
+                                                      *u_Subject,
+                                                      u_Xice.get(),
+                                                      u_XiceShew.get(),
+                                                      INIT_MINDEFMAX_TRACKING_HALFBAND_ANYPERCENT,
+                                                      INIT_MINDEFMAX_TRACKING_WARN_ANYPERCENT,
+                                                      ctrlrRef );
+
+
+//======================================================================================================/
+// Fact objects based on charts - Shewhart charts 
+
+   u_QgTesSteady =
+      std::make_unique< CFactFromChart<CChartShewhart, PtrShewGetr_t> >(  seq0Ref,
+                                                                           *u_Subject,
+                                                                           EDataLabel::Fact_data_QgSteady,
+                                                                           *u_QgTesShew,
+                                                                           &CChartShewhart::IsSteady );
+
+
+//'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Fact objects based on charts - tracking charts
+
+   u_XiceRising =
+      std::make_unique< CFactFromChart<CChartTracking, PtrTrakGetr_t> >( seq0Ref,
+                                                                           *u_Subject,
+                                                                           EDataLabel::Fact_data_XiceRising,
+                                                                           *u_Xice_VS_auto,
+                                                                           &CChartTracking::IsRising );
+
+   u_XiceFalling =
+      std::make_unique< CFactFromChart<CChartTracking, PtrTrakGetr_t> >( seq0Ref,
+                                                                           *u_Subject,
+                                                                           EDataLabel::Fact_data_XiceFalling,
+                                                                           *u_Xice_VS_auto,
+                                                                           &CChartTracking::IsFalling );
+
+
+//======================================================================================================/ 
+// CFactRelatingLeftToParam
+
+   u_TgiAtChargeTemp = std::make_unique<  CFactRelatingLeftToParam<
+                                    CPointAnalog,
+                                    PtrRainGetr_t,
+                                    Left_EQ_Right>
+                                 >( seq0Ref,
+                                    *u_Subject,
+                                    EDataLabel::Fact_para_TgiAtChargeTemp,
+                                    u_Xice.get(),
+                                    &CRainAnalog::NowY,
+                                    INIT_HVACPARAM_TES_PRITEMPTOMAKEICE_DEGC,
+                                    INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
+                                    INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_ZERO,
+                                    ctrlrRef );
+
+   u_XiceZero = std::make_unique<  CFactRelatingLeftToParam<
+                                    CPointAnalog,
+                                    PtrRainGetr_t,
+                                    Left_EQ_Right>
+                                 >( seq0Ref,
+                                    *u_Subject,
+                                    EDataLabel::Fact_para_XiceZero,
+                                    u_Xice.get(),
+                                    &CRainAnalog::NowY,
+                                    FIXED_PARAM_PERCENT_SHUT,
+                                    INIT_MINDEFMAX_RELATE_HYSTER_ANYPERCENT,
+                                    INIT_MINDEFMAX_RELATE_SLACK_ANYPERCENT,
+                                    ctrlrRef );
+
+   u_XiceZeroSus =  std::make_unique<CFactSustained>(
+                       seq0Ref,
+                       *u_Subject,
+                       EDataLabel::Fact_sustained_XiceZero,
+                       *u_XiceZero,
+                       ESustainedAs::True,
+                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_15,
+                       ctrlrRef );
+
+   u_QgTesZero = std::make_unique<  CFactRelatingLeftToParam<
+                                    CPointAnalog,
+                                    PtrRainGetr_t,
+                                    Left_EQ_Right>
+                                 >( seq0Ref,
+                                    *u_Subject,
+                                    EDataLabel::Fact_para_QgTesZero,
+                                    u_QgTes.get(),
+                                    &CRainAnalog::NowY,
+                                    FIXED_PARAM_ZERO,
+                                    INIT_MINDEFMAX_RELATE_HYSTER_LPM_0TO150,
+                                    INIT_MINDEFMAX_RELATE_SLACK_LPM_0TO150,
+                                    ctrlrRef );
+
+   u_QgTesNonzeroSus =  std::make_unique<CFactSustained>(
+                       seq0Ref,
+                       *u_Subject,
+                       EDataLabel::Fact_sustained_UvcShut,
+                       *u_QgTesZero,
+                       ESustainedAs::False,
+                       INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_30,
+                       ctrlrRef );
+
+
+
+//======================================================================================================/ 
+// CFactRelatingLeftToRight
+// EQ specializations
+
+   u_Tgo_GT_Tgi = std::make_unique<  CFactRelatingLeftToRight<
+                                          CPointAnalog,
+                                          PtrRainGetr_t,
+                                          Left_GT_Right,
+                                          CPointAnalog,
+                                          PtrRainGetr_t>
+                                          >( seq0Ref,
+                                             *u_Subject,
+                                             EDataLabel::Fact_data_Tgo_GT_Tgi,
+                                             u_Tgo.get(),
+                                             &CRainAnalog::NowY,
+                                             u_Tgi.get(),
+                                             &CRainAnalog::NowY,
+                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
+                                             INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                             ctrlrRef );
+
+   u_Tgo_LT_Tgi = std::make_unique<  CFactRelatingLeftToRight<
+                                          CPointAnalog,
+                                          PtrRainGetr_t,
+                                          Left_LT_Right,
+                                          CPointAnalog,
+                                          PtrRainGetr_t>
+                                          >( seq0Ref,
+                                             *u_Subject,
+                                             EDataLabel::Fact_data_Tgo_LT_Tgi,
+                                             u_Tgo.get(),
+                                             &CRainAnalog::NowY,
+                                             u_Tgi.get(),
+                                             &CRainAnalog::NowY,
+                                             INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49,
+                                             INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY,
+                                             ctrlrRef );
+
+
+//======================================================================================================/
+// Define Fact objects for occupancy; current and sustained 
+
+//======================================================================================================/
+// Define CFactFromFacts objects
+
+   std::vector<AFact*> operands(0);
+   operands.reserve(6);
+   std::function<bool(void)>LambdaToCopy( [&]() -> bool { return NaNBOOL; } );
+
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// iceBeingMade
+
+   operands.clear();
+   operands.push_back( u_QgTesNonzeroSus.get() );
+   operands.push_back( u_XiceRising.get() );
+
+  LambdaToCopy =  (  [&]() -> bool {
+                        return ( u_QgTesNonzeroSus->Now() &&
+                                 u_XiceRising->Now() );
+                     } );
+
+   u_iceBeingMade =  std::make_unique<CFactFromFacts>(
+                              seq0Ref,
+                              *u_Subject,
+                              EDataLabel::Fact_subj_tes_iceBeingMade,
+                              operands,
+                              LambdaToCopy );
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// iceBeingUsed
+
+   operands.clear();
+   operands.push_back( u_QgTesNonzeroSus.get() );
+   operands.push_back( u_XiceFalling.get() );
+
+  LambdaToCopy =  (  [&]() -> bool {
+                        return ( u_QgTesNonzeroSus->Now() &&
+                                 u_XiceFalling->Now() );
+                     } );
+
+   u_iceBeingMade =  std::make_unique<CFactFromFacts>(
+                              seq0Ref,
+                              *u_Subject,
+                              EDataLabel::Fact_subj_tes_iceBeingUsed,
+                              operands,
+                              LambdaToCopy );
+ 
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// tesAbsorbingHeat
+
+   operands.clear();
+   operands.push_back( u_QgTesZero.get() );
+   operands.push_back( u_Tgo_LT_Tgi.get() );
+
+  LambdaToCopy =  (  [&]() -> bool {
+                        return ( ( ! u_QgTesZero->Now() ) &&
+                                 u_Tgo_LT_Tgi->Now() );
+                     } );
+
+   u_tesAbsorbingHeat =  std::make_unique<CFactFromFacts>(
+                              seq0Ref,
+                              *u_Subject,
+                              EDataLabel::Fact_subj_tes_tesAbsorbingHeat,
+                              operands,
+                              LambdaToCopy );
+ 
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// tesReleasingHeat
+
+   operands.clear();
+   operands.push_back( u_QgTesZero.get() );
+   operands.push_back( u_Tgo_GT_Tgi.get() );
+
+  LambdaToCopy =  (  [&]() -> bool {
+                        return ( ( ! u_QgTesZero->Now() ) &&
+                                 u_Tgo_GT_Tgi->Now() );
+                     } );
+
+   u_tesReleasingHeat =  std::make_unique<CFactFromFacts>(
+                              seq0Ref,
+                              *u_Subject,
+                              EDataLabel::Fact_subj_tes_tesReleasingHeat,
+                              operands,
+                              LambdaToCopy );
+ 
+
+//VVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVVV
+// Instantiate Knowledge Base
+//======================================================================================================/
+// first - instantiate Rule objects
+
+   std::vector<AFact*> operands_if(0);
+   std::vector<AFact*> operands_then(0);
+   std::function<bool(void)> LambdaToCopy_if( [&]() -> bool { return NaNBOOL; } );
+   std::function<bool(void)> LambdaToCopy_then( [&]() -> bool { return NaNBOOL; } );
+
+//'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Rule 1
+
+   operands_if.push_back( u_tesReleasingHeat.get() );
+
+   operands_then.push_back( u_XiceZeroSus.get() );
+
+   LambdaToCopy_if = ( [&]() -> bool {
+                        return ( u_tesReleasingHeat->Now() );
+                     } );
+
+   LambdaToCopy_then =  ( [&]() -> bool {
+                           return (  ! u_XiceZeroSus->Now() );
+                        } );
+
+   u_Rule1 = std::make_unique<CRule>(  ctrlrRef,
+                                       *u_RuleKit,
+                                       static_cast<Nzint_t>(1u),
+                                       EAlertMsg::Rule_chlr_1_focus,
+                                       EAlertMsg::Rule_chlr_1_if,
+                                       EAlertMsg::Rule_chlr_1_then,
+                                       EAlertMsg::Rule_chlr_1_onFail,
+                                       operands_if,
+                                       operands_then,
+                                       LambdaToCopy_if,
+                                       LambdaToCopy_then,
+                                       FIXED_RULE_UNITOUTPUT_PINNED );
+ 
+//'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Rule 2
+
+   operands_if.clear();
+   operands_then.clear();
+
+   operands_if.push_back( u_QgTesZero.get() );
+
+   operands_then.push_back( u_TgiAtChargeTemp.get() );
+ 
+
+   LambdaToCopy_if = ( [&]() -> bool {
+                        return ( ! u_QgTesZero->Now() );
+                        }
+   );
+
+   LambdaToCopy_then =  ( [&]() -> bool {
+                           return ( u_TgiAtChargeTemp->Now() );
+                           }
+   );
+
+   u_Rule2 = std::make_unique<CRule>(  ctrlrRef,
+                                       *u_RuleKit,
+                                       static_cast<Nzint_t>(2u),
+                                       EAlertMsg::Rule_chlr_2_focus,
+                                       EAlertMsg::Rule_chlr_2_if,
+                                       EAlertMsg::Rule_chlr_2_then,
+                                       EAlertMsg::Rule_chlr_2_onFail,
+                                       operands_if,
+                                       operands_then,
+                                       LambdaToCopy_if,
+                                       LambdaToCopy_then,
+                                       FIXED_RULE_UNITOUTPUT_PINNED );
+
+ 
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Instantiate Hypotheses objects
+
+   u_Hypo1 = std::make_unique<CHypo>(1u, "Spurious failure on rule. Adjust parameters in rule operands.");
+   u_Hypo2 = std::make_unique<CHypo>(2u, "Brine temperature sensor at TES inlet bad.");
+   u_Hypo3 = std::make_unique<CHypo>(3u, "Error in TES control logic.");
+   u_Hypo4 = std::make_unique<CHypo>(4u, "Brine leaving chiller at wrong temperature.");
+   u_Hypo5 = std::make_unique<CHypo>(5u, "Glycol circuit trouble.");
+
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Instantiate Evidence objects
+
+   u_Evid1 = std::make_unique<CEvid>(1u, "Does case appear spurious, a 'false alarm'? (e.g., Are zone conditions okay?)");
+   u_Evid2 = std::make_unique<CEvid>(2u, "Does brine temp. signal agree adequately with a ref. measurement?");
+   u_Evid3 = std::make_unique<CEvid>(3u, "Does TES control preclude sensible heat removal?");
+
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Associate Hypos to Rules (and, thus, to the implied CRuleKit object)
+
+   u_Rule1->AssociateHypo( u_Hypo1.get() );
+ 
+   u_Rule2->AssociateHypo( u_Hypo1.get() );
+   u_Rule2->AssociateHypo( u_Hypo2.get() );
+ 
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Associate Evids to Hypos : u_Hypo->AssociateEvid( p_Evid, direct?, invertible? );
+
+   u_Hypo1->AssociateEvid( u_Evid1.get(), true, true );
+   u_Hypo2->AssociateEvid( u_Evid2.get(), false, true );
+   u_Hypo3->AssociateEvid( u_Evid3.get(), false, true );
+   u_Hypo4->AssociateEvid( u_Evid4.get(), false, true );
+   u_Hypo5->AssociateEvid( u_Evid5.get(), false, true );
+
+
+
+// *** !!! DON'T FORGET ME: !!! ***
+
+   u_RuleKit->FinalizeRuleKitAndBuildKbase();
+
+//======================================================================================================/
+// Instantiate GUI Features (none)
+
+
+}  // End of Constructor
+
+//=======================================================================================================/
+// Destructor
+
+CTool_tes_ibal::~CTool_tes_ibal( void ) { }
+
+// ***** End of Commenting out Chiller, TES, CHW Plant and HW Plant tools *****
+*/
+
+// End of Thermal Energy Storage (TES, a.k.a. "ice tank") Tool Definition
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
+// Start of Air-Handling Unit (AHU) Tool Definition
+
+
+CTool_ahu_ibal::CTool_ahu_ibal(  EUnitSystem unitSys,
+                                 CDomain& domainRef,
                                  EDataLabel ahuLabel,
                                  ERealName ahuName,
                                  ERealName chwPlantName,
@@ -63,7 +1264,8 @@ CTool_ahu_ibal::CTool_ahu_ibal(  CDomain& domainRef,
                                  CController& ctrlrRef,
                                  CView& viewRef,
                                  CPortOmni& portRef )
-                                 :  ATool(   domainRef,
+                                 :  ATool(   unitSys,
+                                             domainRef,
                                              ahuLabel,
                                              ahuName, 
                                              clockRef,
@@ -76,16 +1278,17 @@ CTool_ahu_ibal::CTool_ahu_ibal(  CDomain& domainRef,
 //======================================================================================================/
 // $$$ TBD to move these reassignments to ATool initialization list (i.e., learn smt ptr move-semantics)
 
-u_Subject = std::make_unique<CSubj_ahu_sdvr>(
+u_Subject = std::make_unique<CSubj_ahu_ibal>(
+               unitSys,
                domainRef,
                ahuLabel,
                ahuName,
                chwPlantName,
                hwPlantName,
-               2360.0f,    // air flow, rated (L/s)
-               22.0f,      // CHW flow, rated (L/minute)
-               25.0f,      // preheat, rated (kw)
-               0.30f       // min fraction OA
+               660.7f,  // air flow, rated (L/s)
+               34.0f,   // CHW flow, rated (L/minute)
+               9.0f,    // preheat, rated (kw)
+               0.30f    // min fraction OA
 );
 
 
@@ -269,6 +1472,18 @@ u_RuleKit = std::make_unique<CRuleKit>(
                                                             );
                                                    }
                                                 )
+   );
+
+//======================================================================================================/
+// Process objects - Pass data to experior and receive results
+// Temporary to test Experior:
+
+   u_Xtest = std::make_unique<CProcess>(  seq0Ref,
+                                          *u_Subject,
+                                          1,
+                                          std::vector<CPointAnalog*>(
+                                             { u_Tao.get(), u_Tar.get(), u_TasSetpt.get() }
+                                          )
    );
 
 //======================================================================================================/
@@ -665,6 +1880,13 @@ u_RuleKit = std::make_unique<CRuleKit>(
                        INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_60,
                        ctrlrRef );
 
+// Temporary Fact to test Experior:
+
+   u_Xfact =  std::make_unique<CFactFromProcess>(  seq0Ref,
+                                                   *u_Subject,
+                                                   EDataLabel::Fact_process_exp, // okay on linter error 
+                                                   *u_Xtest );
+
 //======================================================================================================/
 // Define CFactFromFacts objects
 
@@ -809,6 +2031,7 @@ u_RuleKit = std::make_unique<CRuleKit>(
 //'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // Rule 1
 
+   operands_if.push_back( u_Xfact.get() ); // Temporary to test Experior (Rule 1 only)
    operands_if.push_back( u_unitOn.get() );
    operands_if.push_back( u_sysOccSus.get() );
    operands_if.push_back( u_inputSteadySus.get() );
@@ -817,7 +2040,8 @@ u_RuleKit = std::make_unique<CRuleKit>(
    operands_then.push_back( u_Tas_EQ_TasSetpt.get() );
 
    LambdaToCopy_if = ( [&]() -> bool {
-                        return ( u_unitOn->Now() &&
+                        return ( u_Xfact &&
+                                 u_unitOn->Now() &&
                                  u_sysOccSus->Now() &&
                                  u_inputSteadySus->Now() &&
                                  (! u_econExpected->Now()) );
@@ -1374,7 +2598,8 @@ CTool_ahu_ibal::~CTool_ahu_ibal( void ) { /* Emtpy d-tor*/ }
 // Start of VAV Box Tool Definition
 
 
-CTool_vav_ibal::CTool_vav_ibal(  CDomain& domainRef,
+CTool_vav_ibal::CTool_vav_ibal(  EUnitSystem unitSys,
+                                 CDomain& domainRef,
                                  EDataLabel vavLabel,
                                  ERealName vavName,
                                  ERealName ahuName,
@@ -1384,7 +2609,8 @@ CTool_vav_ibal::CTool_vav_ibal(  CDomain& domainRef,
                                  CController& ctrlrRef,
                                  CView& viewRef,
                                  CPortOmni& portRef )
-                                 :  ATool(   domainRef,
+                                 :  ATool(   unitSys,
+                                             domainRef,
                                              vavLabel,
                                              vavName, 
                                              clockRef,
@@ -1397,16 +2623,18 @@ CTool_vav_ibal::CTool_vav_ibal(  CDomain& domainRef,
 //======================================================================================================/
 // $$$ TBD to move these reassignments to ATool initialization list (i.e., learn smt ptr move-semantics)
 
-u_Subject = std::make_unique<CSubj_vav_pihr>(
+u_Subject = std::make_unique<CSubj_vav_ibal>(
+               unitSys,
                domainRef,
                vavLabel,
                vavName,
                ahuName,
                hwPlantName,
-               0.305f,     // diam duct (m)
-               1180.0f,    // air flow, rated (L/sec)
-               18.93f,     // HW flow, rated (L/minute)
-               2.0f        // reheat, rated (kW)
+               0.305f,        // duct diam (m)
+               5.555f,        // duct area (m^2)
+               330.4f,        // air flow, rated (L/sec)
+               0.0f,          // HW flow, rated (L/minute)
+               2.0f           // reheat, rated (kW)
 );
 
 u_RuleKit = std::make_unique<CRuleKit>(
@@ -2548,7 +3776,8 @@ CTool_vav_ibal::~CTool_vav_ibal( void ) { /* Emtpy d-tor*/ }
 // Begin Application implementation
 
 CApplication::CApplication( void )
-                  :  u_Domain( std::make_unique<CDomain>( ERealName::Domain_ibal ) ),
+                  :  unitSys (EUnitSystem::SI),
+                     u_Domain( std::make_unique<CDomain>( ERealName::Domain_ibal ) ),
                      u_Clock( std::make_unique<CClockPerPort>( FIXED_CLOCK_SECSPERBELL )
                      ),
                      u_Agent( std::make_unique<CAgent>( *u_Clock ) ),
@@ -2568,41 +3797,44 @@ CApplication::CApplication( void )
 
    u_EachToolInApp.push_back(
 
-      std::make_unique<CTool_ahu_ibal>(  *u_Domain,  
-                                       EDataLabel::Subject_ahu_singleDuct_vavReheat,
-                                       ERealName::Subject_ahu1,
-                                       ERealName::Subject_chwPlant,
-                                       ERealName::Subject_hwPlant,
-                                       *u_Clock,
-                                       *u_Seq0,
-                                       *u_Ctrlr,
-                                       *u_View,
-                                       *u_OmniPort
+      std::make_unique<CTool_ahu_ibal>(   unitSys,
+                                         *u_Domain,  
+                                          EDataLabel::Subject_ahu_singleDuct_vavReheat,
+                                          ERealName::Subject_ahu1,
+                                          ERealName::Subject_chwPlant,
+                                          ERealName::Subject_hwPlant_sim,
+                                          *u_Clock,
+                                          *u_Seq0,
+                                          *u_Ctrlr,
+                                          *u_View,
+                                          *u_OmniPort
       )
    );  // end pushback call
 
    u_EachToolInApp.push_back(
 
-      std::make_unique<CTool_ahu_ibal>(  *u_Domain,  
-                                       EDataLabel::Subject_ahu_singleDuct_vavReheat,
-                                       ERealName::Subject_ahu2,
-                                       ERealName::Subject_chwPlant,
-                                       ERealName::Subject_hwPlant,
-                                       *u_Clock,
-                                       *u_Seq0,
-                                       *u_Ctrlr,
-                                       *u_View,
-                                       *u_OmniPort
+      std::make_unique<CTool_ahu_ibal>(   unitSys,
+                                          *u_Domain,  
+                                          EDataLabel::Subject_ahu_singleDuct_vavReheat,
+                                          ERealName::Subject_ahu2,
+                                          ERealName::Subject_chwPlant,
+                                          ERealName::Subject_hwPlant_sim,
+                                          *u_Clock,
+                                          *u_Seq0,
+                                          *u_Ctrlr,
+                                          *u_View,
+                                          *u_OmniPort
       )
    );  // end pushback call
 
    u_EachToolInApp.push_back(
 
-      std::make_unique<CTool_vav_ibal>( *u_Domain,  
+      std::make_unique<CTool_vav_ibal>(   unitSys,
+                                          *u_Domain,  
                                           EDataLabel::Subject_vav_pressIndep_hwReheat,
                                           ERealName::Subject_vav1,
                                           ERealName::Subject_ahu2,
-                                          ERealName::Subject_hwPlant,
+                                          ERealName::Subject_hwPlant_sim,
                                           *u_Clock,
                                           *u_Seq0,
                                           *u_Ctrlr,
@@ -2613,11 +3845,12 @@ CApplication::CApplication( void )
 
    u_EachToolInApp.push_back(
 
-      std::make_unique<CTool_vav_ibal>( *u_Domain,  
+      std::make_unique<CTool_vav_ibal>(   unitSys,
+                                          *u_Domain,  
                                           EDataLabel::Subject_vav_pressIndep_hwReheat,
                                           ERealName::Subject_vav2,
                                           ERealName::Subject_ahu2,
-                                          ERealName::Subject_hwPlant,
+                                          ERealName::Subject_hwPlant_sim,
                                           *u_Clock,
                                           *u_Seq0,
                                           *u_Ctrlr,
@@ -2628,11 +3861,12 @@ CApplication::CApplication( void )
    
    u_EachToolInApp.push_back(
 
-      std::make_unique<CTool_vav_ibal>( *u_Domain,  
+      std::make_unique<CTool_vav_ibal>(   unitSys,
+                                          *u_Domain,  
                                           EDataLabel::Subject_vav_pressIndep_hwReheat,
                                           ERealName::Subject_vav3,
                                           ERealName::Subject_ahu1,
-                                          ERealName::Subject_hwPlant,
+                                          ERealName::Subject_hwPlant_sim,
                                           *u_Clock,
                                           *u_Seq0,
                                           *u_Ctrlr,
@@ -2643,11 +3877,12 @@ CApplication::CApplication( void )
 
    u_EachToolInApp.push_back(
 
-      std::make_unique<CTool_vav_ibal>( *u_Domain,  
+      std::make_unique<CTool_vav_ibal>(   unitSys,
+                                          *u_Domain,  
                                           EDataLabel::Subject_vav_pressIndep_hwReheat,
                                           ERealName::Subject_vav4,
                                           ERealName::Subject_ahu1,
-                                          ERealName::Subject_hwPlant,
+                                          ERealName::Subject_hwPlant_sim,
                                           *u_Clock,
                                           *u_Seq0,
                                           *u_Ctrlr,

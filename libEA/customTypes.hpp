@@ -27,21 +27,32 @@
 #include "exportTypes.hpp"
 
 //======================================================================================================/
-// Primary P.O.D. typedefs
+// Primary P.O.D. (Plain Old Data) typedefs
 
 typedef unsigned int Nzint_t;       // See File Note [2]
 typedef unsigned char Bindex_t;     // analog or state information mapped as an index to a Rainfall bin
+
+
+//======================================================================================================/
+// Establish "base" trigger groups (i.e., order all surveillance objects will trigger in sequence.cpp)
+// Objects in a higher numbered group will be triggered only after ALL the objects in lower group(s).
+// So, within THE SAME "SAMPLING CYCLE" of data processing ("surveillance") these three items are true:
+// (1) Results from objects in higher groups may depend on calls they make to objects in lower groups.
+// (2) But, results from objects in lower groups cannot depend on results from objects in higher groups.
+// (3) Also, any object in a group may depend on calls made to other objects in that same group. This is
+// thanks to the "CalcOwnTriggerGroup()" method of abstract base class ISeqElement in seqElement.cpp
+
+const Nzint_t           BASETRIGGRP_POINT = 1;
+const Nzint_t           BASETRIGGRP_FORMULA = 2;
+const Nzint_t           BASETRIGGRP_CHART = 3;
+const Nzint_t           BASETRIGGRP_PROCESS = 4;
+const Nzint_t           BASETRIGGRP_FACT = 5;
+const Nzint_t           BASETRIGGRP_RULEKIT = 99;
 
 //======================================================================================================/
 // General constants used throughout project (change to constexpr upon upgade to VS2015 )
 
 const float             PI_F        = 3.14159265358979f;
-
-const Nzint_t           BASETRIGGRP_POINT = 1;
-const Nzint_t           BASETRIGGRP_FORMULA = 2;
-const Nzint_t           BASETRIGGRP_CHART = 3;
-const Nzint_t           BASETRIGGRP_FACT = 4;
-const Nzint_t           BASETRIGGRP_RULEKIT = 99;
 
 const double            NaNDBL      = std::numeric_limits<double>::quiet_NaN();
 const float             NaNFLOAT    = std::numeric_limits<float>::quiet_NaN();
@@ -139,6 +150,9 @@ const float    INIT_HVACPARAM_AHU_FRZSTAT_DEGC = 1.67f;
  // "Min" below is 100% until AHU Rule 10 is redeveloped for IBAL based upon ASHRAE Guideline 10 or etc.
 const float    INIT_HVACPARAM_AHU_OAFRAC_MIN = 1.0f;  // Intended for 2006 APAR (AHU rules) = out-of-date
 
+const float    INIT_HVACPARAM_TES_PRITEMPTOMAKEICE_DEGC = -5.0f;
+const float    INIT_HVACPARAM_TES_PRITEMPTOMAKEICE_DEGF = 23.0f;
+
 const size_t   INIT_MAPBUCKETS_DOMAIN_NUMSUBJECTS = 10;
 const size_t   INIT_MAPBUCKETS_DOMAIN_NUMOUTPUTSPERSUBJ = 4;
 
@@ -163,43 +177,52 @@ const std::array<int,3> INIT_KNOB_MINDEFMAX_DATALOG_SECSLOGGING =
 //------------------------------------------------------------------------------------------------------/
 // Parameters in relational Fact objects (i.e. "_RELATE_")
 
-// Hysteresis, unitless
-const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYFRACTION = {0.0f, 0.0f, 0.1f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYPERCENT =  {0.0f, 0.0f, 10.0f};
-
 // Hysteresis, I-P units
 const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_CFM_0TO3K =   {0.0f, 0.0f, 150.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_DEGF_0TO120 = {0.0f, 0.0f, 4.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_IWG_0TO4 =    {0.0f, 0.0f, 0.1f};
 
 // Hysteresis, SI units
-const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_LPS_0TO1416 =   {0.0f, 0.0f, 75.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_DEGC_n18TO49 =  {0.0f, 0.0f, 2.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_KPA_0TO3450 =   {0.0f, 0.0f, 100.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_KPA_n70TO276 =  {0.0f, 0.0f, 100.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_LPM_0TO150 =    {0.0f, 0.0f, 7.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_LPS_0TO1416 =   {0.0f, 0.0f, 75.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_PA_0TO1K =      {0.0f, 0.0f, 50.0f};
 
-// Slack, unitless
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYFRACTION =    {-0.1f, 0.0f, 0.1f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYPERCENT  =    {-10.0f, 0.0f, 10.0f};
+// Hysteresis, unitless
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ALLZEROS =    {0.0f, 0.0f, 0.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYFRACTION = {0.0f, 0.0f, 0.1f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_HYSTER_ANYPERCENT =  {0.0f, 0.0f, 10.0f};
 
+//------------------------------------------------------------------------------------------------------/
 // Slack, I-P units
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_CFM_0TO3K =      {-150.0f, 75.0f, 150.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_CFM_0TO3K =          {-150.0f, 75.0f, 150.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_EASY =   {-4.0f, 2.0f, 4.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_ZERO =   {-4.0f, 0.0f, 4.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_HARD =   {-4.0f, -2.0f, 4.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGF_0TO120_ZERO =   {-4.0f, 0.0f, 4.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_IWG_0TO4 =           {-0.1f, 0.0f, 0.1f};
 
 // Slack, SI units
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_LPS_0TO1416 =        {-75.0f, 37.5f, 75.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_EASY =  {-3.0f, 2.0f, 3.0f};
-const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_ZERO =  {-3.0f, 0.0f, 3.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_HARD =  {-3.0f, -2.0f, 3.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_DEGC_n18TO49_ZERO =  {-3.0f, 0.0f, 3.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_KPA_0TO3450 =        {-100.0f, 0.0f, 100.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_KPA_n70TO276 =       {-100.0f, 0.0f, 100.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_LPM_0TO150 =         {-7.0f, 0.0f, 7.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_LPS_0TO1416 =        {-75.0f, 37.5f, 75.0f};
 const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_PA_0TO1K =           {-50.0f, 0.0f, 50.0f};
 
+// Slack, unitless
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ALLZEROS  =      {0.0f, 0.0f, 0.0f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYFRACTION =    {-0.1f, 0.0f, 0.1f};
+const std::array<float,3> INIT_MINDEFMAX_RELATE_SLACK_ANYPERCENT  =    {-10.0f, 0.0f, 10.0f};
 //------------------------------------------------------------------------------------------------------/
 // Parameters in sustained Fact objects (i.e. "_SUSTAINED_")
 
 // Sets default and Knob slider range on sustained Facts:
 const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_60 = {1, 60, 180};
+const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_30 = {1, 30, 60};
 const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_15 = {1, 15, 30};
 const std::array<int,3> INIT_MINDEFMAX_FACTSUSTAINED_MINCYCLES_05 = {1, 3, 15};
 
@@ -497,6 +520,7 @@ enum struct EApiType : unsigned int {
    Pane_snapshot_rule,
    Point_analogReadAsAnalog,
    Point_analogReadAsBinary,
+   Process_expClient,
    Rainfall_analog,
    Rainfall_fact,
    Rainfall_ruleKit,
@@ -541,8 +565,11 @@ enum class ERealName : unsigned int {
 */
    Undefined = 0u,
    Domain_ibal,
+   Subject_chlr1,
+   Subject_chlr2,
    Subject_chwPlant,
-   Subject_hwPlant,
+   Subject_hwPlant_sim,
+   Subject_tes,
    Subject_ahu1,
    Subject_ahu2,
    Subject_vav1,
@@ -559,30 +586,31 @@ enum struct EPlotGroup : unsigned char {
 
    Undefined = 0u,   // for ISeqElement obj never themselves plotted (Charts, Rule kits)
    Alone,
-   Free,             // Free = put in any Pane as long as same kind and units
-   GroupA,
+   Free,       // Free = put in any Pane as long as same kind and units, up to max (3)
+   GroupA,     // Max of three Point objs assigned to same plot group (via c-tor arguments in tool.cpp)
    GroupB,
    GroupC,
+   GroupD
 };
 
 
 enum struct EDataRange : unsigned char {
 
-/* New or edited data ranges must have all actions below done:
-   1) Declared here as part of this enum
-   2) Define end-bin values and map those to this enum in INIT_DATARANGE of guiShadow.cpp
-   3) Map this enum with same end-bin values to an initializer method in ANALOGBINSDEF of rainfall.cpp
+/* To edit an existing data range or add a new one, ALL actions below must be done:
+   1) Declared here as a member of this enum (for a new range)
+   2) Define end-bin values to be mapped to the enum member through INIT_DATARANGE inf guiShadow.cpp
+   3) Map enum member with same end-bin values to an initializer method in ANALOGBINSDEF of rainfall.cpp
 */
 
    Undefined = 0u,
    Analog_percent,               // e.g., damper/valve signal (U) or position (Z) (%)
    Analog_zeroToOne,             // e.g., damper/valve signal (U) or position (Z) (fraction)
    Analog_zeroTo4,               // e.g., Pressure Range A in inches water gage (iwg) (I-P)
-   Analog_zeroTo1k,              // e.g., Pressure range A in Pascals (Pa) (SI)
-   Analog_zeroTo500,             // e.g., Pressure Range B in psig (I-P)
-   Analog_zeroTo3450,            // e.g., Pressure range B in kPa (SI)
-   Analog_n10To40,               // e.g., Pressure Range C in psig (I-P)
-   Analog_n70To276,              // e.g., Pressure Range C in kPa (SI)
+   Analog_zeroTo1k,              // e.g., Pressure range A in Pascals (Pa) (SI) (for air ducts)
+   Analog_zeroTo500,             // e.g., Pressure Range B in psig (I-P) (for refrigerant)
+   Analog_zeroTo3450,            // e.g., Pressure range B in kPa (SI) (for refrigerant)
+   Analog_n10To40,               // e.g., Pressure Range C in psig (I-P) (for water/glycol)
+   Analog_n70To276,              // e.g., Pressure Range C in kPa (SI) (for water/glycol)
    Analog_zeroTo120,             // e.g., Temperature Range A in degF (I-P)
    Analog_n18To49,               // e.g., Temperature Range A in degC (SI)
    Analog_zeroTo3k,              // e.g., Volumetric Flow Range A in cfm (I-P)
@@ -617,6 +645,8 @@ enum struct EDataLabel : unsigned int {
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // labels for facts acquired directly as true/false from (binary) points
 
+   Fact_direct_BchlrEnable,
+   Fact_direct_BpumpOn,
    Fact_direct_Bso,
    Fact_direct_Bzo,
 
@@ -637,6 +667,7 @@ enum struct EDataLabel : unsigned int {
    Fact_data_QasSteady,
    Fact_data_QasTrackingHigh,
    Fact_data_QasTrackingLow,
+   Fact_data_QgSteady,
 
    Fact_data_Tad_GT_Tai,
    Fact_data_Tad_GT_Taz,
@@ -672,12 +703,21 @@ enum struct EDataLabel : unsigned int {
    Fact_data_TazTrackingHigh,
    Fact_data_TazTrackingLow,
 
+   Fact_data_Tgl_EQ_setpt,
+   Fact_data_Tgo_GT_Tgi,
+   Fact_data_Tgo_LT_Tgi,
+
    Fact_data_UddSteady,
    Fact_data_UdmSteady,
 
    Fact_data_UvcHunting,
    Fact_data_UvcSteady,
    Fact_data_UvhSteady,
+
+
+   Fact_data_XiceFalling,
+   Fact_data_XiceRising,
+   Fact_data_XiceSteady,
 
    Fact_data_ZddSteady,
    Fact_data_ZdmSteady,
@@ -693,16 +733,25 @@ enum struct EDataLabel : unsigned int {
    Fact_para_fracOA_EQ_min,
    Fact_para_fracOA_GTE_min,
 
+   Fact_para_PrdHighOOR,
+   Fact_para_PrsLowOOR,
    Fact_para_PsasZero,
+   Fact_para_TgiAtChargeTemp,
    Fact_para_Tam_GT_frzStat,
    Fact_para_QasZero,
    Fact_para_QadZero,
+   Fact_para_QgeLowOOR,
+   Fact_para_QgTesZero, 
 
    Fact_para_UddFull,
+   Fact_para_UvgFull,
    Fact_para_UdmFullOA,
    Fact_para_UdmFullRA,
    Fact_para_UvcShut,
    Fact_para_UvhShut,
+
+   Fact_para_WecDraw,
+   Fact_para_XiceZero,
 
    Fact_para_ZddFull,
    Fact_para_ZdmFullOA,
@@ -711,9 +760,16 @@ enum struct EDataLabel : unsigned int {
    Fact_para_ZvhShut,
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Facts resulting from a Process (i.e., from "experior" container)
+
+   Fact_process_exp,
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // facts common among subjects of multiple types
  
    Fact_subject_inputSteady,
+   Fact_subject_readyForUnitOn,
+   Fact_subject_runSteady,
    Fact_subject_unitOn,
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
@@ -730,6 +786,11 @@ enum struct EDataLabel : unsigned int {
    Fact_subj_ahu_preheatNeeded,
    Fact_subj_ahu_unitPreheating,
 
+   Fact_subj_tes_iceBeingMade,
+   Fact_subj_tes_iceBeingUsed,
+   Fact_subj_tes_tesAbsorbingHeat,
+   Fact_subj_tes_tesReleasingHeat,
+
    Fact_subj_vav_TazInBand,
    Fact_subj_vav_unitCoolingZone,
    Fact_subj_vav_unitHeatingZone,
@@ -738,11 +799,12 @@ enum struct EDataLabel : unsigned int {
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // facts sustained as true, false, or XOR (exclusive either) over a specified number of cycles
 
-   Fact_sustained_inputSteady, 
+   Fact_sustained_inputSteady,
+   Fact_sustained_runSteady, 
    Fact_sustained_sysOcc,
    Fact_sustained_UvcShut,
+   Fact_sustained_XiceZero,
    Fact_sustained_zoneOcc,
-
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // labels of formulations/calculations based on data
@@ -780,26 +842,39 @@ enum struct EDataLabel : unsigned int {
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // labels for inputs (primitive data)
 
+   Point_binary_chiller_enable,
+   Point_binary_pump_on,
    Point_binary_system_occupied,
    Point_binary_zone_occupied,
    Point_command_damper_disch,
    Point_command_damper_mixing,
    Point_command_damper_outside,
+   Point_command_pump_speed,
    Point_command_valve_chw,
+   Point_command_valve_glycol,
    Point_command_valve_hw,
    Point_command_fan_speed,
    Point_flowVolume_air_supply,
    Point_flowVolume_air_supply_setpt,
    Point_flowVolume_air_disch,
    Point_flowVolume_air_disch_setpt,
+   Point_flowVolume_glycol,
+   Point_flowVolume_water,
    Point_position_damper_disch,
    Point_position_damper_mixing,
    Point_position_damper_outside,
    Point_position_valve_chw,
+   Point_position_valve_glycol,
    Point_position_valve_hw,
+   Point_power_electric_chiller,
    Point_power_electric_fan,
    Point_power_electric_preheat,
+   Point_power_electric_pump,
    Point_power_electric_reheat,
+   Point_pressure_refrig_disch,
+   Point_pressure_refrig_suction,
+   Point_pressure_glycol_pumpInlet,
+   Point_pressure_glycol_pumpOutlet,
    Point_pressure_static_air_inlet,
    Point_pressure_static_air_supply,
    Point_temperature_air_coldDeck,
@@ -815,15 +890,33 @@ enum struct EDataLabel : unsigned int {
    Point_temperature_air_zone,
    Point_temperature_air_zone_setpt_clg,
    Point_temperature_air_zone_setpt_htg,
+   Point_temperature_glycol_in,
+   Point_temperature_glycol_out,
+   Point_temperature_glycol_out_setpt,
+   Point_temperature_refrig_liquid,
+   Point_temperature_refrig_vapor,
+   Point_temperature_water_out,
+   Point_transducer_iceLevel,
+   Point_transducer_pumpSpeed,
    Point_timeDate_local,
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// labels for data EA exchanges with a Process (i.e., "experior" container)
+
+   Process_expClient,
 
    RuleKit,  // Rule Kits are labeled, but Rules themselves self-identify thru a SayRuleUaiText() method
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
 // labels for subjects
- 
+
+   Subject_ahu_singleDuct_vavReheat,
+   Subject_chlr_ibal,
+   Subject_chwPlant_ibal,
+   Subject_hwPlant_ibal,
+   Subject_tes_ibal, 
    Subject_vav_pressIndep_hwReheat,
-   Subject_ahu_singleDuct_vavReheat
+
 
 };
 
@@ -847,6 +940,52 @@ enum struct EAlertMsg : unsigned int {
    PointAnalog_inputSameDbl,
 
    RainAnalog_binOverUnder,
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Chiller specific rule alerts
+
+   Rule_chlr_1_focus,
+   Rule_chlr_1_if,
+   Rule_chlr_1_then,
+   Rule_chlr_1_onFail,
+
+   Rule_chlr_2_focus,
+   Rule_chlr_2_if,
+   Rule_chlr_2_then,
+   Rule_chlr_2_onFail,
+
+   Rule_chlr_3_focus,
+   Rule_chlr_3_if,
+   Rule_chlr_3_then,
+   Rule_chlr_3_onFail,
+
+   Rule_chlr_4_focus,
+   Rule_chlr_4_if,
+   Rule_chlr_4_then,
+   Rule_chlr_4_onFail,
+
+   Rule_chlr_5_focus,
+   Rule_chlr_5_if,
+   Rule_chlr_5_then,
+   Rule_chlr_5_onFail,
+
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+// Thermal energy storage (TES, a.k.a. ice tank) subsystem specific rule alerts
+
+   Rule_tes_1_focus,
+   Rule_tes_1_if,
+   Rule_tes_1_then,
+   Rule_tes_1_onFail,
+
+   Rule_tes_2_focus,
+   Rule_tes_2_if,
+   Rule_tes_2_then,
+   Rule_tes_2_onFail,
+
+   Rule_tes_3_focus,
+   Rule_tes_3_if,
+   Rule_tes_3_then,
+   Rule_tes_3_onFail,
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 // AHU-sdvr specific rule alerts
@@ -983,6 +1122,16 @@ enum struct EAlertMsg : unsigned int {
 
 };
 
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
+
+enum struct EUnitSystem : unsigned char {
+
+   Undefined = 0u,
+   SI,
+   IP
+
+};
+
 
 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/
 
@@ -1003,6 +1152,7 @@ enum struct EDataUnit : unsigned char {
    Energy_kilowattHr,
    FlowVolume_cfm,
    FlowVolume_gpm,
+   FlowVolume_Lpm,
    FlowVolume_Lps,
    FlowVolume_m3ps,
    Frequency_cph,
@@ -1016,6 +1166,7 @@ enum struct EDataUnit : unsigned char {
    PressureAbso_psia,
    PressureDiff_psid,
    PressureGage_iwg,
+   PressureGage_kPa,
    PressureGage_Pa,
    PressureGage_psig,
    Ratio_fraction,

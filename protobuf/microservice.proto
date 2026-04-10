@@ -1,0 +1,31 @@
+//XXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+// Microservice schema ("contract") between EA (client) and Experior (server) read by "protoc" executable
+syntax = "proto3";
+
+// Protocol Buffers calls this a "package", but actually it creates and populates a new namespace
+package microservice;
+
+// Define each constituent "service" available to the "microservice" package
+
+service MakeComparisons {
+
+// Define the methods available to each service by using this syntax (keyword in "[]" is optional):
+// rpc <method_name>( [stream] <request_message_type> ) returns ( [stream] <response_message_type> ) {}
+// "{}" typically empty, else to bind method to an HTTP prompt so web browsers can run it as client
+
+   rpc Is_x_GT_y(MessageTypeA) returns (MessageTypeB) {};
+
+   rpc Is_y_LT_z(MessageTypeA) returns (MessageTypeB) {};
+}
+
+// Define all messages available under the "microservice" package
+
+message MessageTypeA {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message MessageTypeB {
+  bool reply = 1;
+}

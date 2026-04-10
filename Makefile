@@ -1,4 +1,19 @@
-# Require this file to be present. It must define the following variables:
+#XXXXXXXX1XXXXXXXXX2XXXXXXXXX3XXXXXXXXX4XXXXXXXXX5XXXXXXXXX6XXXXXXXXX7XXXXXXXXX8XXXXXXXXX9XXXXXXXXXCXXXX5
+# Typical ZandrEA dev-phase builds/startups begin with "make docker-up" at CLI with this file in the pwd.
+# Per GNU Make behavior, that results first in a parse of this file followed by a jump to the rule at its
+# target "docker-up" (below). That rule's recipe sends execution out of this file to Docker Compose.
+# Compose finds docker-compose.yml, which directs "rest" service build to the project root Dockerfile in
+# host directory structure. That Dockefile copies this file from host to its own "buildbase" stage.
+# The parse of this file on the host was superfluous, but its parse in the Dockerfile copy matters.
+# Subsequently, calls are made to two targets in the stage's copy of this file.
+# Strictly speaking, this process is not recursive, because a separate copy of this file is now open.
+# However, the initiating "docker-up" target call upon the instance of this file on the host computer
+# cannot return the host process and its CLI to a user prompt until the recipe of "docker-up" returns
+# from "docker compose --build --detach". After that, a Python script is called to run data through.
+
+#==================================================================================================C====5
+# CLI call to this file presumes HDF5 tarball of ver. specified and its h5c++.tmpl file are in the pwd.
+# (SWB) Must define the following variables:
 # DOCKER_REGISTRY
 # DOCKER_PROJECT
 # DOCKER_IMAGE_PREFIX
@@ -10,10 +25,9 @@ DOCKER_PROJECT ?= zandrea
 DOCKER_IMAGE_PREFIX ?= 
 DOCKER_IMAGE_SUFFIX ?= _prod
 
-
 .PHONY:	all _all compile build build-ead rebuild recompile clean test docker-build docker-rerun docker-up docker-down docker-status docker-prune docker-rm-kb docker-retest docker-production-build docker-production-up docker-production-down docker-production-retest docker-production-save docker-production-push jscli pushtestdata install reinstall compiler dist-clean
 
-# NOTE: I commented out .NOTPARALLEL because I discovered the .WAIT special target. (May be
+# (SWB) I commented out .NOTPARALLEL because I discovered the .WAIT special target. (May be
 # specific only to GNU make...?)  This gives better control over dependency processing than
 # the .NOTPARALLEL target.
 # NOTE2: the .WAIT special target was added in GNU make 4.4 which is too new to be in most
@@ -37,6 +51,8 @@ endif
 
 #MAKEFLAGS += --no-print-directory
 
+#==================================================================================================C====5
+# This (root) Makefile enables export on assignments also needed by sub-Makefile at ./libEA/
 export PREFIX := $(CURDIR)
 
 # This is because Dan's Windows WSL environment keeps getting timeouts
@@ -44,6 +60,8 @@ export COMPOSE_HTTP_TIMEOUT = 1000
 
 JSCLI := eajscli	# or EAjsClient
 
+# The use of a variable defining a list might expect a "dependency order".
+# Convention is that dependency grows going to the right in the list.
 SUBDIRS := libEA EAd eajscli		# NOTE: these MUST be in dependency order
 LIBEA_SUBDIRS := libEA				# NOTE: these MUST be in dependency order
 
@@ -55,7 +73,7 @@ USE_SSL := 0
 
 FEATURE_FLAGS := USE_SSL
 
-# Make syntax makes this difficult, but this just builds a list of compiler
+# (SWB) Make syntax makes this difficult, but this just builds a list of compiler
 # define flags (-Dflag=1) for all the feature flags above that have a value of 1.
 CXX_FEATURE_FLAGS :=
 define FFtemplate = 
@@ -65,16 +83,22 @@ endif
 endef
 $(foreach ff,$(FEATURE_FLAGS),$(eval $(call FFtemplate,$(flag))))
 
-##############################################################################
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+# Define variables to configure the GNU Autotools implementation HDF5 uses to build its compiler:
+# Call "shell" to run "uname -s" so it returns "Linux" or "Darwin" (MacOS)
 HDF5PLATFORM := $(shell uname -s)
+# Explicitly define version
 HDF5VER := 1.14.4-2
 HDF5SRCDIR := hdf5-$(HDF5VER)
 HDF5SRCTGZ := $(HDF5SRCDIR).tar.gz
 HDF5INSTALLDIR := HDF5
+#==================================================================================================C====5
+# IMPORTANT: general C++ compiler CXX set to be the HDF5CXX compiler built from the HDF5 Autotools pkg.
+# Project files that #include HDF5 files require HDF5CXX, so for simplicity make its use universal. 
 export HDF5CXX := $(HDF5INSTALLDIR)/bin/h5c++
 export ABSHDF5CXX := $(CURDIR)/$(HDF5INSTALLDIR)/bin/h5c++
 export CXX := $(ABSHDF5CXX)
-##############################################################################
+#==================================================================================================C====5
 
 ifeq ($(HDF5PLATFORM),Darwin)
 export NPROC := $(shell sysctl -n hw.logicalcpu)
@@ -89,13 +113,26 @@ export PATH := $(CURDIR)/HDF5/bin:$(PATH)
 # Add .d to Make's recognized suffixes.
 SUFFIXES += .d
 
-all:	docker-build
+# Conventional GNU name for the topmost target (default goal):
+all: docker-build
+
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+# Each call to "docker compose [etc.]" in recipes below cause a jump (but not exit) from this file to
+# docker-compose.yml, which in turn may call a separate copy of this Makefile using a different target
+# (e.g., build-ead). "In turn" refers to the "services" dependencies defined in the docker-compose.yml.
 
 docker-build:
 	docker compose build
 
 docker-up:
 	docker compose up --build --detach
+
+# Target for troubleshooting build failures; open docker_build_debug.log to see unresolved refs.
+# CLI alternative:   docker compose build --progress=plain > build_errors.log 2>&1
+# [ "2>&1" directs shell to send STDERR to STDOUT, which ">" sends to .log file]
+docker-debug:
+	docker compose build --progress=plain > docker_build_debug.log 2>&1
+	@echo "Build complete (or failed). See docker_build_debug.log for raw compiler output."
 
 docker-down:
 	-docker compose down
@@ -137,15 +174,21 @@ docker-production-down:
 
 docker-production-retest:	docker-production-down .WAIT docker-production-up .WAIT pushtestdata
 
-compiler:	$(HDF5CXX)
+#==================================================================================================C====5
+# Phony target expressing dependency HDF5 compilation has upon HDF5CXX being present;
+# Given the HDF5CXX assignment above, that means "Is /HDF5/bin/h5C++ built from template and available?"
+compiler: $(HDF5CXX)
 
-$(HDF5SRCDIR):	$(HDF5SRCTGZ)
+# Is the target (a directory) absent, OR is the HDF5 tarball newer than it? [error if tarball missing]
+# If yes, whack any dir present and extract HDF5 src code from tarball (which creates a new target dir)  
+$(HDF5SRCDIR): $(HDF5SRCTGZ)
 	rm -rf $@ && tar xzf $<
-
+# HDF5 tarball extract auto-creates a new HDF5SRCDIR (src dir) but not the final "installation" dirs
 $(HDF5INSTALLDIR):
 	mkdir -p $@/bin $@/lib $@/include
+#==================================================================================================C====5
 
-# On Mac build with: `./configure --enable-cxx --disable-shared --enable-static --enable-symbols=yes --prefix=$HOME/Git/ea_ConApp/dep CC=gcc CXX=g++ CXXFLAGS="-std=c++14"`
+# On Mac build with: `./configure --enable-cxx --disable-shared --enable-static --enable-symbols=yes --prefix=$HOME/Git/ea_ConApp/dep CC=gcc CXX=g++ CXXFLAGS="-std=c++17"`
 # On Linux build with: `./configure --enable-cxx --with-gnu-ld --disable-shared --enable-static --enable-symbols=yes --prefix=/Users/steveb/Git/ea_ConApp/dep CC=gcc CXX=g++`
 #ifneq ($(HOMEBREW_PREFIX),)
 #  # Homebrew is installed so we'll use the newest GCC there
@@ -158,19 +201,39 @@ $(HDF5INSTALLDIR):
   $(info Fell back to system CC = $(NATIVE_CC)   CXX = $(NATIVE_CXX))
 #endif
 
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+# FIRST: Overview of what is ahead:
+# Upon jump to root Dockerfile "builder" stage: system (apt) install of dependencies (incl. some Boost).
+# Dockerfile: COPY to builder the HDF5 .tar w/ its embedded kit of GNU Autotools and h5c++.tmpl template.
+# Dockerfile: COPY this file and call "compile" target => HDF5 compiled per a h5c++ "wrapper" (script).
+# The h5c++ script is generated locally from the h5c++.tmpl downloaded as part of the HDF5 package
+
+#==================================================================================================C====5
+# HDF5CONFIGURE sets Autotools method "configure" with flags to act upon an adjacent call to "h5c++"
+# A g++ linker defaults to --enable-dynamic over --enable-static given a path to both .so and .o files
+# So, for Linux this will dynamically link HDF5
+
 ifeq ($(HDF5PLATFORM),Darwin)
-HDF5CONFIGURE := ./configure --enable-threadsafe --disable-hl --disable-shared --enable-static --enable-symbols=yes --prefix=$(CURDIR)/$(HDF5INSTALLDIR) CC=$(NATIVE_CC) CXX=$(NATIVE_CXX) CXXFLAGS="-std=c++14"
+HDF5CONFIGURE := ./configure --enable-threadsafe --disable-hl --disable-shared --enable-static --enable-symbols=yes --prefix=$(CURDIR)/$(HDF5INSTALLDIR) CC=$(NATIVE_CC) CXX=$(NATIVE_CXX) CXXFLAGS="-std=c++17"
 export MAKE := gmake
 else
-HDF5CONFIGURE := ./configure --enable-threadsafe --disable-hl --with-gnu-ld --enable-shared --enable-static --enable-symbols=yes --prefix=$(CURDIR)/$(HDF5INSTALLDIR) CC=$(NATIVE_CC) CXX=$(NATIVE_CXX) CXXFLAGS="-std=c++14 -pthread" #LIBS=-lpthread
+HDF5CONFIGURE := ./configure --enable-threadsafe --disable-hl --with-gnu-ld --enable-shared --enable-static --enable-symbols=yes --prefix=$(CURDIR)/$(HDF5INSTALLDIR) CC=$(NATIVE_CC) CXX=$(NATIVE_CXX) CXXFLAGS="-std=c++17 -pthread" #LIBS=-lpthread
 endif
+
+# Before compile/link of any HDF5-included src file, need a rule to build HDF5CXX, an executable "h5c++"
+# compiler ("wrapper" script) based on ".tmpl" template packaged in the HDF5 Autotools mplementation.
+# $(MAKE) is a GNU Make built-in for calling "make" by the exact path as the current call. Without
+# Autotools that typically recurs to the current Makefile as it's most local. Here, HDF5CONFIGURE instead
+# directs an Autotools-generated Makefile in the HDF5INSTALLDIR be used in building the h5c++ compiler:
 
 $(HDF5CXX):	$(HDF5INSTALLDIR) $(HDF5SRCDIR) $(HDF5SRCTGZ) h5c++.tmpl
 	(cd $(HDF5SRCDIR) && $(HDF5CONFIGURE) && $(MAKE) -j$(JOBS) install)
 	rm -f $@ && sed -e s/BASEDIR/$(HDF5INSTALLDIR)/g < h5c++.tmpl > $@ && chmod 0555 $@
 
-
-##################################################################################################
+#==================================================================================================C====5
+# NEXT: => Dockerfile: gRPC built from src files by install and call of separate build system (CMake)
+# Object ".o" files from both are linked to objs from /libEA/ src code using Make rules below.
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
 
 DEFS	:= -DPOSIX -DSTANDALONE
 CXXOPTS	=  -Wno-comments
@@ -201,6 +264,7 @@ ifeq ($(HOST_OS),Darwin)
   HB_LDFLAGS := -L$(HOMEBREW_PREFIX)/opt/openssl@1.1/lib -L$(HOMEBREW_PREFIX)/lib
   endif
 endif
+# First (given a Linux OS), clear BOOSTLIBSUFFIX
 ifeq ($(HOST_OS),Linux)
   BOOSTLIBSUFFIX := 
   DEFS += -DLINUX
@@ -216,14 +280,34 @@ ifeq ($(HOST_OS),Linux)
     endif
   endif
 endif
-INCLUDES=-I$(PREFIX)/libEA -I$(PREFIX)/include -I$(HDF5INSTALLDIR)/include $(HB_INCLUDES)
 
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+# Variables to organize information needed in the rules generating the executable [ $(EAD_EXES) target ]:
+#==================================================================================================C====5
+# Paths to the directories holding "#include" files. These are needed by the dependency rule**
+# [ ** or the compilation rule had it not been preceded by a dependency rule]
+# Until reaching the linker rule it not relevant whether these will be statically or dynamically linked. 
+
+# INCLUDES for major libraries typically path down ONLY to libraries top-level "/include/" directories.
+# A "major" library has symlinks in its "/include/" so to not need a lot of INCLUDE vars to deeper paths.
+# Use app's src file to define any deeper path needed (e.g., a header with #include <grpcpp/grpcpp.h>).
+# Else, INCLUDE of deeper library dirs can shadow calls app makes to system libraries (e.g., <ctime>).
+
+INCLUDES = -I$(PREFIX)/libEA -I$(PREFIX)/include -I$(HDF5INSTALLDIR)/include $(HB_INCLUDES)
+
+INCLUDES += -I$(PREFIX)/grpc/include -I$(PREFIX)/protobuf
+#bad way was += $(addprefix -I,$(shell find $(PREFIX)/grpc/include -type d)) -I$(PREFIX)/protobuf
+
+#==================================================================================================C====5
+# Define a variable holding paths to Boost library files
+# The (lower case) -l flag tells g++ linker to default to dynamic linking if ".so" files are in the path.
+# Ubuntu "apt install" will have defaulted to intalling .so files (versus .a or .o for static linking). 
 BOOSTLIBS := $(patsubst %,-l$(BOOSTLIBPREFIX)%$(BOOSTLIBSUFFIX),$(BASE_BOOST_LIBS))
 
-##################################################################################################
-
 LIBEA_EXCLPAT = libEA/EAwin32DLL.% # libEA/dllmain.%
+# Define a variable pathing to all .cpp files in /libEA/ (.hpp not required yet as revealed later)
 LIBEA_SRCS := $(filter-out $(LIBEA_EXCLPAT), $(wildcard libEA/*.cpp))
+# Use Make ref substitution to list out similar paths and filenames but to different file extensions
 LIBEA_OBJS := $(LIBEA_SRCS:.cpp=.o)
 LIBEA_DEPS := $(LIBEA_SRCS:.cpp=.d)
 LIBEA_EXES :=
@@ -233,14 +317,56 @@ EAD_EXCLPAT = EAd/session.%
 EAD_SRCS := $(filter-out $(EAD_EXCLPAT), $(wildcard EAd/*.cpp))
 EAD_OBJS := $(EAD_SRCS:.cpp=.o)
 EAD_DEPS := $(EAD_SRCS:.cpp=.d)
+
 #EAD_LIBS := -L$(HDF5INSTALLDIR)/lib -L./lib -L$(HOMEBREW_PREFIX)/opt/openssl@1.1/lib -L$(HOMEBREW_PREFIX)/lib -lcpprest $(BOOSTLIBS) -lhdf5 -lssl -lcrypto -lstdc++
-EAD_LIBS := -L$(HDF5INSTALLDIR)/lib -L./lib $(HB_LDFLAGS) -lcpprest $(BOOSTLIBS) -lhdf5 -lsz -lssl -lcrypto -lstdc++
+
+
+EAD_LIBS := -L$(HDF5INSTALLDIR)/lib \
+            -L./lib $(HB_LDFLAGS) \
+            -lcpprest $(BOOSTLIBS) \
+            -lhdf5 \
+            -lsz \
+            -lssl \
+            -lcrypto \
+            -lstdc++
+
 EAD_EXES := bin/ead
 EAD_PUBLIC_HEADERS := 
 
-SRCS = $(LIBEA_SRCS) $(EAD_SRCS)
-OBJS = $(LIBEA_OBJS) $(EAD_OBJS)
-DEPS = $(LIBEA_DEPS) $(EAD_DEPS)
+GRPC_INSTALLDIR := $(PREFIX)/grpc
+GRPC_LDFLAGS := -L$(GRPC_INSTALLDIR)/lib -Wl,-rpath=$(GRPC_INSTALLDIR)/lib
+# For Abseil ("absl") deps, Lines 2+ avoid "DSO missing" linker errors (Dyn. Shared Obj = .so file)
+GRPC_LIBS := -lgrpc++ -lgrpc -lgpr -lprotobuf \
+             -labsl_log_internal_check_op \
+             -labsl_log_internal_message \
+             -labsl_log_internal_nullguard \
+             -labsl_base \
+             -labsl_synchronization \
+             -labsl_strings \
+             -labsl_strings_internal \
+             -labsl_status \
+             -labsl_cord \
+             -labsl_cordz_info \
+             -labsl_cordz_functions \
+             -labsl_cordz_handle \
+             -labsl_time \
+             -labsl_time_zone
+
+EAD_LIBS += $(GRPC_LDFLAGS) $(GRPC_LIBS)
+
+# Paths to Protobuf generated stub src files and ("promise-to-have-compiler-generate") object .o files
+PROTO_SRCS := $(wildcard protobuf/*.cc)
+PROTO_OBJS := $(PROTO_SRCS:.cc=.o)
+
+# Append the protobuf objects to the EAD_OBJS so they get linked into the final executable
+EAD_OBJS += $(PROTO_OBJS)
+
+#==================================================================================================C====5
+# So-called "bucket" variables to simplify writing rule recipes for various targets (e.g., "clean")
+
+SRCS = $(LIBEA_SRCS) $(EAD_SRCS) $(PROTO_SRCS)
+OBJS = $(LIBEA_OBJS) $(EAD_OBJS) $(PROTO_OBJS)
+DEPS = $(LIBEA_DEPS) $(EAD_DEPS) $(PROTO_SRCS:.cc=.d)
 EXES = $(LIBEA_OBJS) $(EAD_EXES)
 
 ##################################################################################################
@@ -252,58 +378,92 @@ JSCLI_DEPS := $(JSCLI_SRCS) eajscli/package.json
 
 MASTER_PUBLIC_HEADERS := $(LIBEA_PUBLIC_HEADERS) $(EAD_PUBLIC_HEADERS)
 PUBLIC_HEADERS := $(addprefix include/ea/,$(notdir $(MASTER_PUBLIC_HEADERS)))
-$(PUBLIC_HEADERS):	include/ea $(MASTER_PUBLIC_HEADERS)
+$(PUBLIC_HEADERS): include/ea $(MASTER_PUBLIC_HEADERS)
 	cp $(MASTER_PUBLIC_HEADERS) include/ea
 	(cd include && ln -sf ea/* ./)
 
+#==================================================================================================C====5
+# NOT Make "include" directive, but instead rules creating ./include/ea and ./bin if not present
 include/ea:
 	-mkdir -p include/ea
 
 bin:
 	-mkdir bin
 
-CXXFLAGS +=     -g -O $(CXX_FEATURE_FLAGS) $(CXXOPTS) $(DEFS) $(INCLUDES)
-LDFLAGS +=      -g
+#==================================================================================================C====5
+# Extending these flags
 
-##################################################################################################
+CXXFLAGS += -std=c++17 -g -O $(CXX_FEATURE_FLAGS) $(CXXOPTS) $(DEFS) $(INCLUDES)
+LDFLAGS += -g
 
-#Don't create dependencies when we're cleaning, for instance
-NODEPS=docker-down docker-up docker-run docker-rerun docker-build docker-restart docker-status docker-prune docker-rm-kb docker-retest docker-clean docker-production-build docker-production-up docker-production-down docker-production-retest docker-production-save docker-production-push clean dist-clean tags svn pushtestdata
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+# Don't create dependencies upon calls to "debug" or "clean" from the host CLI (as two examples of many).
+# For e.g., calling at host CLI a debug target not in NODEPS yields a hailstorm 10K+ line error log!
+# That happens because deps are installed into Docker stages but not installed onto the host computer.
+
+NODEPS = docker-debug docker-down docker-up docker-run docker-rerun docker-build docker-restart docker-status docker-prune docker-rm-kb docker-retest docker-clean docker-production-build docker-production-up docker-production-down docker-production-retest docker-production-save docker-production-push clean dist-clean tags svn pushtestdata
 ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
     #Chances are, these files don't exist.  GMake will create them and
     #clean up automatically afterwards
     -include $(DEPS)
 endif
 
-#This is the rule for creating the dependency files
-%.d:    %.cpp $(HDF5CXX)
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+# THREE STEPS in building "ead" (the executable running container "ea-rest") from its C++ src code:
+# [Since these are run by a copy of this file located in a Dockerfile stage, the cluttering up of its pwd
+# with intermediate results (e.g., %.d pattern generations) doesn't matter once that stage is superceded]
+
+#==================================================================================================C====5
+# (1) Generation of dependency (".d") files in order to individualize the deps of each src file.
+# This is necessary for Make to build a dependency graph AHEAD of running the compilation build rule.
+# Each .d file accompanys its src file in the compiler rule's dep list so it recompiles only if revised.
+# This intervening layer of .d target is effected by -M flag upon compiler (e.g., 2nd line of recipe). 
+# Rule for creating dependecy (.d) files from source code in the root directory (i.e., HDF5 src files):
+
+# Unless Make "define" employed, full %-match means a separate but similar rule for each src extension.
+# [i.e., .cpp files and .cc files each need their own rule and recipe] :
+
+# For src files with .cpp extension (compiler uses their #include stmts to find all related .hpp)  
+%.d: %.cpp $(HDF5CXX)
 	@set -e; rm -f $@; \
 		$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
 		sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 		rm -f $@.$$$$
 #       $(CXX) $(CXXFLAGS) -MM -MT '$(patsubst %.cpp,%.o,$<)' $< -MF $@
 
-# How to build a .o file from a .cpp file
-%.o:    %.cpp %.d Makefile $(HDF5CXX) $(PUBLIC_HEADERS)
+# For src files with .cc extension (i.e., Protobuf stubs, so no #includes are associated)
+%.d: %.cc $(HDF5CXX)
+	@set -e; rm -f $@; \
+		$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
+		sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+		rm -f $@.$$$$
+#==================================================================================================C====5
+# (2) Call compiler again to generate obj files from C++ src files after checks upon dependencies.
+# [Note: Step (1) rolled the includes .cpp have on project headers (.hpp) into the dependencies (%.d)]
+
+%.o: %.cpp %.d Makefile $(HDF5CXX) $(PUBLIC_HEADERS)
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
+%.o: %.cc %.d Makefile $(HDF5CXX) $(PUBLIC_HEADERS)
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
-
-##################################################################################################
-
-$(EAD_EXES):	Makefile bin include/ea $(HDF5CXX) $(PUBLIC_HEADERS) $(LIBEA_OBJS) $(EAD_OBJS)
+#==================================================================================================C====5
+# (3) Link rule; since $(EAD_EXES)="/ea/bin/ead", result goes where root Dockerfile starts up "ea-rest": 
+ 
+$(EAD_EXES): Makefile bin include/ea $(HDF5CXX) $(PUBLIC_HEADERS) $(LIBEA_OBJS) $(EAD_OBJS)
 	$(CXX) $(LDFLAGS) $(LIBEA_OBJS) $(EAD_OBJS) -o $@ $(EAD_LIBS)
 	-chmod 755 $@
 
-##################################################################################################
+#VVVVVVVV1VVVVVVVVV2VVVVVVVVV3VVVVVVVVV4VVVVVVVVV5VVVVVVVVV6VVVVVVVVV7VVVVVVVVV8VVVVVVVVV9VVVVVVVVVCVVVV5
+# Further (collateral-purpose) targets, not involving Docker or Compose:
 
-all:	; @$(MAKE) _all
+all: ; @$(MAKE) _all
 
-_all:	compiler $(EXES)
+_all: compiler $(EXES)
 
-build-ead:	$(EAD_EXES)
+build-ead: $(EAD_EXES)
 
-test:	$(EXES)
+test: $(EXES)
 	for c in bin/desktopTestTheDll_IowaVAV_Interact_FeaturesAndMore ; do /bin/rm -f *.h5; $$c || exit 1; /bin/rm -f *.h5; done
 	$(MAKE) -C EAd/tests test
 
@@ -315,14 +475,17 @@ clean:
 	  test -f $$d/Makefile && $(MAKE) -C $$d clean ; \
 	done
 
-compile:	$(EXES)
+compile: $(EXES)
 
-install:	$(EXES)
+install: $(EXES)
 
-reinstall:	clean .WAIT install
+reinstall: clean .WAIT install
 
-recompile:	reinstall
+recompile: reinstall
 
+#==================================================================================================C====5
+# This target switches to a local directory (so "./" prefix not req'd as it is when directly pathing an
+# executable) in order to start a Node.js app (app.js ?)
 jscli:
 	(cd eajscli && npm start)
 
