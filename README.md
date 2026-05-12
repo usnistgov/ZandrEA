@@ -2,25 +2,30 @@
 
 ## What is it?
 
-ZandrEA&trade; is an ongoing, collaborative, open-source software development project.  It supports research into automated, real-time detection and diagnostics of "faults" (unwanted, wasteful conditions) in the heating, ventilating, and air-conditioning (HVAC) systems of large commercial buildings.  The topic is known throughout the HVAC industry as automated fault detection and diagnostics (AFDD). The ZandrEA project was founded by federal employees at the U.S. National Institute of Standards and Technology (NIST). The project shares in NIST's overall mission through research advancing AFDD technology in ways to benefit U.S. enterprises marketing AFDD products and services. The project is "collaborative" because research proposals, development contributions, and technical skills are welcomed from beyond NIST, particularly from other laboratories, universities, private-sector businesses, and individuals engaged in AFDD.
+ZandrEA&trade; is an ongoing, collaborative, open-source software development project.  It supports research into automated, real-time detection and diagnostics of "faults" (unwanted, wasteful conditions) in the heating, ventilating, and air-conditioning (HVAC) systems of large commercial buildings.  The topic is known throughout the HVAC industry as automated fault detection and diagnostics (AFDD). The ZandrEA project was founded by two federal employees at the U.S. National Institute of Standards and Technology (NIST). The project shares in NIST's overall mission through research advancing AFDD technology in ways to benefit U.S. enterprises marketing AFDD products and services. The project is "collaborative" because research proposals, development contributions, and technical skills are welcomed from beyond NIST, particularly from other laboratories, universities, private-sector businesses, and individuals engaged in AFDD.
+
+Creating an instance (also called an "application") of ZandrEA is to create a software "microservice" that, given development planned for the future, is a client of a "digital twin" representing a large commercial building. That phase of development will begin with the NIST Intelligent Building Agents Laboratory (IBAL) posing as the "large commercial building".
 
 Anyone wanting to learn more about ZandrEA and its application to AFDD research is strongly encouraged to first read the Section 1, Introduction in its "primer" document, NIST Technical Note (TN) 2337, available as a free PDF download at: https://doi.org/10.6028/NIST.TN.2337 
 
-The moniker "EA" preceded the final name "ZandrEA" given to the project, being previously an abbreviation of "Expert Assistant". That association to an abbreviation is now deprecated. However, as a convenient short tag, "EA" is still used extensively throughout the ZandrEA codebase and TN-2337 to encompass the parts of it in the founding NIST contribution. EA should be understood to refer to an evolving subset within a future, potentially larger and more broadly capable, codebase for ZandrEA.
+## A Historical Note
+
+The moniker "EA" preceded the final name "ZandrEA" given to the project, being at that time an abbreviation of "Expert Assistant". Any association of "EA" to an abbreviation is now deprecated. It remains as a convenient short tag, however, used extensively throughout the ZandrEA codebase and TN-2337 to encompass parts of ZandrEA in the founding NIST contribution. EA should be understood to refer to an evolving subset within a future, potentially larger and more broadly capable, codebase for ZandrEA.
 
 ## Implementation Overview
 
-ZandrEA consists of a system of four Docker containers orchestrated with Docker Compose. Running in the Docker environment vastly reduces the requirements to build and run this software. See the [INSTALLATION](./INSTALLATION.md) document for instructions for how to build, run, and test ZandrEA.
+ZandrEA consists of a system of five Docker containers orchestrated with Docker Compose. Running in the Docker environment vastly reduces the requirements to build and run this software. See the [INSTALLATION](./INSTALLATION.md) document for instructions for how to build, run, and test ZandrEA.
 
 There are two types of environments supported by the build process:
 1. Development: Intended for software evaluation and development purposes. This is the default build environment.
 2. Production: although ZandrEA should NOT be used in any production capacity (see [Current Status](#current-status) below), a more streamlined, better-performing "production" build is available. This build pre-generates all the web pages so they can be directly and immediately served instead, reducing overhead. Most or all debugging capabilities have been stripped out. You might use this on a longer-running test installation, for example, where you want more stability and less overhead.
 
-The four Docker containers include:
+The five Docker containers include:
 - the computational engine (implemented by the `libEA` library code which exposes its functionality via a C++ API) which has been wrapped with a REST API handler to expose its functionality via a traditional HTTP (web) interface
 - a front-end GUI dashboard for viewing and interacting with the analysis, written in React (a Javascript framework) for viewing in a standard web browser
 - a live data collection script which periodically polls BACnet devices and pushes the collected data into the computational engine via the REST interface for analysis
 - a reverse proxy container that merges the REST API and the server for the web client into a single unified web service, and could also be configured to implement SSL/https in a single location
+- a container for developing and experimenting upon novel algorithms by  under the development and experimentation of that might be developed and experimented upon  
 
 ## How to work with this repo
 
@@ -34,9 +39,9 @@ If you experience any bugs, please submit them as [Issues](https://github.com/us
 
 ## System Requirements
 
-The use of Docker allows for very minimal system requirements and a programatic, scripted build process that is portable across any type of system that can run Docker.
+The use of Docker allows for very minimal system requirements and a programmatic, scripted build process that is portable across any type of system that can run Docker.
 
-Any host system hardware that can run Docker or Docker Desktop should should suffice for development and testing, as long as:
+Any host system hardware that can run Docker or Docker Desktop should suffice for development and testing, as long as:
 - At least 4GB of RAM should be available for the Docker containers
 - At least 2 CPU cores should be available for the Docker containers
 - At least 200GB of disk space should be available for build/development
@@ -56,7 +61,7 @@ Any host that can run Docker (or Docker Desktop) should be able to build and run
 ## Overview about the structure of this implementation
 
 This build consists of four Docker containers orchestrated with docker-compose:
-- `ea-rest` is the core REST server component that houses all of the EA functionality, and wraps it with a REST server.
+- `ea-rest` is the core REST server component that houses all the EA functionality and wraps it with a REST server.
 - `ea-webapp` is a React single page (web) application to serve as the user interface and front end.
 - `ea-bacnet` is the Python bacnet code to collect data from bacnet devices and push it to the REST server
 - `ea-proxy` is a Traefik server running as a reverse proxy for the `ea-rest` and `ea-webapp` containers.
