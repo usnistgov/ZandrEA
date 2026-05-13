@@ -22,7 +22,7 @@ See the License for the specific language governing permissions and limitations 
    function-pointer type parameters.  See no advantage to fwd-declare classes in the header to tool.cpp
 */
 #include "customTypes.hpp"
-#include "state.hpp"          // Includes all AFact subclasses
+#include "fact.hpp"          // Includes all AFact subclasses
 #include "chart.hpp"
 #include "rainfall.hpp"
 

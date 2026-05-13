@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and limitations 
 
 #include "dataChannel.hpp"
 #include "agentTask.hpp"      // register to sequence
-#include "state.hpp"          // for d-tor to destroy Fact object by smart pointer in CPointBinary
+#include "fact.hpp"           // for d-tor to destroy Fact object by smart pointer in CPointBinary
 #include "rainfall.hpp"       // call methods on rainfall
 #include "viewParts.hpp"      // get NGuiKey of traces, call d-tor of trace u-ptr
 #include "subject.hpp"        // call getters on subject

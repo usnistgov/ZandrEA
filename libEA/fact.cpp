@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and limitations 
 */
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C////V
 
-#include "state.hpp"
-
+#include "fact.hpp"
 #include "rainfall.hpp"       // call methods on rainfall
 #include "subject.hpp"        // call getters on subject
 #include "dataChannel.hpp"    // call getters on binary point

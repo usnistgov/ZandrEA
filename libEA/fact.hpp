@@ -22,7 +22,7 @@ See the License for the specific language governing permissions and limitations 
 
 #include "agentTask.hpp"      // register to sequence 
 #include "seqElement.hpp"     // Inheiritance requires type completion, also brings customTypes
-#include "stateParts.hpp"
+#include "factParts.hpp"
 #include "viewParts.hpp"      // get NGuiKey of traces, call d-tor on smart ptr to trace
 #include "controlParts.hpp"   // Needed for upcast of CKnobFloat (for hyster) to AKnob
 #include "rainfall.hpp"       // Needed for method calls in templated subclasses

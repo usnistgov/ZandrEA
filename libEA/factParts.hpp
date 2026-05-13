@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and limitations 
 */
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C////V
 
-#ifndef STATEPARTS_HPP
-#define STATEPARTS_HPP
+#ifndef FACTPARTS_HPP
+#define FACTPARTS_HPP
 
 #include "customTypes.hpp"
 

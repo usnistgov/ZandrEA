@@ -18,7 +18,7 @@ See the License for the specific language governing permissions and limitations 
 #include "viewParts.hpp"         // need type completion due to Histogram Kit c-tor calls
 #include "dataChannel.hpp"       // need type completion due to method calls
 #include "formula.hpp"           // need type completion due to method calls
-#include "state.hpp"
+#include "fact.hpp"
 #include "rule.hpp"
 #include "agentTask.hpp"        // must follow other *.h includes to override F.D. with a complete type
 
