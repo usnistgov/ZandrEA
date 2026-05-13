@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and limitations 
 #include "rule.hpp"
 #include "rainfall.hpp"
 #include "controlParts.hpp"      // rule kit and r-t krono knobs
-#include "state.hpp"             // call methods on rule inputs (facts)
+#include "fact.hpp"              // call methods on rule inputs (facts)
 #include "subject.hpp"           // call getters on subject
 #include "case.hpp"              // call CreateCase() in rule kit cycle
 #include "agentTask.hpp"         // register rule kit to sequence

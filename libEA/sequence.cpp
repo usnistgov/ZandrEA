@@ -28,7 +28,7 @@ See the License for the specific language governing permissions and limitations 
 #include "formula.hpp"
 #include "chart.hpp"
 #include "process.hpp"
-#include "state.hpp"
+#include "fact.hpp"
 #include "rule.hpp"
 #include "viewParts.hpp"   // needed for CSeqTimeAxis length
 
