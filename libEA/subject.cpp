@@ -29,6 +29,29 @@ See the License for the specific language governing permissions and limitations 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////C/////
 // Implementation of abstract base class for all Subject objects
 
+// ownLabel is the compiled equipment/model identity (for example,
+// Subject_vav_pressIndep_hwReheat).  Export it as text so REST clients can
+// key on the model without depending on libEA's internal enum type.
+static std::string SubjectLabelId( EDataLabel label ) {
+
+   switch( label ) {
+      case EDataLabel::Subject_ahu_singleDuct_vavReheat:
+         return "Subject_ahu_singleDuct_vavReheat";
+      case EDataLabel::Subject_vav_pressIndep_hwReheat:
+         return "Subject_vav_pressIndep_hwReheat";
+      case EDataLabel::Subject_chlr_ibal:
+         return "Subject_chlr_ibal";
+      case EDataLabel::Subject_chwPlant_ibal:
+         return "Subject_chwPlant_ibal";
+      case EDataLabel::Subject_hwPlant_ibal:
+         return "Subject_hwPlant_ibal";
+      case EDataLabel::Subject_tes_ibal:
+         return "Subject_tes_ibal";
+      default:
+         return "Undefined";
+   }
+}
+
 ASubject::ASubject(  EUnitSystem arg0,
                      CDomain& arg1,
                      EDataLabel arg2,
@@ -66,10 +89,14 @@ ASubject::~ASubject( void ) { }
 GuiPackSubjectBasic_t ASubject::SayBasicGuiPack( void ) const {
 
    // *** TBD to include Subject's const params as additional 'infoLines'
+   // This pack is the REST layer's subject metadata source: model id
+   // (ownLabel), display name (ownName), display label (ownLabel tag), and
+   // child object keys all cross the libEA/API boundary here.
 
    return SGuiPackSubjectBasic(  LookUpGuiType( ownApiType ),
                                  ownGuiKey,
                                  DomainRef.SayGuiKey(),
+                                 SubjectLabelId( ownLabel ),
                                  LookUpText(ownName),
                                  std::vector<std::string>( 1, LookUpTag( ownLabel ) ),
                                  featureKeys,

@@ -48,6 +48,7 @@ class handler
       const web::json::value json_traceinkrono(const NGuiKey &, const NGuiKey &, bool recurse = true);
       const web::json::value json_paneinkrono(const NGuiKey &, const NGuiKey &, bool recurse = true);
       const web::json::value json_krono(const NGuiKey &, bool recurse = true);
+      const web::json::value json_contracts(void);
 
       web::http::experimental::listener::http_listener m_listener;
 

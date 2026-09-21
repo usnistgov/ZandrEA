@@ -4,7 +4,7 @@ SETUP := /bin/bash EAdSetup.sh
 CLEANUP := /bin/bash EAdCleanup.sh
 TESTS := ead-get-noop.js ead-get-domain.js ead-get-casekeys.js ead-put-ctrl-time.js ead-set-1st-knob.js #ead-functest-gui.py
 
-.PHONY:	all clean test
+.PHONY:	all clean test pytest
 
 all:	test
 
@@ -20,6 +20,9 @@ venv:	requirements.txt
 
 pushtestdata:	ead-functest-combined.py venv
 	venv/bin/python3 ead-functest-combined.py
+
+pytest:	venv
+	venv/bin/python3 -m pytest test_named_write_api.py -v
 
 test:	$(EAD) $(SETUP) $(CLEANUP) $(TESTS) node_modules venv
 	$(SETUP) $(EAD)

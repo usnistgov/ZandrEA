@@ -1,0 +1,80 @@
+{
+  "AHU-1": {
+    "Binary_systemOccupied": "A1_Bso",
+    "FlowRateVolume_air_ahu": "A1_Qas",
+    "Position_damper_mixingBox": "A1_Udm",
+    "Position_valve_chw": "A1_Uvc",
+    "Position_valve_hw": "A1_Uvh",
+    "Pressure_static_air_supply": "A1_Psas",
+    "Temperature_air_mixed": "A1_Tam",
+    "Temperature_air_outside": "A1_Tao",
+    "Temperature_air_return": "A1_Tar",
+    "Temperature_air_supply": "A1_Tas",
+    "Temperature_air_supply_setpt": "A1_TasSetpt"
+  },
+  "AHU-2": {
+    "Binary_systemOccupied": "A2_Bso",
+    "FlowRateVolume_air_ahu": "A2_Qas",
+    "Position_damper_mixingBox": "A2_Udm",
+    "Position_valve_chw": "A2_Uvc",
+    "Position_valve_hw": "A2_Uvh",
+    "Pressure_static_air_supply": "A2_Psas",
+    "Temperature_air_mixed": "A2_Tam",
+    "Temperature_air_outside": "A2_Tao",
+    "Temperature_air_return": "A2_Tar",
+    "Temperature_air_supply": "A2_Tas",
+    "Temperature_air_supply_setpt": "A2_TasSetpt"
+  },
+  "VAV-1": {
+    "Binary_zoneOccupied": "V1_Bzo",
+    "FlowRateVolume_air_vav": "V1_Qad",
+    "FlowRateVolume_air_vav_setpt": "V1_QadSetpt",
+    "Position_damper_vav": "V1_Udd",
+    "Position_valve_hw": "V1_Uvh",
+    "Pressure_static_air_supply": "V1_Psai",
+    "Temperature_air_discharge": "V1_Tad",
+    "Temperature_air_supply": "V1_Tai",
+    "Temperature_air_zone": "V1_Taz",
+    "Temperature_air_zone_setpt_clg": "V1_TazSetptClg",
+    "Temperature_air_zone_setpt_htg": "V1_TazSetptHtg"
+  },
+  "VAV-2": {
+    "Binary_zoneOccupied": "V2_Bzo",
+    "FlowRateVolume_air_vav": "V2_Qad",
+    "FlowRateVolume_air_vav_setpt": "V2_QadSetpt",
+    "Position_damper_vav": "V2_Udd",
+    "Position_valve_hw": "V2_Uvh",
+    "Pressure_static_air_supply": "V2_Psai",
+    "Temperature_air_discharge": "V2_Tad",
+    "Temperature_air_supply": "V2_Tai",
+    "Temperature_air_zone": "V2_Taz",
+    "Temperature_air_zone_setpt_clg": "V2_TazSetptClg",
+    "Temperature_air_zone_setpt_htg": "V2_TazSetptHtg"
+  },
+  "VAV-3": {
+    "Binary_zoneOccupied": "V3_Bzo",
+    "FlowRateVolume_air_vav": "V3_Qad",
+    "FlowRateVolume_air_vav_setpt": "V3_QadSetpt",
+    "Position_damper_vav": "V3_Udd",
+    "Position_valve_hw": "V3_Uvh",
+    "Pressure_static_air_supply": "V3_Psai",
+    "Temperature_air_discharge": "V3_Tad",
+    "Temperature_air_supply": "V3_Tai",
+    "Temperature_air_zone": "V3_Taz",
+    "Temperature_air_zone_setpt_clg": "V3_TazSetptClg",
+    "Temperature_air_zone_setpt_htg": "V3_TazSetptHtg"
+  },
+  "VAV-4": {
+    "Binary_zoneOccupied": "V4_Bzo",
+    "FlowRateVolume_air_vav": "V4_Qad",
+    "FlowRateVolume_air_vav_setpt": "V4_QadSetpt",
+    "Position_damper_vav": "V4_Udd",
+    "Position_valve_hw": "V4_Uvh",
+    "Pressure_static_air_supply": "V4_Psai",
+    "Temperature_air_discharge": "V4_Tad",
+    "Temperature_air_supply": "V4_Tai",
+    "Temperature_air_zone": "V4_Taz",
+    "Temperature_air_zone_setpt_clg": "V4_TazSetptClg",
+    "Temperature_air_zone_setpt_htg": "V4_TazSetptHtg"
+  }
+}

@@ -22,10 +22,10 @@ ENVFILE ?= production.env
 -include ${ENVFILE}
 DOCKER_REGISTRY ?= 
 DOCKER_PROJECT ?= zandrea
-DOCKER_IMAGE_PREFIX ?= 
+DOCKER_IMAGE_PREFIX ?=
 DOCKER_IMAGE_SUFFIX ?= _prod
 
-.PHONY:	all _all compile build build-ead rebuild recompile clean test docker-build docker-rerun docker-up docker-down docker-status docker-prune docker-rm-kb docker-retest docker-production-build docker-production-up docker-production-down docker-production-retest docker-production-save docker-production-push jscli pushtestdata install reinstall compiler dist-clean
+.PHONY:	all _all compile build build-ead rebuild recompile clean test pytest docker-build docker-rerun docker-up docker-down docker-status docker-prune docker-rm-kb docker-retest docker-test docker-production-build docker-production-up docker-production-down docker-production-retest docker-production-save docker-production-push jscli pushtestdata install reinstall compiler dist-clean
 
 # (SWB) I commented out .NOTPARALLEL because I discovered the .WAIT special target. (May be
 # specific only to GNU make...?)  This gives better control over dependency processing than
@@ -59,6 +59,7 @@ export PREFIX := $(CURDIR)
 export COMPOSE_HTTP_TIMEOUT = 1000
 
 JSCLI := eajscli	# or EAjsClient
+PYTEST_ARGS ?= -q EAd/tests
 
 # The use of a variable defining a list might expect a "dependency order".
 # Convention is that dependency grows going to the right in the list.
@@ -153,6 +154,9 @@ docker-rm-kb:
 	-docker volume rm $(DOCKER_PROJECT)_rest-kb
 
 docker-retest:	docker-down .WAIT docker-rm-kb .WAIT docker-up .WAIT pushtestdata
+
+docker-test:
+	docker compose run --rm --no-deps --entrypoint sh --volume "$(CURDIR):/work" --workdir /work bacnet -lc 'python -m pip install -q -r EAd/tests/requirements.txt && PYTHONDONTWRITEBYTECODE=1 EA_HOST=rest EA_PORT=9876 python -m pytest $(PYTEST_ARGS) -o cache_dir=/tmp/pytest-cache --cache-clear'
 
 docker-clean:	docker-down .WAIT docker-rm-kb
 	-/bin/rm -f production-images.tar.gz
@@ -401,7 +405,7 @@ LDFLAGS += -g
 # For e.g., calling at host CLI a debug target not in NODEPS yields a hailstorm 10K+ line error log!
 # That happens because deps are installed into Docker stages but not installed onto the host computer.
 
-NODEPS = docker-debug docker-down docker-up docker-run docker-rerun docker-build docker-restart docker-status docker-prune docker-rm-kb docker-retest docker-clean docker-production-build docker-production-up docker-production-down docker-production-retest docker-production-save docker-production-push clean dist-clean tags svn pushtestdata
+NODEPS = docker-debug docker-down docker-up docker-run docker-rerun docker-build docker-restart docker-status docker-prune docker-rm-kb docker-retest docker-test docker-clean docker-production-build docker-production-up docker-production-down docker-production-retest docker-production-save docker-production-push clean dist-clean tags svn pushtestdata
 ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
     #Chances are, these files don't exist.  GMake will create them and
     #clean up automatically afterwards
@@ -491,6 +495,9 @@ jscli:
 
 pushtestdata:
 	(cd EAd/tests && sleep 5 && $(MAKE) pushtestdata)
+
+pytest:
+	(cd EAd/tests && $(MAKE) pytest)
 
 rebuild:	reinstall 
 

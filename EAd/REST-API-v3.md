@@ -153,9 +153,23 @@ The REST endpoints for HTTP GET are as follows:
 | `/features` | `subject:INT` | * | `features:OBJ[]` | Same as above but returns a list of feature objects for a given subject |
 | `/krono` | `key:INT` | * | `key:INT`<br>`reply:STR`<br>`type:INT`<br>`caption:STR`<br>`panes:INT[]`<br>`timestamps:INT[]`<br>`knobs:INT[]`<br>`error:STR` (ONLY if error) | Returns the attributes from the corresponding krono key OR the error message |
 | `/subjectkeys` | | | `subjectkeys:INT[]` | Return a list of all the configured subject keys |
+| `/contracts` | | * | `schema:STR`<br>`contracts:OBJ[]` with `id:STR`, `label:STR`, `points:STR[]`<br>`subjects:OBJ[]` with `key:INT`, `name:STR`, `contract:STR` | Returns the self-describing write contract from the libEA model. `contracts` is the single source for contract metadata: stable contract ids from the subject `EDataLabel`, model labels, and expected point names. `subjects` contains subject-specific identity and a contract id reference. Source-specific adapters, such as CSV header mappings, are client-side concerns and are not included here. |
 | `/subject` | `subject:INT` | * | `key:INT`<br>`idtext:STR`<br>`reply:STR`<br>`domain:INT`<br>`label:STR`<br>`info:STR[]`<br>`name:STR`<br>`featurekeys:INT[]`<br>`knobkeys:INT[]`<br>`rulekitkeys:INT[]`<br>`casekeys:INT[]`<br>`points:STR[]`<br>`features:OBJ[]` (not compact)<br>`knobs:OBJ[]` (not compact)<br>`rulekits:OBJ[]` (not compact)<br>`cases:OBJ[]` (not compact)<br>`error:STR` | Returns the attributes from the corresponding subject key OR the error message |
 | `/subjects` | | * | `subjects:OBJ[]` | Same as above but returns a list of all the subject objects |
 | `/alerts` | | * | `alerts:OBJ[]` | Returns a list of alert objects (consisting of `id:INT` and `message:STR` attributes) for all alerts in the ring buffer. Each client instance is reponsible for keeping track of events the user no longer wishes to see. |
+
+#### `/contracts` response fields
+
+`contracts[]` is the single source of truth for write-contract metadata. Subjects with the same `label` and `points` share one contract.
+
+| *Field* | *Description* |
+| ------- | ------------- |
+| `contracts[].id` | Stable contract identifier. Derived from the subject model id (`EDataLabel`) and used by `subjects[].contract` as a reference. |
+| `contracts[].label` | Human-readable model/equipment label derived from the subject `EDataLabel`. |
+| `contracts[].points` | Ordered point names expected by named sample uploads for subjects using this contract. |
+| `subjects[].key` | Runtime subject key to use when uploading values for that subject. |
+| `subjects[].name` | Human-readable configured subject name. |
+| `subjects[].contract` | Reference to the matching `contracts[].id`; clients should resolve this to find the subject's expected `points`. |
 
 ## HTTP POST endpoints
 
@@ -203,8 +217,9 @@ The REST endpoints for HTTP PUT are as follows:
 | *URI* | *JSON params* | *Compress* | *JSON return* | *Description* |
 | ----- | ------------- | ---------- | ------------- | ------------- |
 | `/ctrl/time` | `time:INT`| | | Submits a new timestamp to libEA to be associated with the next batch(es) of data |
-| `/ctrl/sample` | `subject:INT`<br>`values:DBL[]`| | `returncode:INT` | Submits an array containing all the point data for the specified subject key using the last set timestamp (above) |
-| `/ctrl/sampletimestep` | `time:INT`<br>`values_by_subject:OBJ[]`| | `returncode:INT` | This function combines the 3 steps of setting a timestamp, submitting data to one or more subjects corresponding to that timestamp, and then calling the SingleStep function to process it in a single atomic operation. `values_by_subject` is an array of objects with attributes `subject:INT` and `values:DBL[]` like the calls above |
+| `/ctrl/sample` | `subject:INT`<br>`values:DBL[]`| | `returncode:INT` | Legacy positional upload for the specified subject key using the last set timestamp (above). `values` must be ordered exactly as the subject's expected point list. |
+| `/ctrl/sampletimestep` | `time:INT`<br>`values_by_subject:OBJ[]`| | `returncode:INT` | This function combines the 3 steps of setting a timestamp, submitting data to one or more subjects corresponding to that timestamp, and then calling the SingleStep function to process it in a single atomic operation. `values_by_subject` is an array of objects with attributes `subject:INT` and ordered `values:DBL[]` like the calls above. |
+| `/ctrl/sampletimestep-named` | `time:INT`<br>`values_by_subject:OBJ[]`| | `returncode:INT`<br>`missing:STR[]` (if invalid)<br>`unknown:STR[]` (if invalid)<br>`nonnumeric:STR[]` (if invalid)<br>`expected:STR[]` (if invalid) | Named timestep upload. `values_by_subject` is an array of objects with attributes `subject:INT` and `values:OBJ`; each `values` object is keyed by point name and validated against the subject contract before conversion to the internal ordered array. |
 | `/ctrl/answercase` | `case:INT`<br>`answer:INT` | | `success:BOOL` | Reply to the specified case key with the answer of zero-based option `answer` (from the list of options in the case) |
 | `/set/knob` | `key:INT`<br>`value:INT\|FLT` | | `success:BOOL` | Sets the knob specified by `key` to an integer or float value |
 | `/set/histogram/mode` | `key:INT`<br>`value:INT` | | `success:BOOL` | Sets the mode of the histogram specified by `key` to `value` |

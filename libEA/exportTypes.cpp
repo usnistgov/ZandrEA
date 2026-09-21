@@ -467,19 +467,21 @@ SGuiPackSubjectBasic::SGuiPackSubjectBasic(  EGuiType arg1,
                                              NGuiKey arg2,
                                              NGuiKey arg3,
                                              std::string arg4,
-                                             std::vector<std::string> arg5,
-                                             std::vector<NGuiKey> arg6,
+                                             std::string arg5,
+                                             std::vector<std::string> arg6,
                                              std::vector<NGuiKey> arg7,
-                                             std::vector<NGuiKey> arg8 )
+                                             std::vector<NGuiKey> arg8,
+                                             std::vector<NGuiKey> arg9 )
                                              :  getterReply (EGuiReply::OKAY_allDone),
                                                 ownType (arg1),
                                                 ownKey (arg2),
                                                 hostDomainKey (arg3),
-                                                ownNameText (arg4),
-                                                infoText_byCR (arg5),
-                                                featureKeys (arg6),
-                                                paramKnobKeys (arg7),
-                                                ruleKitKeys (arg8) {
+                                                ownLabelId (arg4),
+                                                ownNameText (arg5),
+                                                infoText_byCR (arg6),
+                                                featureKeys (arg7),
+                                                paramKnobKeys (arg8),
+                                                ruleKitKeys (arg9) {
 }
 
 SGuiPackSubjectBasic::SGuiPackSubjectBasic(  EGuiReply arg2 )
@@ -487,6 +489,7 @@ SGuiPackSubjectBasic::SGuiPackSubjectBasic(  EGuiReply arg2 )
                                                 ownType (EGuiType::Undefined),
                                                 ownKey (0),
                                                 hostDomainKey (0),
+                                                ownLabelId ("Undefined"),
                                                 ownNameText (""),
                                                 infoText_byCR (0),
                                                 featureKeys (0),
