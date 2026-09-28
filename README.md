@@ -6,6 +6,8 @@ ZandrEA&trade; (spoken as "ZAN-drey-ah") is an ongoing, collaborative, open-sour
 
 Creating an instance (also called an "application") of the ZandrEA software is to create an AFDD "microservice" that, given further development, will be automatically configured by a "digital twin" representing a large commercial building. That development has begun with the NIST Intelligent Building Agents Laboratory (IBAL) posing as the "large commercial building".
 
+An introductory video is available at: [IntroVideo]
+
 Anyone wanting to learn more about ZandrEA and its application to AFDD research is strongly encouraged to first read the Section 1, Introduction in its "primer" document, NIST Technical Note (TN) 2337, available as a free PDF download at: https://doi.org/10.6028/NIST.TN.2337 
 
 ## A Historical Note
@@ -114,3 +116,5 @@ As of October 1, 2024:
 - The `ea-rest` REST daemon is functional. The [REST API documentation](./EAd/REST-API-v3.md) is up to date.
 - The `ea-webapp` container is feature-complete (as far as the capabilities available through the REST API)
 - The `ea-bacnet` docker container has been reworked, and with proper configuration MIGHT work now. It is currently untested. See the [EAbacnet/README](./EAbacnet/README.md) file for configuration information.
+
+[IntroVideo]: https://gcc02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fnist-el.s3.amazonaws.com%2Fenergy_embedded_intel%2FZandrEA%2Fzandrea_one.mp4&data=05%7C02%7Cdaniel.veronica%40nist.gov%7C12075c432df94b6a150808df19974ca3%7C2ab5d82fd8fa4797a93e054655c61dec%7C0%7C0%7C639257809752397681%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=oNrWxqvruttSitlHmYG82%2FyNQ4Z8%2BjJ0Je%2Bte6BmLuU%3D&reserved=0
