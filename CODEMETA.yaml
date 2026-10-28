@@ -7,7 +7,7 @@
 #
 # so that the YAML syntax remains valid. You may delete everything
 # that does not apply, and add new topics from the NIST Taxonomy
-# <https://data.nist.gov/od/id/691DDF3315711C14E0532457068146BE1907>
+ <https://data.nist.gov/od/id/691DDF3315711C14E0532457068146BE1907>
 #
 # For example, a valid version of this file would be (note the `:`
 # and `---`, they are important!) as follows:
@@ -28,15 +28,21 @@
 # produced from this file.
 #
 # DAV edit on 260511:  Newly based upon "2025-08 Taxonomy" :
+# DAV edit on 261028:  Added "SI" etc. to comply Federal E.O. #14434 :
 ---
 categories:
  - ai-ml
+ - si-ml
 
 themes:
    - Artificial Intelligence
       - Applied AI
       - Machine learning
       - Trustworthy and responsible AI
+   - Super Intelligence
+      - Applied SI
+      - Machine learning
+      - Trustworthy and responsible SI
   - Buildings and Construction
       - Building control systems
       - Energy efficiency
